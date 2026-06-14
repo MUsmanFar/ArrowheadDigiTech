@@ -10,10 +10,40 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import dynamic from 'next/dynamic';
 
-const FloatingObjects = dynamic(() => import('@/components/3d/FloatingObjects'), { 
-  ssr: false,
-  loading: () => null 
-});
+const DeferredFloatingObjects = () => {
+  const [Component, setComponent] = useState<any>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+
+  useEffect(() => {
+    const triggerLoad = () => {
+      setShouldLoad(true);
+      window.removeEventListener('scroll', triggerLoad);
+      window.removeEventListener('mousemove', triggerLoad);
+      window.removeEventListener('touchstart', triggerLoad);
+    };
+
+    window.addEventListener('scroll', triggerLoad, { passive: true });
+    window.addEventListener('mousemove', triggerLoad, { passive: true });
+    window.addEventListener('touchstart', triggerLoad, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', triggerLoad);
+      window.removeEventListener('mousemove', triggerLoad);
+      window.removeEventListener('touchstart', triggerLoad);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (shouldLoad) {
+      import('@/components/3d/FloatingObjects').then((mod) => {
+        setComponent(() => mod.default);
+      });
+    }
+  }, [shouldLoad]);
+
+  if (!Component) return null;
+  return <Component />;
+};
 
 const metrics = [
   { value: '500+', label: 'Projects Delivered', icon: TrendingUp },
@@ -73,7 +103,7 @@ export default function Home() {
         {/* Premium Animated Background Elements */}
         <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
           <div className="absolute inset-0 z-0 opacity-80">
-            <FloatingObjects />
+            <DeferredFloatingObjects />
           </div>
           <div 
             className="absolute top-[10%] left-[20%] w-[600px] h-[600px] bg-blue-300/20 rounded-full blur-[100px] mix-blend-multiply"
