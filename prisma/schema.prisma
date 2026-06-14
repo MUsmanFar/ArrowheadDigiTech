@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String?
+  role          String    @default("admin")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Service {
+  id            String    @id @default(cuid())
+  slug          String    @unique
+  title         String
+  description   String
+  icon          String?
+  problem       String?
+  solution      String?
+  process       String?
+  benefits      String?
+  deliverables  String?
+  featured      Boolean   @default(false)
+  order         Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  pricingPackages PricingPackage[]
+}
+
+model Project {
+  id            String    @id @default(cuid())
+  slug          String    @unique
+  title         String
+  description   String
+  clientName    String?
+  industry      String?
+  images        String[]
+  thumbnail     String?
+  featured      Boolean   @default(false)
+  metrics       String?
+  testimonialId String?
+  testimonial   Testimonial? @relation(fields: [testimonialId], references: [id])
+  caseStudy     Boolean   @default(false)
+  order         Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Testimonial {
+  id            String    @id @default(cuid())
+  name          String
+  role          String?
+  company       String?
+  content       String
+  image         String?
+  rating        Int       @default(5)
+  featured      Boolean   @default(false)
+  projectId     String?
+  projects      Project[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model FAQ {
+  id            String    @id @default(cuid())
+  question      String
+  answer        String
+  category      String?
+  order         Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model BlogPost {
+  id            String    @id @default(cuid())
+  slug          String    @unique
+  title         String
+  excerpt       String
+  content       String
+  coverImage    String?
+  author        String?
+  published     Boolean   @default(false)
+  featured      Boolean   @default(false)
+  publishedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model PricingPackage {
+  id            String    @id @default(cuid())
+  name          String
+  price         String
+  description   String
+  features      String[]
+  popular       Boolean   @default(false)
+  serviceId     String?
+  service       Service?  @relation(fields: [serviceId], references: [id])
+  order         Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Lead {
+  id            String    @id @default(cuid())
+  name          String
+  email         String
+  phone         String?
+  company       String?
+  service       String?
+  message       String
+  status        String    @default("new")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model TeamMember {
+  id            String    @id @default(cuid())
+  name          String
+  role          String
+  bio           String?
+  image         String?
+  linkedin      String?
+  twitter       String?
+  order         Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Setting {
+  id            String    @id @default(cuid())
+  key           String    @unique
+  value         String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
