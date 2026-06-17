@@ -1,65 +1,46 @@
-// run_lighthouse.js - runs Lighthouse for key routes and saves HTML/JSON results
-const lighthouse = require('lighthouse').default;
-const chromeLauncher = require('chrome-launcher');
+const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const routes = [
-  '/', '/about', '/services', '/portfolio', '/case-studies', '/pricing', '/faq', '/blog', '/contact', '/admin/dashboard'
-];
+console.log('Starting Lighthouse audit for http://localhost:3000/ ...');
 
-const baseUrl = 'http://localhost:3002';
-const outputDir = path.resolve('lighthouse_output');
-if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+const outputJsonPath = path.join(__dirname, 'lighthouse_report.json');
 
-(async () => {
-  const chrome = await chromeLauncher.launch({chromeFlags: ['--headless']});
-  const opts = {port: chrome.port, output: ['html', 'json'], logLevel: 'error'};
-  const summary = [];
+// Run Lighthouse CLI in headless mode
+const cmd = `npx lighthouse http://localhost:3000/ --output=json --output-path="${outputJsonPath}" --chrome-flags="--headless --no-sandbox"`;
 
-  for (const route of routes) {
-    const url = baseUrl + (route === '/' ? '' : route);
-    console.log(`Running Lighthouse for ${url}`);
-    
+exec(cmd, (error, stdout, stderr) => {
+  if (error) {
+    console.error(`Error executing Lighthouse: ${error.message}`);
+    return;
+  }
+  
+  if (fs.existsSync(outputJsonPath)) {
     try {
-      const runnerResult = await lighthouse(url, opts);
-      const reportHtml = runnerResult.report[0];
-      const reportJson = runnerResult.report[1];
-      const lhr = runnerResult.lhr;
-
-      const safeName = route === '/' ? 'home' : route.replace(/^\//, '').replace(/\//g, '_');
+      const rawData = fs.readFileSync(outputJsonPath);
+      const report = JSON.parse(rawData);
       
-      const htmlPath = path.join(outputDir, `${safeName}.html`);
-      const jsonPath = path.join(outputDir, `${safeName}.json`);
-
-      fs.writeFileSync(htmlPath, reportHtml, 'utf-8');
-      fs.writeFileSync(jsonPath, reportJson, 'utf-8');
-
       const scores = {
-        route,
-        performance: lhr.categories.performance ? Math.round(lhr.categories.performance.score * 100) : null,
-        accessibility: lhr.categories.accessibility ? Math.round(lhr.categories.accessibility.score * 100) : null,
-        bestPractices: lhr.categories['best-practices'] ? Math.round(lhr.categories['best-practices'].score * 100) : null,
-        seo: lhr.categories.seo ? Math.round(lhr.categories.seo.score * 100) : null,
+        performance: report.categories.performance.score * 100,
+        accessibility: report.categories.accessibility.score * 100,
+        bestPractices: report.categories['best-practices'].score * 100,
+        seo: report.categories.seo.score * 100
       };
-
-      summary.push(scores);
-      console.log(`Saved reports for ${route} (${safeName}.html)`);
-    } catch (err) {
-      console.error(`Failed to audit ${url}:`, err.message);
+      
+      console.log('\n================ LIGHTHOUSE AUDIT SCORES ================');
+      console.log(`Performance:    ${scores.performance.toFixed(0)}/100`);
+      console.log(`Accessibility:  ${scores.accessibility.toFixed(0)}/100`);
+      console.log(`Best Practices: ${scores.bestPractices.toFixed(0)}/100`);
+      console.log(`SEO:            ${scores.seo.toFixed(0)}/100`);
+      console.log('=========================================================\n');
+      
+      // Keep report.json but clean up if needed.
+    } catch (e) {
+      console.error('Failed to parse Lighthouse JSON:', e.message);
     }
+  } else {
+    console.error('Lighthouse report was not created.');
+    console.log('Stdout:', stdout);
+    console.log('Stderr:', stderr);
   }
-
-  try {
-    await chrome.kill();
-  } catch (killErr) {
-    console.warn('Chrome kill process warning (common on Windows EPERM):', killErr.message);
-  }
-
-  const summaryPath = path.join(outputDir, 'summary.json');
-  fs.writeFileSync(summaryPath, JSON.stringify(summary, null, 2), 'utf-8');
-
-  console.log('\nAudit Summary:');
-  console.table(summary);
-  console.log(`\nLighthouse audit completed. Results saved in ${outputDir}`);
-})();
+});

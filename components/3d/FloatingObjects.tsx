@@ -23,7 +23,7 @@ function FloatingSphere({ position, color, speed }: { position: [number, number,
   return (
     <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
       <mesh ref={meshRef} position={position}>
-        <sphereGeometry args={[1, 24, 24]} />
+        <sphereGeometry args={[1, 16, 16]} />
         <MeshDistortMaterial
           color={color}
           attach="material"
@@ -57,7 +57,7 @@ function FloatingTorus({ position, color, speed }: { position: [number, number, 
   return (
     <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.3}>
       <mesh ref={meshRef} position={position}>
-        <torusGeometry args={[0.8, 0.3, 12, 48]} />
+        <torusGeometry args={[0.8, 0.2, 8, 24]} />
         <MeshDistortMaterial
           color={color}
           attach="material"
@@ -111,8 +111,8 @@ export default function FloatingObjects() {
     <div className="w-full h-full">
       <Canvas
         camera={{ position: [0, 0, 8], fov: 45 }}
-        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-        dpr={[1, 1.5]}
+        gl={{ antialias: true, alpha: true, powerPreference: "high-performance", precision: "mediump" }}
+        dpr={[1, 1.2]}
         className="w-full h-full"
       >
         <ambientLight intensity={0.5} />
