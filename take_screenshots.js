@@ -2,30 +2,69 @@ const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
 
-const screenshotsDir = path.resolve('screenshots');
-if (!fs.existsSync(screenshotsDir)) fs.mkdirSync(screenshotsDir);
+const PAGES = [
+  { name: 'home', url: 'http://localhost:3000/' },
+  { name: 'services', url: 'http://localhost:3000/services' },
+  { name: 'portfolio', url: 'http://localhost:3000/portfolio' },
+  { name: 'case_studies', url: 'http://localhost:3000/case-studies' },
+  { name: 'about', url: 'http://localhost:3000/about' },
+  { name: 'contact', url: 'http://localhost:3000/contact' }
+];
 
-(async () => {
-  const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const TARGET_DIR = 'C:\\Users\\USMAN FAROOQRI\\.gemini\\antigravity-ide\\brain\\4511dacb-fb84-47bb-b896-d1c57657c6c8';
+
+async function capture() {
+  console.log('Starting screenshot capture...');
+  const browser = await chromium.launch({ headless: true });
   
-  const routes = [
-    { url: 'http://localhost:3000/', name: 'Home' },
-    { url: 'http://localhost:3000/services', name: 'Services' },
-    { url: 'http://localhost:3000/portfolio', name: 'Portfolio' },
-    { url: 'http://localhost:3000/case-studies', name: 'Case_Studies' }
-  ];
+  // Create desktop context
+  const desktopContext = await browser.newContext({
+    viewport: { width: 1440, height: 900 }
+  });
+  
+  // Create mobile context (mimicking iPhone 12)
+  const mobileContext = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1',
+    deviceScaleFactor: 3,
+    isMobile: true,
+    hasTouch: true
+  });
 
-  for (const route of routes) {
+  for (const pageInfo of PAGES) {
+    // Desktop screenshot
     try {
-      await page.goto(route.url, { waitUntil: 'networkidle' });
-      const filePath = path.join(screenshotsDir, `${route.name}.png`);
-      await page.screenshot({ path: filePath, fullPage: true });
-      console.log(`Saved screenshot: ${filePath}`);
+      const page = await desktopContext.newPage();
+      console.log(`Navigating to ${pageInfo.url} (Desktop)...`);
+      await page.goto(pageInfo.url, { waitUntil: 'networkidle' });
+      // Wait a bit for animations
+      await page.waitForTimeout(2000);
+      const filePath = path.join(TARGET_DIR, `${pageInfo.name}_desktop.png`);
+      await page.screenshot({ path: filePath, fullPage: false });
+      console.log(`Saved ${filePath}`);
+      await page.close();
     } catch (e) {
-      console.error(`Failed to screenshot ${route.name}:`, e);
+      console.error(`Error capturing desktop for ${pageInfo.name}:`, e.message);
+    }
+
+    // Mobile screenshot
+    try {
+      const page = await mobileContext.newPage();
+      console.log(`Navigating to ${pageInfo.url} (Mobile)...`);
+      await page.goto(pageInfo.url, { waitUntil: 'networkidle' });
+      // Wait a bit for animations
+      await page.waitForTimeout(2000);
+      const filePath = path.join(TARGET_DIR, `${pageInfo.name}_mobile.png`);
+      await page.screenshot({ path: filePath, fullPage: false });
+      console.log(`Saved ${filePath}`);
+      await page.close();
+    } catch (e) {
+      console.error(`Error capturing mobile for ${pageInfo.name}:`, e.message);
     }
   }
 
   await browser.close();
-})();
+  console.log('Capture complete.');
+}
+
+capture().catch(console.error);

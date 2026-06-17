@@ -23,6 +23,8 @@ const footerLinks = {
     { name: 'Pricing', href: '/pricing' },
     { name: 'Testimonials', href: '/testimonials' },
     { name: 'Contact', href: '/contact' },
+    { name: 'Privacy Policy', href: '/privacy-policy' },
+    { name: 'Terms & Conditions', href: '/terms-and-conditions' },
   ],
 };
 
