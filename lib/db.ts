@@ -620,6 +620,8 @@ export const dbService = {
       return prisma.user.findUnique({ where: { email } });
     },
     create: async (data: any) => isMockMode() ? mockCrud<any>('users').create(data) : prisma.user.create({ data }),
+    update: async (id: string, data: any) => isMockMode() ? mockCrud<any>('users').update(id, data) : prisma.user.update({ where: { id }, data }),
+    delete: async (id: string) => isMockMode() ? mockCrud<any>('users').delete(id) : prisma.user.delete({ where: { id } }),
   },
   services: {
     findMany: async () => {

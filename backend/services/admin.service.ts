@@ -9,6 +9,8 @@ const entityMap: Record<string, any> = {
   pricing: dbService.pricingPackages,
   team: dbService.teamMembers,
   leads: dbService.leads,
+  users: dbService.users,
+  settings: dbService.settings,
 };
 
 export class AdminService {
