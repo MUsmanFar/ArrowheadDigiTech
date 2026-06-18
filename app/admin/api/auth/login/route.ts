@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { dbService } from '@/lib/db';
 import { signJwt } from '@/lib/jwt';
 import bcrypt from 'bcryptjs';
+import { getJwtSecret } from '@/lib/env';
 
 export async function POST(request: Request) {
   try {
@@ -43,7 +44,6 @@ export async function POST(request: Request) {
     }
 
     // 2. Sign JWT Token
-    const jwtSecret = process.env.JWT_SECRET || 'arrowhead-digitech-premium-secret-key-2026-secure-token-generation-key';
     const token = await signJwt(
       {
         id: user.id,
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
         role: user.role,
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7 days
       },
-      jwtSecret
+      getJwtSecret()
     );
 
     // 3. Set HttpOnly Cookie

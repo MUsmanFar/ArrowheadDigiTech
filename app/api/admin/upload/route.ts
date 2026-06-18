@@ -1,24 +1,11 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { verifyJwt } from '@/lib/jwt';
-
-async function authenticate(request: Request) {
-  const cookieHeader = request.headers.get('cookie') || '';
-  const cookies = Object.fromEntries(
-    cookieHeader.split(';').map((c) => c.trim().split('='))
-  );
-  const token = cookies['admin_token'];
-
-  if (!token) return null;
-
-  const jwtSecret = process.env.JWT_SECRET || 'arrowhead-digitech-premium-secret-key-2026-secure-token-generation-key';
-  return await verifyJwt(token, jwtSecret);
-}
+import { authenticateAdmin } from '@/backend/middleware/auth.middleware';
 
 export async function POST(request: Request) {
   try {
-    const isAuthed = await authenticate(request);
+    const isAuthed = await authenticateAdmin(request);
     if (!isAuthed) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -76,7 +63,7 @@ export async function POST(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
-    const isAuthed = await authenticate(request);
+    const isAuthed = await authenticateAdmin(request);
     if (!isAuthed) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -106,4 +93,3 @@ export async function DELETE(request: Request) {
     );
   }
 }
-

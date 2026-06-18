@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { testimonialService } from '../services/testimonial.service';
+import { authenticateAdmin } from '../middleware/auth.middleware';
 
 export class TestimonialController {
   async getTestimonials() {
@@ -17,6 +18,9 @@ export class TestimonialController {
 
   async createTestimonial(request: Request) {
     try {
+      if (!(await authenticateAdmin(request))) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
       const body = await request.json();
       const testimonial = await testimonialService.createTestimonial(body);
       return NextResponse.json(testimonial, { status: 201 });

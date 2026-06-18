@@ -1,4 +1,5 @@
 import { verifyJwt } from '@/lib/jwt';
+import { getJwtSecret } from '@/lib/env';
 
 export async function authenticateAdmin(request: Request) {
   const cookieHeader = request.headers.get('cookie') || '';
@@ -9,6 +10,10 @@ export async function authenticateAdmin(request: Request) {
 
   if (!token) return null;
 
-  const jwtSecret = process.env.JWT_SECRET || 'arrowhead-digitech-premium-secret-key-2026-secure-token-generation-key';
-  return await verifyJwt(token, jwtSecret);
+  try {
+    return await verifyJwt(token, getJwtSecret());
+  } catch (error) {
+    console.error('Admin authentication is unavailable:', error);
+    return null;
+  }
 }

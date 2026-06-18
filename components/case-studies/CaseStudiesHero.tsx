@@ -1,0 +1,3 @@
+export default function CaseStudiesHero() {
+  return <section className="border-b border-slate-200 px-6 pb-20 pt-40 lg:px-8"><div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1fr_22rem] md:items-end"><div><p className="mb-6 text-xs font-bold uppercase tracking-[0.25em] text-blue-600">The archive</p><h1 className="font-montserrat text-5xl font-bold leading-[0.98] tracking-tighter text-slate-950 md:text-7xl lg:text-8xl">Work, with the<br />thinking exposed.</h1></div><p className="font-poppins leading-relaxed text-slate-500">A closer look at the constraints, decisions, and measurable outcomes behind the products we build.</p></div></section>;
+}
