@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { verifyJwt } from '@/lib/jwt';
+import { getJwtSecret } from '@/lib/env';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -21,8 +22,12 @@ export async function middleware(request: NextRequest) {
   }
 
   // 3. Verify JWT
-  const jwtSecret = process.env.JWT_SECRET || 'arrowhead-digitech-premium-secret-key-2026-secure-token-generation-key';
-  const decoded = await verifyJwt(token, jwtSecret);
+  let decoded = null;
+  try {
+    decoded = await verifyJwt(token, getJwtSecret());
+  } catch (error) {
+    console.error('Admin middleware configuration error:', error);
+  }
 
   if (!decoded) {
     // If token invalid, redirect to login and clear invalid cookie

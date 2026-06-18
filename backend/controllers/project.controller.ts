@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { projectService } from '../services/project.service';
+import { authenticateAdmin } from '../middleware/auth.middleware';
 
 export class ProjectController {
   async getProjects() {
@@ -17,6 +18,9 @@ export class ProjectController {
 
   async createProject(request: Request) {
     try {
+      if (!(await authenticateAdmin(request))) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
       const body = await request.json();
       const project = await projectService.createProject(body);
       return NextResponse.json(project, { status: 201 });

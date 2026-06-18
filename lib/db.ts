@@ -2,11 +2,13 @@ import { prisma } from './prisma';
 import fs from 'fs';
 import path from 'path';
 import bcrypt from 'bcryptjs';
+import { validateEnvironment } from './env';
 
 const MOCK_DB_PATH = path.join(process.cwd(), 'prisma', 'mock-db.json');
 
 // Helper to check if we are in mock mode
 export const isMockMode = () => {
+  validateEnvironment();
   return process.env.DB_MOCK === 'true';
 };
 

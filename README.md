@@ -12,7 +12,7 @@ A world-class premium futuristic digital agency website built with Next.js 15, T
 - **Database**: PostgreSQL
 - **ORM**: Prisma
 - **Email**: Nodemailer
-- **Authentication**: NextAuth.js
+- **Authentication**: Signed JWT admin session cookie
 
 ## 📋 Features
 
@@ -73,8 +73,8 @@ cp .env.example .env
 Edit `.env` with your configuration:
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/arrowhead_digitech?schema=public"
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-secret-key-here"
+DB_MOCK="false"
+JWT_SECRET="replace-with-at-least-32-random-characters"
 EMAIL_HOST="smtp.gmail.com"
 EMAIL_PORT="587"
 EMAIL_USER="your-email@gmail.com"
@@ -164,19 +164,28 @@ arrowhead-digitech/
 2. Configure GitHub Actions for CI/CD
 
 ### Hostinger Node.js Hosting
-1. Build the project:
+1. Provision PostgreSQL and set all production environment variables. `DATABASE_URL` and `JWT_SECRET` are mandatory; the JWT secret must contain at least 32 characters. Generate a unique random value and never commit it.
+
+2. Set `DB_MOCK=false`. The application intentionally refuses to start or build with the mock database enabled in production.
+
+Required SMTP settings are `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USER`, `EMAIL_PASSWORD`, and `EMAIL_FROM`. Configure them with the production mail provider before enabling contact-form delivery.
+
+3. Apply the Prisma schema against the production database:
+```bash
+npx prisma migrate deploy
+```
+
+4. Build the project:
 ```bash
 npm run build
 ```
 
-2. Upload files to Hostinger
-3. Set environment variables in Hostinger control panel
-4. Configure Node.js application
-5. Set up PostgreSQL database
-6. Run database migrations:
+5. Upload the build and configure the Node.js application to run:
 ```bash
-npx prisma db push
+npm run start
 ```
+
+The public `GET` routes for services, projects, and testimonials remain readable. Their write operations require a valid admin session cookie and return `401 Unauthorized` otherwise.
 
 ## 📊 Performance
 
@@ -189,10 +198,13 @@ npx prisma db push
 ## 🔒 Security
 
 - Environment variables for sensitive data
+- No built-in or fallback JWT signing secret
+- Production startup validation for JWT and database mode
+- Authenticated writes for services, projects, testimonials, and uploads
 - SQL injection prevention with Prisma
 - XSS protection with React
 - CSRF protection with Next.js
-- Secure authentication with NextAuth.js
+- Secure authentication with signed, HTTP-only admin session cookies
 
 ## 📧 Contact
 

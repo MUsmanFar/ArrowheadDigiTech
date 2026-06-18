@@ -2,11 +2,14 @@
   "name": "arrowhead-digitech",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20 <21"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "postinstall": "prisma generate"
   },
   "dependencies": {
@@ -19,7 +22,6 @@
     "framer-motion": "^11.11.7",
     "lucide-react": "^0.451.0",
     "next": "^16.2.9",
-    "next-auth": "^4.24.10",
     "nodemailer": "^9.0.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
