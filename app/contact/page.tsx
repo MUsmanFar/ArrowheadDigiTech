@@ -22,9 +22,9 @@ export default function ContactPage() {
           <div className="relative z-10 pt-12">
             <span className="text-blue-400 font-bold uppercase tracking-widest text-xs font-poppins mb-6 block">Initiate Contact</span>
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold font-montserrat tracking-tighter leading-[1.05] mb-8">
-              Let&apos;s build your <br/>
+              Let&apos;s build something <br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
-                unfair advantage.
+                great together.
               </span>
             </h1>
             <p className="text-lg text-slate-400 font-poppins max-w-md leading-relaxed font-light">

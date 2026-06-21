@@ -1,88 +1,138 @@
 'use client';
 
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, CheckCircle } from 'lucide-react';
+import { ArrowUpRight, CheckCircle } from 'lucide-react';
 
-interface StickyServiceBlockProps {
+interface ServiceCardProps {
   index: number;
   title: string;
   description: string;
   features: string[];
   slug: string;
-  align: 'left' | 'right';
-  gradient: string;
 }
 
-export default function StickyServiceBlock({ index, title, description, features, slug, align, gradient }: StickyServiceBlockProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.25, 0.1, 0, 1] },
+  },
+};
 
-  const yVisual = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const opacityVisual = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+const colorPairs = [
+  {
+    dot: 'bg-orange-500',
+    bg: 'bg-orange-50',
+    border: 'border-orange-100',
+    text: 'text-orange-600',
+    gradient: 'from-orange-500 to-amber-400',
+    shadow: 'shadow-orange-500/10',
+  },
+  {
+    dot: 'bg-blue-500',
+    bg: 'bg-blue-50',
+    border: 'border-blue-100',
+    text: 'text-blue-600',
+    gradient: 'from-blue-500 to-cyan-400',
+    shadow: 'shadow-blue-500/10',
+  },
+  {
+    dot: 'bg-emerald-500',
+    bg: 'bg-emerald-50',
+    border: 'border-emerald-100',
+    text: 'text-emerald-600',
+    gradient: 'from-emerald-500 to-teal-400',
+    shadow: 'shadow-emerald-500/10',
+  },
+  {
+    dot: 'bg-purple-500',
+    bg: 'bg-purple-50',
+    border: 'border-purple-100',
+    text: 'text-purple-600',
+    gradient: 'from-purple-500 to-pink-400',
+    shadow: 'shadow-purple-500/10',
+  },
+];
+
+export default function StickyServiceBlock({
+  index,
+  title,
+  description,
+  features,
+  slug,
+}: ServiceCardProps) {
+  const colors = colorPairs[index % colorPairs.length];
 
   return (
-    <section ref={containerRef} className="relative min-h-screen flex items-center py-24 bg-white border-b border-slate-100">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
-        <div className={`flex flex-col ${align === 'right' ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-16 lg:gap-24`}>
-          
-          {/* Text Content */}
-          <div className="w-full md:w-1/2">
-            <span className="text-4xl font-black text-slate-200 font-montserrat mb-6 block">0{index}</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 font-montserrat tracking-tight leading-tight mb-6">
-              {title}
-            </h2>
-            <p className="text-xl text-slate-600 font-poppins leading-relaxed mb-8">
-              {description}
-            </p>
-            
-            <ul className="space-y-4 mb-10">
-              {features.map((feature, i) => (
-                <li key={i} className="flex items-start">
-                  <CheckCircle className="w-6 h-6 text-emerald-500 mr-3 flex-shrink-0 mt-0.5" />
-                  <span className="text-slate-700 font-poppins text-lg">{feature}</span>
-                </li>
-              ))}
-            </ul>
+    <motion.div
+      variants={cardVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-80px' }}
+      className="group"
+    >
+      <Link href={`/services/${slug}`} className="block h-full">
+        <div
+          className={`relative ${colors.bg} ${colors.border} border rounded-2xl p-8 md:p-10 transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-xl ${colors.shadow}`}
+        >
+          <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-10">
+            <div className="flex-shrink-0">
+              <span
+                className={`inline-flex items-center justify-center w-14 h-14 rounded-xl ${colors.bg} border ${colors.border} text-2xl font-bold ${colors.text} font-poppins`}
+              >
+                {String(index + 1).padStart(2, '0')}
+              </span>
+            </div>
 
-            <Link href={`/services/${slug}`} className="inline-flex items-center gap-3 text-white bg-slate-900 hover:bg-blue-600 transition-colors py-4 px-8 rounded-full font-semibold font-poppins group">
-              Explore Capability <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </div>
-
-          {/* Visual Demonstration */}
-          <div className="w-full md:w-1/2 h-[500px] lg:h-[600px] relative rounded-3xl overflow-hidden bg-slate-50 border border-slate-200 flex items-center justify-center p-8 group">
-            {/* We simulate a premium UI mockup or abstract representation using framer-motion */}
-            <motion.div 
-              style={{ y: yVisual, opacity: opacityVisual }}
-              className="w-full h-full relative"
-            >
-              <div className={`absolute inset-0 bg-gradient-to-br ${gradient} rounded-2xl opacity-10 blur-3xl`} />
-              
-              <div className="absolute inset-4 rounded-2xl bg-white shadow-2xl border border-slate-100 overflow-hidden flex flex-col">
-                <div className="h-10 border-b border-slate-100 flex items-center px-4 gap-2 bg-slate-50/50">
-                  <div className="w-3 h-3 rounded-full bg-red-400" />
-                  <div className="w-3 h-3 rounded-full bg-amber-400" />
-                  <div className="w-3 h-3 rounded-full bg-emerald-400" />
+            <div className="flex-1 min-w-0">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className={`w-2 h-2 rounded-full ${colors.dot}`} />
+                    <span className={`text-xs font-semibold tracking-wide uppercase ${colors.text}`}>
+                      Service
+                    </span>
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-bold text-slate-900 font-poppins tracking-tight">
+                    {title}
+                  </h3>
                 </div>
-                <div className="flex-1 p-6 relative">
-                  <div className={`absolute -right-10 -bottom-10 w-64 h-64 bg-gradient-to-br ${gradient} rounded-full opacity-20 blur-2xl group-hover:scale-150 transition-transform duration-1000`} />
-                  <div className="w-3/4 h-6 bg-slate-100 rounded-md mb-4" />
-                  <div className="w-full h-32 bg-slate-50 rounded-xl border border-slate-100 mb-4" />
-                  <div className="w-1/2 h-4 bg-slate-100 rounded-md mb-2" />
-                  <div className="w-2/3 h-4 bg-slate-100 rounded-md" />
-                </div>
+                <span
+                  className={`hidden md:flex w-10 h-10 rounded-full ${colors.bg} border ${colors.border} items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:bg-white group-hover:border-slate-200`}
+                >
+                  <ArrowUpRight
+                    size={16}
+                    className={`${colors.text} transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5`}
+                  />
+                </span>
               </div>
-            </motion.div>
+
+              <p className="mt-3 text-sm md:text-base text-slate-500 font-inter leading-relaxed max-w-2xl">
+                {description}
+              </p>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                {features.slice(0, 3).map((feature, i) => (
+                  <span
+                    key={i}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${colors.bg} ${colors.text} border ${colors.border}`}
+                  >
+                    <CheckCircle size={12} />
+                    {feature}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
 
+          <div
+            className={`absolute -top-px left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r ${colors.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+          />
         </div>
-      </div>
-    </section>
+      </Link>
+    </motion.div>
   );
 }

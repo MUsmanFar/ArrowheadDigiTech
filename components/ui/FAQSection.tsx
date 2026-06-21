@@ -2,8 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, HelpCircle } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { ChevronDown } from 'lucide-react';
 
 interface FAQItem {
   id?: string;
@@ -25,36 +24,37 @@ export default function FAQSection({ faqs }: FAQSectionProps) {
   if (!faqs || faqs.length === 0) return null;
 
   return (
-    <div className="space-y-4 max-w-3xl mx-auto">
+    <div className="space-y-3">
       {faqs.map((faq, index) => {
         const isOpen = activeIndex === index;
         return (
           <motion.div
             key={faq.id || index}
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: index * 0.05 }}
+            transition={{ delay: index * 0.04 }}
           >
-            <Card className={`border transition-all duration-300 rounded-2xl overflow-hidden ${
-              isOpen 
-                ? 'border-blue-200 bg-blue-50/10 shadow-md shadow-blue-100/10' 
-                : 'border-slate-100 bg-white hover:border-slate-200 shadow-sm'
-            }`}>
+            <div
+              className={`rounded-xl border transition-all duration-300 ${
+                isOpen
+                  ? 'border-orange-200 bg-orange-50/50 shadow-sm'
+                  : 'border-slate-100 bg-white hover:border-slate-200'
+              }`}
+            >
               <button
                 type="button"
                 onClick={() => toggleFAQ(index)}
-                className="w-full text-left p-6 flex items-center justify-between gap-4 font-semibold text-slate-800 focus:outline-none"
+                className="w-full text-left p-5 flex items-center justify-between gap-4 font-semibold text-slate-800 focus:outline-none"
               >
-                <span className="flex items-center gap-3 font-montserrat text-sm md:text-base leading-snug">
-                  <HelpCircle className={`flex-shrink-0 transition-colors ${isOpen ? 'text-blue-600' : 'text-slate-400'}`} size={20} />
+                <span className="text-sm md:text-base font-inter leading-snug">
                   {faq.question}
                 </span>
-                <ChevronDown 
+                <ChevronDown
                   className={`flex-shrink-0 text-slate-400 transition-transform duration-300 ${
-                    isOpen ? 'rotate-180 text-blue-600' : ''
-                  }`} 
-                  size={18} 
+                    isOpen ? 'rotate-180 text-orange-500' : ''
+                  }`}
+                  size={16}
                 />
               </button>
               <AnimatePresence initial={false}>
@@ -63,15 +63,15 @@ export default function FAQSection({ faqs }: FAQSectionProps) {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.25, ease: 'easeInOut' }}
+                    transition={{ duration: 0.2, ease: 'easeInOut' }}
                   >
-                    <CardContent className="px-6 pb-6 pt-0 text-slate-600 text-sm leading-relaxed font-poppins border-t border-slate-50/50">
-                      {faq.answer}
-                    </CardContent>
+                    <div className="px-5 pb-5 pt-0 text-slate-600 text-sm leading-relaxed font-inter border-t border-slate-100 mt-0">
+                      <div className="pt-4">{faq.answer}</div>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
-            </Card>
+            </div>
           </motion.div>
         );
       })}

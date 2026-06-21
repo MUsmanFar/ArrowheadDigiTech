@@ -1,35 +1,41 @@
 import type { Metadata } from "next";
-import { Poppins, Montserrat } from "next/font/google";
+import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
 
 const poppins = Poppins({
   subsets: ["latin"],
   variable: "--font-poppins",
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const montserrat = Montserrat({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-montserrat",
-  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-inter",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Arrowhead DigiTech | Building Digital Experiences That Drive Growth",
-  description: "Web Development, Marketing, AI Automation, CRM Solutions, Lead Generation and Business Growth.",
-  keywords: "web development, digital marketing, AI automation, CRM solutions, lead generation, business growth",
+  title: "Arrowhead DigiTech | Digital Agency — Websites, AI & Growth",
+  description:
+    "Custom Websites, AI-Powered Experiences, and Digital Solutions designed to generate leads, improve credibility, and accelerate growth.",
+  keywords:
+    "web development, digital marketing, AI automation, CRM solutions, lead generation, business growth",
   openGraph: {
-    title: "Arrowhead DigiTech | Building Digital Experiences That Drive Growth",
-    description: "Web Development, Marketing, AI Automation, CRM Solutions, Lead Generation and Business Growth.",
+    title: "Arrowhead DigiTech | Digital Agency — Websites, AI & Growth",
+    description:
+      "Custom Websites, AI-Powered Experiences, and Digital Solutions designed to generate leads, improve credibility, and accelerate growth.",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Arrowhead DigiTech | Building Digital Experiences That Drive Growth",
-    description: "Web Development, Marketing, AI Automation, CRM Solutions, Lead Generation and Business Growth.",
+    title: "Arrowhead DigiTech | Digital Agency — Websites, AI & Growth",
+    description:
+      "Custom Websites, AI-Powered Experiences, and Digital Solutions designed to generate leads, improve credibility, and accelerate growth.",
   },
 };
+
+import MobileStickyCta from '@/components/layout/MobileStickyCta';
 
 export default function RootLayout({
   children,
@@ -39,9 +45,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} ${montserrat.variable} font-montserrat antialiased bg-gradient-to-br from-white via-slate-50 to-blue-50 min-h-screen`}
+        className={`${poppins.variable} ${inter.variable} font-inter antialiased bg-white min-h-screen pb-16 md:pb-0`}
       >
         {children}
+        <MobileStickyCta />
       </body>
     </html>
   );

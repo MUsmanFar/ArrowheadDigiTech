@@ -1,114 +1,173 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowUpRight, Monitor, Cpu, Layout, Settings } from 'lucide-react';
+import { caseStudies } from '@/lib/case-studies';
 
-const capabilities = [
+const serviceProjects: Record<string, typeof caseStudies> = {
+  'web-development': caseStudies.filter((s) => ['yalaride', 'atlanta-car-rental'].includes(s.slug)),
+  'ai-chatbots': caseStudies.filter((s) => ['america-needs-nurses'].includes(s.slug)),
+  'lead-generation': caseStudies.filter((s) => ['cars-compound', 'priceless-rent-a-car'].includes(s.slug)),
+  'digital-strategy': caseStudies.filter((s) => ['go-jetter-tours', 'vipkars'].includes(s.slug)),
+};
+
+const services = [
   {
-    id: 'engineering',
-    title: 'Custom Engineering',
-    tag: 'Development',
-    color: 'bg-blue-500'
+    slug: 'web-development',
+    title: 'Website Development',
+    description:
+      'Custom, high-performance websites built with Next.js, React, and modern architectures. Fast, scalable, and conversion-optimized.',
+    icon: Monitor,
   },
   {
-    id: 'acquisition',
-    title: 'Acquisition Funnels',
-    tag: 'Marketing',
-    color: 'bg-cyan-500'
+    slug: 'ai-chatbots',
+    title: 'AI Website Creation',
+    description:
+      'Intelligent AI-powered web experiences with smart chatbots, personalized content, and automated customer engagement.',
+    icon: Cpu,
   },
   {
-    id: 'architecture',
-    title: 'UI/UX Architecture',
-    tag: 'Design',
-    color: 'bg-indigo-500'
+    slug: 'lead-generation',
+    title: 'Landing Page Development',
+    description:
+      'High-converting landing pages designed to capture leads and drive sales — with measurable results we track and optimize.',
+    icon: Layout,
   },
   {
-    id: 'ai',
-    title: 'AI Integrations',
-    tag: 'Automation',
-    color: 'bg-purple-500'
-  }
+    slug: 'digital-strategy',
+    title: 'Website Management',
+    description:
+      'Ongoing maintenance, security updates, performance optimization, and content management to keep your site at its best.',
+    icon: Settings,
+  },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.25, 0.1, 0, 1] },
+  },
+};
+
 export default function CapabilitiesHover() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-
   return (
-    <section className="py-32 bg-slate-50 relative z-10 border-y border-slate-200/50" aria-label="Capabilities">
+    <section className="py-28 md:py-36 bg-white" aria-label="Services">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
-          <div>
-            <span className="text-xs font-bold text-blue-600 uppercase tracking-widest font-poppins mb-4 block">Core Capabilities</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 font-montserrat tracking-tight">
-              Enterprise Grade Solutions.
-            </h2>
-          </div>
-          <Link href="/services" className="group flex items-center gap-2 text-slate-600 hover:text-blue-600 font-semibold font-poppins transition-colors">
-            Explore all services
-            <div className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center group-hover:border-blue-200 group-hover:bg-blue-50 transition-colors">
-              <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
-            </div>
-          </Link>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
+          className="max-w-2xl mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 font-poppins tracking-tight leading-[1.1]">
+            Services designed to
+            <br />
+            <span className="text-orange-500">grow your business.</span>
+          </h2>
+          <p className="mt-4 text-lg text-slate-500 font-inter leading-relaxed">
+            From custom development to AI-powered experiences, we deliver digital solutions that drive real results.
+          </p>
+        </motion.div>
 
-        <div className="relative">
-          {/* Main List */}
-          <div className="border-t border-slate-200">
-            {capabilities.map((item, index) => (
-              <Link key={item.id} href="/services">
-                <div 
-                  className="group relative flex items-center justify-between py-8 md:py-12 border-b border-slate-200 cursor-pointer"
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                >
-                  <div className="flex items-center gap-8 relative z-10">
-                    <span className="text-slate-300 font-bold font-poppins text-lg w-8 transition-colors group-hover:text-blue-200">0{index + 1}</span>
-                    <h3 className="text-3xl md:text-5xl font-bold text-slate-900 font-montserrat tracking-tight group-hover:translate-x-4 transition-transform duration-500">
-                      {item.title}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
+          {services.map((service, index) => {
+            const Icon = service.icon;
+
+            return (
+              <motion.div
+                key={service.slug}
+                variants={cardVariants}
+              >
+                <Link href={`/services/${service.slug}`} className="block h-full group">
+                  <div className="relative h-full border border-slate-200 rounded-xl p-6 transition-all duration-300 hover:border-slate-300 hover:shadow-sm">
+                    <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center mb-4 transition-colors duration-300 group-hover:bg-orange-50">
+                      <Icon className="w-5 h-5 text-slate-500 transition-colors duration-300 group-hover:text-orange-500" />
+                    </div>
+
+                    <h3 className="text-lg font-semibold text-slate-900 font-poppins mb-2">
+                      {service.title}
                     </h3>
-                  </div>
-                  
-                  <div className="relative z-10 flex items-center gap-6">
-                    <span className="hidden md:inline-block px-4 py-1.5 rounded-full border border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-500 font-poppins group-hover:bg-white group-hover:border-white transition-colors">
-                      {item.tag}
-                    </span>
-                    <div className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all duration-300 transform group-hover:scale-110 group-hover:-rotate-45">
-                      <ArrowRight size={20} />
+
+                    <p className="text-sm text-slate-500 font-inter leading-relaxed">
+                      {service.description}
+                    </p>
+
+                    {serviceProjects[service.slug] && serviceProjects[service.slug].length > 0 && (
+                      <div className="mt-4 flex items-center gap-3">
+                        {serviceProjects[service.slug].slice(0, 2).map((project) => (
+                          <div key={project.slug} className="flex items-center gap-2">
+                            <div className="relative w-7 h-7 rounded-md overflow-hidden bg-slate-100 flex-shrink-0 border border-slate-200">
+                              {project.thumbnail ? (
+                                <Image
+                                  src={project.thumbnail}
+                                  alt={project.client}
+                                  fill
+                                  sizes="28px"
+                                  className="object-cover"
+                                />
+                              ) : (
+                                <div className="absolute inset-0 bg-slate-100" />
+                              )}
+                            </div>
+                            <span className="text-[11px] font-medium text-slate-400 font-inter truncate max-w-[90px]">
+                              {project.client}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                      <span className="text-xs font-medium text-slate-400 group-hover:text-slate-600 transition-colors duration-300">
+                        Learn More
+                      </span>
+                      <ArrowUpRight
+                        size={14}
+                        className="text-slate-300 transition-all duration-300 group-hover:text-slate-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      />
                     </div>
                   </div>
+                </Link>
+              </motion.div>
+            );
+          })}
+        </motion.div>
 
-                  {/* Hover background slide */}
-                  <div className="absolute inset-0 bg-white scale-y-0 origin-bottom group-hover:scale-y-100 group-hover:origin-top transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] z-0 shadow-[0_0_40px_rgba(0,0,0,0.03)]" />
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          {/* Floating Image Reveal (Desktop only) */}
-          <div className="hidden lg:block absolute right-[20%] top-1/2 -translate-y-1/2 pointer-events-none z-20 w-80 aspect-[4/5]">
-            <AnimatePresence mode="wait">
-              {hoveredIndex !== null && (
-                <motion.div
-                  key={hoveredIndex}
-                  initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, rotate: 5 }}
-                  transition={{ duration: 0.4, ease: "backOut" }}
-                  className={`w-full h-full rounded-2xl ${capabilities[hoveredIndex].color} shadow-2xl relative overflow-hidden`}
-                >
-                  <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-30 mix-blend-overlay" />
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <div className="text-white font-bold font-montserrat text-2xl">{capabilities[hoveredIndex].title}</div>
-                    <div className="text-white/80 font-poppins text-sm mt-2">Discover how we build scalable {capabilities[hoveredIndex].tag.toLowerCase()} architectures.</div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5, duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
+          className="mt-12 text-center"
+        >
+          <Link
+            href="/services"
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-slate-200 text-slate-700 font-semibold text-sm transition-all duration-300 hover:border-slate-300 hover:bg-slate-50 hover:-translate-y-0.5"
+          >
+            View All Services
+            <ArrowUpRight size={16} />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

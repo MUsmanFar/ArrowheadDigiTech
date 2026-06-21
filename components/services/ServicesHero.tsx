@@ -2,46 +2,58 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
 
 export default function ServicesHero() {
   return (
-    <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-slate-950" aria-label="Services Hero">
-      <div className="absolute inset-0 z-0 opacity-40 mix-blend-screen" aria-hidden="true">
-        {/* Subtle grid and glowing orbs */}
-        <div className="absolute top-[30%] left-[10%] w-[500px] h-[500px] bg-blue-600/30 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[10%] right-[20%] w-[600px] h-[400px] bg-indigo-500/20 rounded-full blur-[120px]" />
-      </div>
+    <section
+      className="relative min-h-[60vh] flex items-center overflow-hidden bg-white"
+      aria-label="Services Hero"
+    >
+      <div
+        className="absolute inset-0 subtle-grid opacity-30 pointer-events-none"
+        aria-hidden="true"
+      />
 
-      <div className="absolute inset-0 z-[1] bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+      <div
+        className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-orange-50/40 to-transparent pointer-events-none"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-t from-blue-50/30 to-transparent pointer-events-none"
+        aria-hidden="true"
+      />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 py-32 mt-20 text-center">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 py-32 mt-16">
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-semibold uppercase tracking-widest text-slate-300 mb-8 backdrop-blur-md font-poppins mx-auto"
+          transition={{ duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
         >
-          <Sparkles size={14} className="text-blue-400" /> Capabilities & Solutions
+          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide text-orange-600 bg-orange-50 border border-orange-100/60">
+            Our Services
+          </span>
         </motion.div>
 
         <motion.h1
-          className="text-5xl md:text-7xl lg:text-[6rem] font-bold text-white mb-8 font-montserrat leading-[1.05] tracking-tighter"
+          className="mt-6 text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-slate-900 font-poppins tracking-tight leading-[1.05]"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
+          transition={{ delay: 0.15, duration: 0.7, ease: [0.25, 0.1, 0, 1] }}
         >
-          Engineering <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Growth</span> <br className="hidden md:block"/>
-          Architectures.
+          Everything you need
+          <br />
+          to <span className="text-orange-500">succeed online.</span>
         </motion.h1>
-        
+
         <motion.p
-          className="text-xl text-slate-400 mb-12 font-poppins leading-relaxed max-w-2xl mx-auto font-light"
-          initial={{ opacity: 0, y: 20 }}
+          className="mt-6 text-lg md:text-xl text-slate-500 font-inter leading-relaxed max-w-2xl"
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
+          transition={{ delay: 0.3, duration: 0.7, ease: [0.25, 0.1, 0, 1] }}
         >
-          We don&apos;t just offer services; we deploy full-stack systems designed to give you an undeniable competitive advantage in your market.
+          From custom web development to AI-powered experiences and strategic
+          digital marketing, we provide end-to-end solutions that drive
+          measurable growth.
         </motion.p>
       </div>
     </section>

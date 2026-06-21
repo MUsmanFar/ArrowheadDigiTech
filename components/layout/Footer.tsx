@@ -40,14 +40,14 @@ export default function Footer() {
             <p className="text-slate-400 mb-6">
               Building Digital Experiences That Drive Growth
             </p>
-            <div className="flex space-x-4">
-              <a href="https://linkedin.com/company/arrowheaddigitech" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors" aria-label="Visit Arrowhead DigiTech on LinkedIn">
+            <div className="flex items-center gap-1">
+              <a href="https://linkedin.com/company/arrowheaddigitech" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-11 h-11 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-all" aria-label="Visit Arrowhead DigiTech on LinkedIn">
                 <Linkedin size={20} aria-hidden="true" />
               </a>
-              <a href="https://twitter.com/arrowheaddigit" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors" aria-label="Follow Arrowhead DigiTech on Twitter">
+              <a href="https://twitter.com/arrowheaddigit" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-11 h-11 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-all" aria-label="Follow Arrowhead DigiTech on Twitter">
                 <Twitter size={20} aria-hidden="true" />
               </a>
-              <a href="https://facebook.com/arrowheaddigitech" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors" aria-label="Follow Arrowhead DigiTech on Facebook">
+              <a href="https://facebook.com/arrowheaddigitech" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-11 h-11 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-all" aria-label="Follow Arrowhead DigiTech on Facebook">
                 <Facebook size={20} aria-hidden="true" />
               </a>
             </div>
@@ -77,11 +77,11 @@ export default function Footer() {
             <div className="space-y-3">
               <div className="flex items-center space-x-3 text-slate-400">
                 <Mail size={18} />
-                <span>info@arrowheaddigitech.com</span>
+                <a href="mailto:info@arrowheaddigitech.com" className="hover:text-white transition-colors">info@arrowheaddigitech.com</a>
               </div>
               <div className="flex items-center space-x-3 text-slate-400">
                 <Phone size={18} />
-                <span>+1 (555) 123-4567</span>
+                <a href="tel:+15551234567" className="hover:text-white transition-colors">+1 (555) 123-4567</a>
               </div>
               <div className="flex items-center space-x-3 text-slate-400">
                 <MapPin size={18} />

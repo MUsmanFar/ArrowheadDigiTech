@@ -11,5 +11,18 @@ export const metadata: Metadata = {
 };
 
 export default function CaseStudiesPage() {
-  return <div className="min-h-screen bg-slate-50 selection:bg-blue-200 selection:text-blue-900"><Navbar /><main id="main-content"><CaseStudiesHero /><section>{caseStudies.map((study, index) => <CaseStudyCard key={study.slug} study={study} index={index} />)}</section></main><Footer /></div>;
+  return (
+    <div className="min-h-screen bg-white selection:bg-orange-200 selection:text-orange-900">
+      <Navbar />
+      <main id="main-content">
+        <CaseStudiesHero />
+        <section>
+          {caseStudies.map((study, index) => (
+            <CaseStudyCard key={study.slug} study={study} index={index} />
+          ))}
+        </section>
+      </main>
+      <Footer />
+    </div>
+  );
 }
