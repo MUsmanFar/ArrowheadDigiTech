@@ -28,6 +28,7 @@ model Service {
   process       String?
   benefits      String?
   deliverables  String?
+  thumbnail     String?
   featured      Boolean   @default(false)
   order         Int       @default(0)
   createdAt     DateTime  @default(now())
@@ -52,6 +53,39 @@ model Project {
   order         Int       @default(0)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+}
+
+model ProjectMedia {
+  id                      String   @id @default(cuid())
+  slug                    String   @unique
+  homepageFeaturedImage   String?
+  portfolioFeaturedImage  String?
+  portfolioGridImage      String?
+  caseStudyHeroImage      String?
+  caseStudyGalleryImages  String[]
+  mobileScreenshots       String[]
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+}
+
+model Founder {
+  id        String   @id @default(cuid())
+  name      String
+  position  String
+  biography String
+  photo     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ClientLogo {
+  id          String   @id @default(cuid())
+  logo        String
+  companyName String
+  websiteUrl  String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Testimonial {

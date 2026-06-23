@@ -11,6 +11,7 @@ import StickyServiceBlock from '@/components/services/StickyServiceBlock';
 import DynamicOutcomesTicker from '@/components/services/DynamicOutcomesTicker';
 import CtaSection from '@/components/portfolio/CtaSection';
 import { caseStudies } from '@/lib/case-studies';
+import { useProjectMediaMap, thumbnailFor } from '@/lib/use-project-media';
 
 const fallbackServices = [
   {
@@ -60,6 +61,7 @@ const fallbackServices = [
 export default function ServicesPage() {
   const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const mediaMap = useProjectMediaMap();
 
   useEffect(() => {
     async function loadServices() {
@@ -161,40 +163,44 @@ export default function ServicesPage() {
             </motion.div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {caseStudies.slice(0, 4).map((study, i) => (
-                <motion.div
-                  key={study.slug}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08, duration: 0.5, ease: [0.25, 0.1, 0, 1] }}
-                >
-                  <Link
-                    href={`/case-studies/${study.slug}`}
-                    className="block p-6 rounded-xl bg-slate-50 border border-slate-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-slate-200"
+              {caseStudies.slice(0, 4).map((study, i) => {
+                const studyMedia = mediaMap.get(study.slug);
+                const thumb = thumbnailFor(studyMedia) || study.thumbnail;
+                return (
+                  <motion.div
+                    key={study.slug}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.08, duration: 0.5, ease: [0.25, 0.1, 0, 1] }}
                   >
-                    <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-slate-100 mb-4">
-                      {study.thumbnail ? (
-                        <Image
-                          src={study.thumbnail}
-                          alt={study.client}
-                          fill
-                          sizes="48px"
-                          className="object-cover"
-                        />
-                      ) : (
-                        <div className="absolute inset-0 bg-gradient-to-br from-orange-100 to-slate-100" />
-                      )}
-                    </div>
-                    <h3 className="text-sm font-bold text-slate-900 font-poppins">{study.client}</h3>
-                    <p className="text-xs text-slate-400 font-inter mt-1">{study.industry}</p>
-                    <div className="mt-3 flex items-center gap-1.5">
-                      <span className="text-xs font-semibold text-orange-600">{study.metrics[0]?.value}</span>
-                      <span className="text-[10px] text-slate-400">{study.metrics[0]?.label}</span>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
+                    <Link
+                      href={`/case-studies/${study.slug}`}
+                      className="block p-6 rounded-xl bg-slate-50 border border-slate-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-slate-200"
+                    >
+                      <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-slate-100 mb-4">
+                        {thumb ? (
+                          <Image
+                            src={thumb}
+                            alt={study.client}
+                            fill
+                            sizes="48px"
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 bg-gradient-to-br from-orange-100 to-slate-100" />
+                        )}
+                      </div>
+                      <h3 className="text-sm font-bold text-slate-900 font-poppins">{study.client}</h3>
+                      <p className="text-xs text-slate-400 font-inter mt-1">{study.industry}</p>
+                      <div className="mt-3 flex items-center gap-1.5">
+                        <span className="text-xs font-semibold text-orange-600">{study.metrics[0]?.value}</span>
+                        <span className="text-[10px] text-slate-400">{study.metrics[0]?.label}</span>
+                      </div>
+                    </Link>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         </section>

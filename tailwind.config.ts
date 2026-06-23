@@ -47,11 +47,16 @@ const config: Config = {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-16px)" },
         },
+        scroll: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "fade-in": "fade-in 0.7s ease-out forwards",
         "fade-in-up": "fade-in-up 0.9s ease-out forwards",
         float: "float 6s ease-in-out infinite",
+        scroll: "scroll 40s linear infinite",
       },
     },
   },

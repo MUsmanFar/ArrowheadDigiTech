@@ -5,86 +5,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUpRight, TrendingUp } from 'lucide-react';
-
-const fallbackProjects = [
-  {
-    slug: 'yalaride',
-    title: 'YalaRide',
-    description: 'Premium ride-sharing platform with real-time tracking and seamless booking experience.',
-    clientName: 'YalaRide Ltd',
-    industry: 'Transportation',
-    thumbnail: '/uploads/yalaride-thumb.jpg',
-    images: ['/uploads/yalaride-1.jpg', '/uploads/yalaride-2.jpg'],
-    featured: true,
-    metrics: '50K+ Downloads, 4.8 Rating',
-  },
-  {
-    slug: 'america-needs-nurses',
-    title: 'America Needs Nurses',
-    description: 'Healthcare recruitment platform connecting nurses with top medical facilities nationwide.',
-    clientName: 'ANN Recruitment',
-    industry: 'Healthcare',
-    thumbnail: '/uploads/nurses-thumb.jpg',
-    images: ['/uploads/nurses-1.jpg'],
-    featured: true,
-    metrics: '200+ Placements, 95% Success',
-  },
-  {
-    slug: 'go-jetter-tours',
-    title: 'Go Jetter Tours',
-    description: 'Travel booking platform with AI-powered recommendations and seamless itinerary management.',
-    clientName: 'GoJetter Tours',
-    industry: 'Travel',
-    thumbnail: '/uploads/travel-thumb.jpg',
-    images: ['/uploads/travel-1.jpg'],
-    featured: true,
-    metrics: '10K+ Bookings, 4.9 Rating',
-  },
-  {
-    slug: 'cars-compound',
-    title: 'Cars Compound',
-    description: 'Luxury car dealership platform with virtual showroom and financing integration.',
-    clientName: 'Cars Compound Inc',
-    industry: 'E-commerce',
-    thumbnail: '/uploads/dealership-thumb.jpg',
-    images: [],
-    featured: false,
-    metrics: '$2M+ Sales, 300+ Cars',
-  },
-  {
-    slug: 'vipkars',
-    title: 'VIPkars',
-    description: 'Premium car rental service for VIP clients with concierge-level service.',
-    clientName: 'VIPkars Rent',
-    industry: 'Transportation',
-    thumbnail: '/uploads/vip-thumb.jpg',
-    images: [],
-    featured: false,
-    metrics: '1K+ Clients, 5-Star Service',
-  },
-  {
-    slug: 'priceless-rent-a-car',
-    title: 'Priceless Rent A Car',
-    description: 'Budget-friendly car rental platform with competitive pricing and excellent service.',
-    clientName: 'Priceless Rent',
-    industry: 'Automotive',
-    thumbnail: '/uploads/priceless-thumb.jpg',
-    images: [],
-    featured: false,
-    metrics: '8K+ Rentals, 4.7 Rating',
-  },
-  {
-    slug: 'atlanta-car-rental',
-    title: 'Atlanta Car Rental',
-    description: 'Car rental management system with fleet tracking and automated booking workflows.',
-    clientName: 'Atlanta Car Services',
-    industry: 'Automotive',
-    thumbnail: '/uploads/rental-thumb.jpg',
-    images: [],
-    featured: false,
-    metrics: '5K+ Rentals, 98% Satisfaction',
-  },
-];
+import { useProjectMediaMap, thumbnailFor } from '@/lib/use-project-media';
 
 const industryColors: Record<string, { border: string; bg: string; text: string; gradient: string }> = {
   Transportation: {
@@ -149,6 +70,7 @@ const cardVariants = {
 export default function ProjectShowcase() {
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const mediaMap = useProjectMediaMap();
 
   useEffect(() => {
     async function loadProjects() {
@@ -156,16 +78,10 @@ export default function ProjectShowcase() {
         const res = await fetch('/api/admin/projects');
         if (res.ok) {
           const data = await res.json();
-          if (data.length > 0) {
-            setProjects(data);
-          } else {
-            setProjects(fallbackProjects);
-          }
-        } else {
-          setProjects(fallbackProjects);
+          setProjects(data.length > 0 ? data : []);
         }
       } catch {
-        setProjects(fallbackProjects);
+        // silently fail
       } finally {
         setLoading(false);
       }
@@ -212,7 +128,6 @@ export default function ProjectShowcase() {
           </div>
         )}
 
-        {/* Featured Projects — Large Showcase */}
         {featured.length > 0 && (
           <div className="space-y-16 md:space-y-24 mb-24">
             {featured.map((project: any, index: number) => {
@@ -220,6 +135,8 @@ export default function ProjectShowcase() {
               const metricsList = project.metrics
                 ? project.metrics.split(',').map((m: string) => m.trim())
                 : [];
+              const projectMedia = mediaMap.get(project.slug);
+              const thumb = thumbnailFor(projectMedia) || project.thumbnail || null;
 
               return (
                 <motion.div
@@ -238,16 +155,15 @@ export default function ProjectShowcase() {
                         index % 2 === 1 ? 'lg:direction-rtl' : ''
                       }`}
                     >
-                      {/* Visual */}
                       <div
                         className={`lg:col-span-7 ${
                           index % 2 === 1 ? 'lg:order-2' : 'lg:order-1'
                         }`}
                       >
                         <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-slate-100 border border-slate-100 transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-xl">
-                          {project.thumbnail ? (
+                          {thumb ? (
                             <Image
-                              src={project.thumbnail}
+                              src={thumb}
                               alt={project.title}
                               fill
                               sizes="(max-width: 1024px) 100vw, 60vw"
@@ -258,11 +174,7 @@ export default function ProjectShowcase() {
                               className={`w-full h-full bg-gradient-to-br ${colors.gradient} opacity-30`}
                             />
                           )}
-
-                          {/* Hover overlay */}
                           <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/10 transition-colors duration-500" />
-
-                          {/* Industry badge */}
                           <span
                             className={`absolute top-4 left-4 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${colors.bg} ${colors.text} border ${colors.border} backdrop-blur-sm`}
                           >
@@ -271,7 +183,6 @@ export default function ProjectShowcase() {
                         </div>
                       </div>
 
-                      {/* Content */}
                       <div
                         className={`lg:col-span-5 ${
                           index % 2 === 1 ? 'lg:order-1' : 'lg:order-2'
@@ -314,7 +225,6 @@ export default function ProjectShowcase() {
           </div>
         )}
 
-        {/* Secondary Projects — Grid */}
         {secondary.length > 0 && (
           <>
             <motion.div
@@ -335,6 +245,8 @@ export default function ProjectShowcase() {
                 const metricsList = project.metrics
                   ? project.metrics.split(',').map((m: string) => m.trim())
                   : [];
+                const projectMedia = mediaMap.get(project.slug);
+                const thumb = thumbnailFor(projectMedia) || project.thumbnail || null;
 
                 return (
                   <motion.div
@@ -351,9 +263,9 @@ export default function ProjectShowcase() {
                     >
                       <div className="h-full rounded-2xl border border-slate-100 bg-white overflow-hidden transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-slate-200">
                         <div className="relative aspect-[16/9] bg-slate-50 overflow-hidden">
-                          {project.thumbnail ? (
+                          {thumb ? (
                             <Image
-                              src={project.thumbnail}
+                              src={thumb}
                               alt={project.title}
                               fill
                               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

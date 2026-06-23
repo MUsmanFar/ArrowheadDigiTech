@@ -17,7 +17,10 @@ import {
   HelpCircle,
   Briefcase,
   Layers,
-  Sparkles
+  Sparkles,
+  Image as ImageIcon,
+  UserCircle,
+  Building2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -31,6 +34,9 @@ const navItems = [
   { label: 'Pricing', href: '/admin/pricing', icon: DollarSign },
   { label: 'Team', href: '/admin/team', icon: Users },
   { label: 'Blog', href: '/admin/blog', icon: FileText },
+  { label: 'Project Media', href: '/admin/project-media', icon: ImageIcon },
+  { label: 'Founder', href: '/admin/founder', icon: UserCircle },
+  { label: 'Client Logos', href: '/admin/client-logos', icon: Building2 },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

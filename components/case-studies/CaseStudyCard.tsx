@@ -1,8 +1,11 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import type { CaseStudy } from '@/lib/case-studies';
+import { useProjectMediaMap, thumbnailFor } from '@/lib/use-project-media';
 
 const industryColors: Record<string, { border: string; bg: string; text: string }> = {
   Transportation: { border: 'border-orange-100', bg: 'bg-orange-50', text: 'text-orange-600' },
@@ -17,7 +20,10 @@ function getColor(industry: string) {
 }
 
 export default function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
+  const mediaMap = useProjectMediaMap();
   const colors = getColor(study.industry);
+  const projectMedia = mediaMap.get(study.slug);
+  const thumb = thumbnailFor(projectMedia) || study.thumbnail;
 
   return (
     <Link
@@ -40,9 +46,9 @@ export default function CaseStudyCard({ study, index }: { study: CaseStudy; inde
         </div>
 
         <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-slate-100 lg:col-span-5">
-          {study.thumbnail && (
+          {thumb && (
             <Image
-              src={study.thumbnail}
+              src={thumb}
               alt=""
               fill
               sizes="(max-width: 1024px) 100vw, 42vw"

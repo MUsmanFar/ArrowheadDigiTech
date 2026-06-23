@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
+import { useProjectMediaMap, thumbnailFor } from '@/lib/use-project-media';
 
 const cardGradients = [
   'from-blue-500 to-cyan-500',
@@ -13,6 +14,7 @@ const cardGradients = [
 export default function FeaturedProjects() {
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const mediaMap = useProjectMediaMap();
 
   useEffect(() => {
     async function loadProjects() {
@@ -20,7 +22,7 @@ export default function FeaturedProjects() {
         const res = await fetch('/api/admin/projects');
         if (res.ok) {
           const data = await res.json();
-          setProjects(data.slice(0, 3)); // Only feature top 3
+          setProjects(data.slice(0, 3));
         }
       } catch (err) {
         console.error('Failed to load portfolio projects:', err);
@@ -52,6 +54,8 @@ export default function FeaturedProjects() {
           ) : projects.length > 0 ? (
             projects.map((project, index) => {
               const gradient = cardGradients[index % cardGradients.length];
+              const projectMedia = mediaMap.get(project.slug);
+              const thumb = thumbnailFor(projectMedia) || project.thumbnail || null;
               return (
                 <motion.div
                   key={project.slug}
@@ -67,27 +71,25 @@ export default function FeaturedProjects() {
                       <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
                       <div className="flex-1 p-8 pb-0 flex flex-col justify-end z-10">
                          <div className="translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
-                           <span className="text-xs text-blue-600 font-bold uppercase tracking-widest font-poppins bg-blue-50/90 backdrop-blur-md px-3 py-1.5 rounded-lg mb-4 inline-block">
-                              {project.industry || project.category || 'Case Study'}
-                           </span>
-                           <h3 className="text-2xl font-bold text-slate-900 mb-3 font-montserrat leading-tight group-hover:text-blue-600 transition-colors">
-                             {project.title}
-                           </h3>
+                            <span className="text-xs text-blue-600 font-bold uppercase tracking-widest font-poppins bg-blue-50/90 backdrop-blur-md px-3 py-1.5 rounded-lg mb-4 inline-block">
+                               {project.industry || project.category || 'Case Study'}
+                            </span>
+                            <h3 className="text-2xl font-bold text-slate-900 mb-3 font-montserrat leading-tight group-hover:text-blue-600 transition-colors">
+                              {project.title}
+                            </h3>
                          </div>
                       </div>
                       <div className="h-1/2 mt-auto relative overflow-hidden rounded-t-2xl mx-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 shadow-2xl">
-                        {project.thumbnail ? (
-                           <>
-                             <Image 
-                               src={project.thumbnail} 
-                               alt={project.title} 
-                               fill
-                               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-                               className="w-full h-full object-cover" 
-                             />
-                           </>
+                        {thumb ? (
+                            <Image
+                              src={thumb}
+                              alt={project.title}
+                              fill
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
+                              className="w-full h-full object-cover"
+                            />
                         ) : (
-                           <div className={`w-full h-full bg-gradient-to-br ${gradient} opacity-80`} />
+                            <div className={`w-full h-full bg-gradient-to-br ${gradient} opacity-80`} />
                         )}
                       </div>
                     </div>

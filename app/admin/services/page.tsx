@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ImageUploadField } from '@/components/admin/ImageUploadField';
 
 interface Service {
   id: string;
@@ -13,6 +14,7 @@ interface Service {
   title: string;
   description: string;
   icon?: string;
+  thumbnail?: string;
   problem?: string;
   solution?: string;
   process?: string;
@@ -42,6 +44,7 @@ export default function AdminServicesPage() {
   const [deliverables, setDeliverables] = useState('');
   const [featured, setFeatured] = useState(false);
   const [order, setOrder] = useState(0);
+  const [thumbnail, setThumbnail] = useState('');
 
   // Fetch all services
   const fetchServices = async () => {
@@ -78,6 +81,7 @@ export default function AdminServicesPage() {
     setDeliverables('');
     setFeatured(false);
     setOrder(services.length + 1);
+    setThumbnail('');
     setIsModalOpen(true);
   };
 
@@ -94,6 +98,7 @@ export default function AdminServicesPage() {
     setDeliverables(service.deliverables || '');
     setFeatured(service.featured);
     setOrder(service.order);
+    setThumbnail(service.thumbnail || '');
     setIsModalOpen(true);
   };
 
@@ -118,6 +123,7 @@ export default function AdminServicesPage() {
       slug,
       description,
       icon,
+      thumbnail: thumbnail || undefined,
       problem,
       solution,
       process: processVal,
@@ -346,6 +352,16 @@ export default function AdminServicesPage() {
                       <span className="text-sm font-semibold text-slate-700">Featured Service</span>
                     </label>
                   </div>
+                </div>
+
+                <div>
+                  <ImageUploadField
+                    value={thumbnail}
+                    onChange={setThumbnail}
+                    label="Service Thumbnail"
+                    helperText="Recommended: 1200x800 WebP. Max 5MB."
+                    subdir="services"
+                  />
                 </div>
 
                 <div>

@@ -11,6 +11,9 @@ const entityMap: Record<string, any> = {
   leads: dbService.leads,
   users: dbService.users,
   settings: dbService.settings,
+  'project-media': dbService.projectMedia,
+  founders: dbService.founders,
+  'client-logos': dbService.clientLogos,
 };
 
 export class AdminService {

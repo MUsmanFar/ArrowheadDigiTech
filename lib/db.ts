@@ -243,8 +243,8 @@ const initialMockData = {
       description: 'Premium ride-sharing platform with real-time tracking and seamless booking experience.',
       clientName: 'YalaRide Ltd',
       industry: 'Transportation',
-      images: ['/uploads/yalaride-1.jpg', '/uploads/yalaride-2.jpg'],
-      thumbnail: '/uploads/yalaride-thumb.jpg',
+      images: [],
+      thumbnail: '',
       featured: true,
       metrics: '50K+ Downloads, 4.8 Rating',
       testimonialId: 'tst_1',
@@ -260,8 +260,8 @@ const initialMockData = {
       description: 'Healthcare recruitment platform connecting nurses with top medical facilities nationwide.',
       clientName: 'ANN Recruitment',
       industry: 'Healthcare',
-      images: ['/uploads/nurses-1.jpg'],
-      thumbnail: '/uploads/nurses-thumb.jpg',
+      images: [],
+      thumbnail: '',
       featured: true,
       metrics: '200+ Placements, 95% Success',
       testimonialId: 'tst_2',
@@ -277,8 +277,8 @@ const initialMockData = {
       description: 'Travel booking platform with AI-powered recommendations and seamless itinerary management.',
       clientName: 'GoJetter Tours',
       industry: 'Travel',
-      images: ['/uploads/travel-1.jpg'],
-      thumbnail: '/uploads/travel-thumb.jpg',
+      images: [],
+      thumbnail: '',
       featured: true,
       metrics: '10K+ Bookings, 4.9 Rating',
       testimonialId: 'tst_3',
@@ -295,7 +295,7 @@ const initialMockData = {
       clientName: 'Atlanta Car Services',
       industry: 'Automotive',
       images: [],
-      thumbnail: '/uploads/rental-thumb.jpg',
+      thumbnail: '',
       featured: false,
       metrics: '5K+ Rentals, 98% Satisfaction',
       testimonialId: '',
@@ -312,7 +312,7 @@ const initialMockData = {
       clientName: 'Cars Compound Inc',
       industry: 'E-commerce',
       images: [],
-      thumbnail: '/uploads/dealership-thumb.jpg',
+      thumbnail: '',
       featured: false,
       metrics: '$2M+ Sales, 300+ Cars',
       testimonialId: '',
@@ -329,7 +329,7 @@ const initialMockData = {
       clientName: 'VIPkars Rent',
       industry: 'Transportation',
       images: [],
-      thumbnail: '/uploads/vip-thumb.jpg',
+      thumbnail: '',
       featured: false,
       metrics: '1K+ Clients, 5-Star Service',
       testimonialId: '',
@@ -346,7 +346,7 @@ const initialMockData = {
       clientName: 'Priceless Rent',
       industry: 'Automotive',
       images: [],
-      thumbnail: '/uploads/priceless-thumb.jpg',
+      thumbnail: '',
       featured: false,
       metrics: '8K+ Rentals, 4.7 Rating',
       testimonialId: '',
@@ -363,7 +363,7 @@ const initialMockData = {
       role: 'CEO',
       company: 'YalaRide',
       content: 'Arrowhead DigiTech transformed our ride-sharing idea into a highly functional, scalable platform. Their developer skills and technical agility are world-class.',
-      image: '/uploads/t1.jpg',
+      image: '',
       rating: 5,
       featured: true,
       projectId: 'prj_1',
@@ -376,7 +376,7 @@ const initialMockData = {
       role: 'Director of HR',
       company: 'ANN Recruitment',
       content: 'Our placement rate surged by 300% within months of launching our new portal. They understand recruitment workflows like no other.',
-      image: '/uploads/t2.jpg',
+      image: '',
       rating: 5,
       featured: true,
       projectId: 'prj_2',
@@ -389,7 +389,7 @@ const initialMockData = {
       role: 'VP of Marketing',
       company: 'Go Jetter Tours',
       content: 'Our mobile bookings exceeded our desktop sales within weeks of launching the application. An absolutely stunning user interface.',
-      image: '/uploads/t3.jpg',
+      image: '',
       rating: 5,
       featured: true,
       projectId: 'prj_3',
@@ -743,5 +743,43 @@ export const dbService = {
     create: async (data: any) => isMockMode() ? mockCrud<any>('settings').create(data) : prisma.setting.create({ data }),
     update: async (id: string, data: any) => isMockMode() ? mockCrud<any>('settings').update(id, data) : prisma.setting.update({ where: { id }, data }),
     delete: async (id: string) => isMockMode() ? mockCrud<any>('settings').delete(id) : prisma.setting.delete({ where: { id } }),
-  }
+  },
+  projectMedia: {
+    findMany: async () => isMockMode() ? mockCrud<any>('projectMedia').findMany() : prisma.projectMedia.findMany(),
+    findUnique: async (slug: string) => isMockMode() ? mockCrud<any>('projectMedia').findFirst((pm) => pm.slug === slug) : prisma.projectMedia.findUnique({ where: { slug } }),
+    upsert: async (slug: string, data: any) => {
+      if (isMockMode()) {
+        const existing = await mockCrud<any>('projectMedia').findFirst((pm) => pm.slug === slug);
+        if (existing) {
+          return mockCrud<any>('projectMedia').update(existing.id, data);
+        }
+        return mockCrud<any>('projectMedia').create({ ...data, slug });
+      }
+      return prisma.projectMedia.upsert({
+        where: { slug },
+        create: { slug, ...data },
+        update: data,
+      });
+    },
+    create: async (data: any) => isMockMode() ? mockCrud<any>('projectMedia').create(data) : prisma.projectMedia.create({ data }),
+    update: async (id: string, data: any) => isMockMode() ? mockCrud<any>('projectMedia').update(id, data) : prisma.projectMedia.update({ where: { id }, data }),
+    delete: async (id: string) => isMockMode() ? mockCrud<any>('projectMedia').delete(id) : prisma.projectMedia.delete({ where: { id } }),
+  },
+  founders: {
+    findMany: async () => isMockMode() ? mockCrud<any>('founders').findMany() : prisma.founder.findMany(),
+    create: async (data: any) => isMockMode() ? mockCrud<any>('founders').create(data) : prisma.founder.create({ data }),
+    update: async (id: string, data: any) => isMockMode() ? mockCrud<any>('founders').update(id, data) : prisma.founder.update({ where: { id }, data }),
+    delete: async (id: string) => isMockMode() ? mockCrud<any>('founders').delete(id) : prisma.founder.delete({ where: { id } }),
+  },
+  clientLogos: {
+    findMany: async () => {
+      if (isMockMode()) {
+        return (await mockCrud<any>('clientLogos').findMany()).sort((a, b) => a.sortOrder - b.sortOrder);
+      }
+      return prisma.clientLogo.findMany({ orderBy: { sortOrder: 'asc' } });
+    },
+    create: async (data: any) => isMockMode() ? mockCrud<any>('clientLogos').create(data) : prisma.clientLogo.create({ data }),
+    update: async (id: string, data: any) => isMockMode() ? mockCrud<any>('clientLogos').update(id, data) : prisma.clientLogo.update({ where: { id }, data }),
+    delete: async (id: string) => isMockMode() ? mockCrud<any>('clientLogos').delete(id) : prisma.clientLogo.delete({ where: { id } }),
+  },
 };

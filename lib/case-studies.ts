@@ -13,7 +13,7 @@ export type CaseStudy = {
   projectType: string;
   summary: string;
   technologies: string[];
-  thumbnail: string;
+  thumbnail: string | null;
   images: string[];
   metrics: CaseStudyMetric[];
   challenge: string;
@@ -34,8 +34,8 @@ export const caseStudies: CaseStudy[] = [
     projectType: 'Mobile Application',
     summary: 'A premium ride-sharing platform built around fast booking, live trip visibility, and a calmer passenger experience.',
     technologies: ['React Native', 'Node.js', 'PostgreSQL', 'Socket.io', 'Google Maps API', 'Firebase'],
-    thumbnail: '/uploads/yalaride-thumb.jpg',
-    images: ['/uploads/yalaride-1.jpg', '/uploads/yalaride-2.jpg'],
+    thumbnail: null,
+    images: [],
     metrics: [{ value: '50K+', label: 'downloads' }, { value: '4.8', label: 'app rating' }],
     challenge: 'Turn a complex dispatch workflow into a simple mobile experience while keeping riders and drivers informed in real time.',
     painPoints: [
@@ -65,8 +65,8 @@ export const caseStudies: CaseStudy[] = [
     projectType: 'Web Application',
     summary: 'A healthcare recruitment experience that connects qualified nurses with facilities that need them.',
     technologies: ['Next.js', 'TypeScript', 'PostgreSQL', 'Prisma', 'Tailwind CSS', 'SendGrid'],
-    thumbnail: '/uploads/nurses-thumb.jpg',
-    images: ['/uploads/nurses-1.jpg'],
+    thumbnail: null,
+    images: [],
     metrics: [{ value: '200+', label: 'placements' }, { value: '95%', label: 'success rate' }],
     challenge: 'Reduce friction across a high-trust recruitment process involving candidates, credentials, and healthcare employers.',
     painPoints: [
@@ -96,8 +96,8 @@ export const caseStudies: CaseStudy[] = [
     projectType: 'Web Platform',
     summary: 'A travel booking platform that helps customers move from inspiration to a managed itinerary.',
     technologies: ['Next.js', 'React', 'Node.js', 'MongoDB', 'Stripe', 'Cloudinary'],
-    thumbnail: '/uploads/travel-thumb.jpg',
-    images: ['/uploads/travel-1.jpg'],
+    thumbnail: null,
+    images: [],
     metrics: [{ value: '10K+', label: 'bookings' }, { value: '4.9', label: 'customer rating' }],
     challenge: 'Make a broad catalog of destinations and travel choices feel personal without complicating the path to booking.',
     painPoints: [
@@ -127,7 +127,7 @@ export const caseStudies: CaseStudy[] = [
     projectType: 'Web Application',
     summary: 'A fleet and reservation experience designed to keep availability, booking, and operations in sync.',
     technologies: ['React', 'Node.js', 'PostgreSQL', 'Redis', 'AWS', 'Docker'],
-    thumbnail: '/uploads/rental-thumb.jpg',
+    thumbnail: null,
     images: [],
     metrics: [{ value: '5K+', label: 'rentals' }, { value: '98%', label: 'satisfaction' }],
     challenge: 'Replace fragmented fleet and reservation workflows with one understandable customer and operator journey.',
@@ -153,7 +153,7 @@ export const caseStudies: CaseStudy[] = [
     projectType: 'Web Platform',
     summary: 'A digital showroom for high-value vehicles, built to make discovery and financing feel considered.',
     technologies: ['Next.js', 'TypeScript', 'PostgreSQL', 'Prisma', 'Stripe', 'Vercel'],
-    thumbnail: '/uploads/dealership-thumb.jpg',
+    thumbnail: null,
     images: [],
     metrics: [{ value: '$2M+', label: 'sales' }, { value: '300+', label: 'vehicles' }],
     challenge: 'Bring the confidence and detail of an in-person luxury showroom into an online buying journey.',
@@ -179,7 +179,7 @@ export const caseStudies: CaseStudy[] = [
     projectType: 'Web Application',
     summary: 'A concierge-led premium rental experience for clients who expect speed, discretion, and service.',
     technologies: ['React', 'Node.js', 'PostgreSQL', 'Socket.io', 'Twilio', 'Stripe'],
-    thumbnail: '/uploads/vip-thumb.jpg',
+    thumbnail: null,
     images: [],
     metrics: [{ value: '1K+', label: 'clients' }, { value: '5-star', label: 'service' }],
     challenge: 'Express a high-touch service model digitally while keeping the reservation path immediate and practical.',
@@ -205,7 +205,7 @@ export const caseStudies: CaseStudy[] = [
     projectType: 'Web Application',
     summary: 'A straightforward rental platform balancing competitive pricing with a dependable booking experience.',
     technologies: ['React', 'Node.js', 'PostgreSQL', 'Redis', 'AWS', 'Docker'],
-    thumbnail: '/uploads/priceless-thumb.jpg',
+    thumbnail: null,
     images: [],
     metrics: [{ value: '8K+', label: 'rentals' }, { value: '4.7', label: 'customer rating' }],
     challenge: 'Help value-conscious customers compare options quickly without making the service feel transactional or uncertain.',

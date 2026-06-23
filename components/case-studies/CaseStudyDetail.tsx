@@ -8,12 +8,18 @@ import { ArrowLeft, ArrowRight, CheckCircle, Lightbulb, Target, BarChart3, Monit
 import { getSchedulingUrl } from '@/lib/scheduling';
 import type { CaseStudy } from '@/lib/case-studies';
 import { caseStudies } from '@/lib/case-studies';
+import { useProjectMediaMap, heroImageFor, galleryImagesFor } from '@/lib/use-project-media';
 
 export default function CaseStudyDetail({ study }: { study: CaseStudy }) {
+  const mediaMap = useProjectMediaMap();
   const currentIndex = caseStudies.findIndex((s) => s.slug === study.slug);
   const prev = currentIndex > 0 ? caseStudies[currentIndex - 1] : null;
   const next = currentIndex < caseStudies.length - 1 ? caseStudies[currentIndex + 1] : null;
   const related = caseStudies.filter((s) => s.industry === study.industry && s.slug !== study.slug).slice(0, 2);
+
+  const projectMedia = mediaMap.get(study.slug);
+  const heroImg = heroImageFor(projectMedia) || study.thumbnail;
+  const galleryImages = galleryImagesFor(projectMedia).length > 0 ? galleryImagesFor(projectMedia) : study.images;
 
   return (
     <main id="main-content" className="bg-white">
@@ -78,11 +84,11 @@ export default function CaseStudyDetail({ study }: { study: CaseStudy }) {
       </section>
 
       {/* Hero Image */}
-      {study.thumbnail && (
+      {heroImg && (
         <section className="px-6 pb-20 lg:px-8">
           <div className="relative mx-auto aspect-[16/9] max-w-7xl overflow-hidden rounded-2xl bg-slate-100">
             <Image
-              src={study.thumbnail}
+              src={heroImg}
               alt={`${study.title} project`}
               fill
               priority
@@ -168,7 +174,7 @@ export default function CaseStudyDetail({ study }: { study: CaseStudy }) {
       </section>
 
       {/* Screenshots */}
-      {study.images.length > 0 && (
+      {galleryImages.length > 0 && (
         <section className="px-6 py-20 lg:py-28 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide text-purple-600 bg-purple-50 border border-purple-100/60">
@@ -178,7 +184,7 @@ export default function CaseStudyDetail({ study }: { study: CaseStudy }) {
               A look at the final product.
             </h2>
             <div className="mt-10 grid gap-6 sm:grid-cols-2">
-              {study.images.map((img, i) => (
+              {galleryImages.map((img, i) => (
                 <div
                   key={i}
                   className="relative aspect-[16/10] overflow-hidden rounded-xl bg-slate-100 border border-slate-100"
@@ -346,46 +352,50 @@ export default function CaseStudyDetail({ study }: { study: CaseStudy }) {
             </motion.div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              {related.map((project, i) => (
-                <motion.div
-                  key={project.slug}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.5 }}
-                >
-                  <Link
-                    href={`/case-studies/${project.slug}`}
-                    className="group flex items-center gap-5 p-5 rounded-xl bg-slate-50 border border-slate-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+              {related.map((project, i) => {
+                const relatedMedia = mediaMap.get(project.slug);
+                const relatedThumb = heroImageFor(relatedMedia) || project.thumbnail;
+                return (
+                  <motion.div
+                    key={project.slug}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1, duration: 0.5 }}
                   >
-                    <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
-                      {project.thumbnail ? (
-                        <Image
-                          src={project.thumbnail}
-                          alt={project.title}
-                          fill
-                          sizes="80px"
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="absolute inset-0 bg-gradient-to-br from-orange-100 to-slate-100" />
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                        {project.client}
-                      </p>
-                      <h3 className="text-base font-bold text-slate-900 font-poppins mt-0.5 truncate">
-                        {project.title}
-                      </h3>
-                      <p className="text-xs text-slate-400 font-inter mt-1 line-clamp-1">
-                        {project.summary}
-                      </p>
-                    </div>
-                    <ArrowRight size={16} className="text-slate-300 group-hover:text-orange-500 transition-colors flex-shrink-0" />
-                  </Link>
-                </motion.div>
-              ))}
+                    <Link
+                      href={`/case-studies/${project.slug}`}
+                      className="group flex items-center gap-5 p-5 rounded-xl bg-slate-50 border border-slate-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                    >
+                      <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
+                        {relatedThumb ? (
+                          <Image
+                            src={relatedThumb}
+                            alt={project.title}
+                            fill
+                            sizes="80px"
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 bg-gradient-to-br from-orange-100 to-slate-100" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                          {project.client}
+                        </p>
+                        <h3 className="text-base font-bold text-slate-900 font-poppins mt-0.5 truncate">
+                          {project.title}
+                        </h3>
+                        <p className="text-xs text-slate-400 font-inter mt-1 line-clamp-1">
+                          {project.summary}
+                        </p>
+                      </div>
+                      <ArrowRight size={16} className="text-slate-300 group-hover:text-orange-500 transition-colors flex-shrink-0" />
+                    </Link>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         </section>

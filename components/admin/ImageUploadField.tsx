@@ -10,6 +10,7 @@ interface ImageUploadFieldProps {
   onChange: (url: string) => void;
   label?: string;
   helperText?: string;
+  subdir?: string;
 }
 
 export function ImageUploadField({
@@ -17,6 +18,7 @@ export function ImageUploadField({
   onChange,
   label = 'Upload Image',
   helperText = 'Recommended: PNG, JPG, WEBP, SVG or GIF. Max 5MB.',
+  subdir,
 }: ImageUploadFieldProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
@@ -42,6 +44,7 @@ export function ImageUploadField({
     try {
       const formData = new FormData();
       formData.append('file', file);
+      if (subdir) formData.append('subdir', subdir);
 
       // If there is an existing image, attempt to delete it from the server
       if (value) {

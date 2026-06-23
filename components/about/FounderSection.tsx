@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { caseStudies } from '@/lib/case-studies';
@@ -10,7 +10,16 @@ const allTechnologies = [...new Set(caseStudies.flatMap((s) => s.technologies))]
 const totalProjects = caseStudies.length;
 
 export default function FounderSection() {
-  const [imgError, setImgError] = useState(false);
+  const [founder, setFounder] = useState<any>(null);
+
+  useEffect(() => {
+    fetch('/api/admin/founders')
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) setFounder(data[0]);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <section className="py-24 lg:py-32 bg-white relative z-10 border-b border-slate-100" aria-label="Founder">
@@ -25,25 +34,29 @@ export default function FounderSection() {
               transition={{ duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
               className="sticky top-32"
             >
-              <div className="aspect-[3/4] w-full rounded-2xl overflow-hidden relative bg-orange-50 border border-orange-100 shadow-lg shadow-orange-100/30">
-                {!imgError ? (
+              <div className="aspect-[3/4] w-full rounded-2xl overflow-hidden relative bg-slate-100 border border-slate-200 shadow-lg shadow-slate-200/30">
+                {founder?.photo ? (
                   <Image
-                    src="/uploads/usman.jpg"
-                    alt="Usman Farooqi"
+                    src={founder.photo}
+                    alt={founder.name}
                     fill
                     sizes="(max-width: 1024px) 100vw, 40vw"
                     className="object-cover"
                     priority
-                    onError={() => setImgError(true)}
                   />
                 ) : (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-orange-50 to-orange-100 p-8">
-                    <div className="w-24 h-24 rounded-full bg-orange-200 flex items-center justify-center mb-4">
-                      <span className="text-3xl font-bold text-orange-600 font-poppins">UF</span>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-8">
+                    <div className="w-24 h-24 rounded-full bg-slate-200 flex items-center justify-center mb-4">
+                      <span className="text-3xl font-bold text-slate-500 font-poppins">
+                        {founder ? founder.name.charAt(0) : 'A'}
+                      </span>
                     </div>
-                    <p className="text-sm font-semibold text-slate-700 font-poppins text-center">Usman Farooqi</p>
-                    <p className="text-xs text-slate-400 font-inter text-center">Web Development Lead &amp; Project Manager</p>
-                    <p className="text-[10px] text-slate-300 font-inter mt-2">Photo coming soon</p>
+                    <p className="text-sm font-semibold text-slate-600 font-poppins text-center">
+                      {founder?.name || 'Arrowhead DigiTech'}
+                    </p>
+                    {founder?.position && (
+                      <p className="text-xs text-slate-400 font-inter text-center mt-1">{founder.position}</p>
+                    )}
                   </div>
                 )}
               </div>
@@ -63,15 +76,13 @@ export default function FounderSection() {
               </span>
 
               <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 font-poppins tracking-tight">
-                Usman Farooqi
+                {founder?.name || 'Usman Farooqi'}
               </h2>
               <p className="mt-2 text-base md:text-lg text-orange-500 font-semibold font-inter">
-                Web Development Lead &amp; Project Manager
+                {founder?.position || 'Founder & CEO, Arrowhead DigiTech'}
               </p>
               <p className="mt-6 text-base leading-relaxed text-slate-600 font-inter">
-                I lead a team that has delivered {totalProjects} digital platforms across {industries.length} industries
-                &mdash; from ride-sharing and healthcare recruitment to travel booking and automotive marketplaces.
-                Every project we ship is built around the business outcome first, not the technology stack.
+                {founder?.biography || `I lead a team that has delivered ${totalProjects} digital platforms across ${industries.length} industries — from ride-sharing and healthcare recruitment to travel booking and automotive marketplaces. Every project we ship is built around the business outcome first, not the technology stack.`}
               </p>
             </motion.div>
 

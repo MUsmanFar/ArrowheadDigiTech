@@ -36,6 +36,7 @@ export const metadata: Metadata = {
 };
 
 import MobileStickyCta from '@/components/layout/MobileStickyCta';
+import ClientLogoStrip from '@/components/home/ClientLogoStrip';
 
 export default function RootLayout({
   children,
@@ -48,6 +49,7 @@ export default function RootLayout({
         className={`${poppins.variable} ${inter.variable} font-inter antialiased bg-white min-h-screen pb-16 md:pb-0`}
       >
         {children}
+        <ClientLogoStrip />
         <MobileStickyCta />
       </body>
     </html>
