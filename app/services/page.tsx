@@ -66,7 +66,7 @@ export default function ServicesPage() {
   useEffect(() => {
     async function loadServices() {
       try {
-        const res = await fetch('/api/admin/services');
+        const res = await fetch('/api/services');
         if (res.ok) {
           const data = await res.json();
           if (data.length > 0) {

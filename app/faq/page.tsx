@@ -16,7 +16,7 @@ export default function FAQPage() {
   useEffect(() => {
     async function loadFaqs() {
       try {
-        const res = await fetch('/api/admin/faqs');
+        const res = await fetch('/api/public/faqs');
         if (res.ok) {
           const data = await res.json();
           setFaqs(data);

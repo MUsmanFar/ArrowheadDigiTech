@@ -88,7 +88,7 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
 4. Set up the database:
 ```bash
 npx prisma generate
-npx prisma db push
+npm run db:migrate:dev
 ```
 
 5. Run the development server:
@@ -172,8 +172,12 @@ Required SMTP settings are `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USER`, `EMAIL_PASS
 
 3. Apply the Prisma schema against the production database:
 ```bash
-npx prisma migrate deploy
+npm run db:migrate
 ```
+
+For Neon PostgreSQL:
+- Set `DATABASE_URL` to the **pooled** connection string (`?sslmode=require&pgbouncer=true`).
+- Set `DIRECT_DATABASE_URL` to the **direct** connection string for migrations.
 
 4. Build the project:
 ```bash

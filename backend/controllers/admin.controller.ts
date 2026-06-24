@@ -11,12 +11,9 @@ export class AdminController {
         return NextResponse.json({ error: 'Entity not found' }, { status: 404 });
       }
 
-      // Enforce authentication only for sensitive entities
-      if (['leads', 'users', 'settings'].includes(entity)) {
-        const isAuthed = await authenticateAdmin(request);
-        if (!isAuthed) {
-          return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
+      const isAuthed = await authenticateAdmin(request);
+      if (!isAuthed) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
       }
 
       const data = await targetService.findMany();
@@ -63,6 +60,20 @@ export class AdminController {
       }
 
       const body = await request.json();
+
+      if (entity === 'project-media') {
+        const { id, slug, ...data } = body;
+        if (!slug) {
+          return NextResponse.json({ error: 'Missing slug for project media' }, { status: 400 });
+        }
+        if (id) {
+          const updated = await targetService.update(id, { slug, ...data });
+          return NextResponse.json(updated);
+        }
+        const created = await targetService.upsert(slug, data);
+        return NextResponse.json(created);
+      }
+
       const { id, ...updateData } = body;
 
       if (!id) {

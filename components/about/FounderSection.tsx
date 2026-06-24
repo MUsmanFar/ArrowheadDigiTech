@@ -13,7 +13,7 @@ export default function FounderSection() {
   const [founder, setFounder] = useState<any>(null);
 
   useEffect(() => {
-    fetch('/api/admin/founders')
+    fetch('/api/public/founders')
       .then((r) => (r.ok ? r.json() : []))
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) setFounder(data[0]);

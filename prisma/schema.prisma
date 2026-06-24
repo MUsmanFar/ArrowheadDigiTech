@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
 }
 
 model User {
@@ -48,7 +49,8 @@ model Project {
   featured      Boolean   @default(false)
   metrics       String?
   testimonialId String?
-  testimonial   Testimonial? @relation(fields: [testimonialId], references: [id])
+  testimonial   Testimonial?  @relation(fields: [testimonialId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  projectMedia  ProjectMedia?
   caseStudy     Boolean   @default(false)
   order         Int       @default(0)
   createdAt     DateTime  @default(now())
@@ -66,16 +68,18 @@ model ProjectMedia {
   mobileScreenshots       String[]
   createdAt               DateTime @default(now())
   updatedAt               DateTime @updatedAt
+  project                 Project  @relation(fields: [slug], references: [slug], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Founder {
-  id        String   @id @default(cuid())
-  name      String
-  position  String
-  biography String
-  photo     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(cuid())
+  profileKey String   @unique @default("primary")
+  name       String
+  position   String
+  biography  String
+  photo      String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model ClientLogo {
@@ -97,7 +101,6 @@ model Testimonial {
   image         String?
   rating        Int       @default(5)
   featured      Boolean   @default(false)
-  projectId     String?
   projects      Project[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -136,7 +139,7 @@ model PricingPackage {
   features      String[]
   popular       Boolean   @default(false)
   serviceId     String?
-  service       Service?  @relation(fields: [serviceId], references: [id])
+  service       Service?  @relation(fields: [serviceId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   order         Int       @default(0)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -153,6 +156,9 @@ model Lead {
   status        String    @default("new")
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
 }
 
 model TeamMember {

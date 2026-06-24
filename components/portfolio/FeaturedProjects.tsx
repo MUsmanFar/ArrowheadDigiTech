@@ -19,7 +19,7 @@ export default function FeaturedProjects() {
   useEffect(() => {
     async function loadProjects() {
       try {
-        const res = await fetch('/api/admin/projects');
+        const res = await fetch('/api/projects');
         if (res.ok) {
           const data = await res.json();
           setProjects(data.slice(0, 3));

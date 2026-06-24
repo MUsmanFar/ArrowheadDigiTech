@@ -56,7 +56,7 @@ export default function HorizontalScrollGallery() {
   useEffect(() => {
     async function loadProjects() {
       try {
-        const res = await fetch('/api/admin/projects');
+        const res = await fetch('/api/projects');
         if (res.ok) {
           const data = await res.json();
           const featured = data.filter((p: any) => p.featured).slice(0, 4);

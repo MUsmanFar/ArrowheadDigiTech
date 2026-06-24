@@ -7,6 +7,9 @@ async function main() {
   console.log('Seeding database...');
 
   // 1. Clean existing records
+  await prisma.clientLogo.deleteMany();
+  await prisma.projectMedia.deleteMany();
+  await prisma.founder.deleteMany();
   await prisma.lead.deleteMany();
   await prisma.pricingPackage.deleteMany();
   await prisma.project.deleteMany();

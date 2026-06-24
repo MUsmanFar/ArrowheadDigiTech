@@ -6,6 +6,51 @@ import { validateEnvironment } from './env';
 
 const MOCK_DB_PATH = path.join(process.cwd(), 'prisma', 'mock-db.json');
 
+const FOUNDER_PROFILE_KEY = 'primary';
+
+async function attachProjectIdsToTestimonials<T extends { id: string }>(
+  testimonials: T[],
+): Promise<Array<T & { projectId: string | null }>> {
+  const links = await prisma.project.findMany({
+    where: { testimonialId: { not: null } },
+    select: { id: true, testimonialId: true },
+  });
+  const projectIdByTestimonialId = new Map(
+    links.map((project) => [project.testimonialId as string, project.id]),
+  );
+  return testimonials.map((testimonial) => ({
+    ...testimonial,
+    projectId: projectIdByTestimonialId.get(testimonial.id) ?? null,
+  }));
+}
+
+async function syncTestimonialProjectLink(
+  testimonialId: string,
+  projectId: string | null | undefined,
+) {
+  if (projectId === undefined) return;
+
+  await prisma.project.updateMany({
+    where: { testimonialId },
+    data: { testimonialId: null },
+  });
+
+  if (projectId) {
+    await prisma.project.update({
+      where: { id: projectId },
+      data: { testimonialId },
+    });
+  }
+}
+
+function stripTestimonialInput(data: Record<string, unknown>) {
+  const { projectId, ...testimonialData } = data;
+  return {
+    testimonialData,
+    projectId: projectId as string | null | undefined,
+  };
+}
+
 // Helper to check if we are in mock mode
 export const isMockMode = () => {
   validateEnvironment();
@@ -676,14 +721,73 @@ export const dbService = {
         include: { testimonial: true }
       });
     },
-    create: async (data: any) => isMockMode() ? mockCrud<any>('projects').create(data) : prisma.project.create({ data }),
+    create: async (data: any) => {
+      const withImages = { ...data, images: data.images ?? [] };
+      return isMockMode()
+        ? mockCrud<any>('projects').create(withImages)
+        : prisma.project.create({ data: withImages });
+    },
     update: async (id: string, data: any) => isMockMode() ? mockCrud<any>('projects').update(id, data) : prisma.project.update({ where: { id }, data }),
     delete: async (id: string) => isMockMode() ? mockCrud<any>('projects').delete(id) : prisma.project.delete({ where: { id } }),
   },
   testimonials: {
-    findMany: async () => isMockMode() ? mockCrud<any>('testimonials').findMany() : prisma.testimonial.findMany(),
-    create: async (data: any) => isMockMode() ? mockCrud<any>('testimonials').create(data) : prisma.testimonial.create({ data }),
-    update: async (id: string, data: any) => isMockMode() ? mockCrud<any>('testimonials').update(id, data) : prisma.testimonial.update({ where: { id }, data }),
+    findMany: async () => {
+      if (isMockMode()) {
+        return mockCrud<any>('testimonials').findMany();
+      }
+      const testimonials = await prisma.testimonial.findMany();
+      return attachProjectIdsToTestimonials(testimonials);
+    },
+    create: async (data: any) => {
+      if (isMockMode()) {
+        const created = await mockCrud<any>('testimonials').create(data);
+        if (data.projectId) {
+          const db = readMockDb();
+          const project = db.projects?.find((p: any) => p.id === data.projectId);
+          if (project) {
+            project.testimonialId = created.id;
+            writeMockDb(db);
+          }
+        }
+        return created;
+      }
+      const { testimonialData, projectId } = stripTestimonialInput(data);
+      const created = await prisma.testimonial.create({ data: testimonialData as any });
+      await syncTestimonialProjectLink(created.id, projectId ?? null);
+      return { ...created, projectId: projectId ?? null };
+    },
+    update: async (id: string, data: any) => {
+      if (isMockMode()) {
+        const updated = await mockCrud<any>('testimonials').update(id, data);
+        if (data.projectId !== undefined) {
+          const db = readMockDb();
+          for (const project of db.projects || []) {
+            if (project.testimonialId === id) {
+              project.testimonialId = '';
+            }
+          }
+          if (data.projectId) {
+            const project = db.projects?.find((p: any) => p.id === data.projectId);
+            if (project) {
+              project.testimonialId = id;
+            }
+          }
+          writeMockDb(db);
+        }
+        return updated;
+      }
+      const { testimonialData, projectId } = stripTestimonialInput(data);
+      const updated = await prisma.testimonial.update({ where: { id }, data: testimonialData as any });
+      await syncTestimonialProjectLink(id, projectId);
+      const linkedProjectId =
+        projectId !== undefined
+          ? projectId
+          : (await prisma.project.findFirst({
+              where: { testimonialId: id },
+              select: { id: true },
+            }))?.id ?? null;
+      return { ...updated, projectId: linkedProjectId };
+    },
     delete: async (id: string) => isMockMode() ? mockCrud<any>('testimonials').delete(id) : prisma.testimonial.delete({ where: { id } }),
   },
   faqs: {
@@ -767,8 +871,43 @@ export const dbService = {
   },
   founders: {
     findMany: async () => isMockMode() ? mockCrud<any>('founders').findMany() : prisma.founder.findMany(),
-    create: async (data: any) => isMockMode() ? mockCrud<any>('founders').create(data) : prisma.founder.create({ data }),
-    update: async (id: string, data: any) => isMockMode() ? mockCrud<any>('founders').update(id, data) : prisma.founder.update({ where: { id }, data }),
+    create: async (data: any) => {
+      if (isMockMode()) {
+        const db = readMockDb();
+        const existing = (db.founders || []).find(
+          (founder: any) => founder.profileKey === FOUNDER_PROFILE_KEY,
+        );
+        if (existing) {
+          return mockCrud<any>('founders').update(existing.id, {
+            ...data,
+            profileKey: FOUNDER_PROFILE_KEY,
+          });
+        }
+        return mockCrud<any>('founders').create({
+          ...data,
+          profileKey: FOUNDER_PROFILE_KEY,
+        });
+      }
+      const { profileKey: _profileKey, ...founderData } = data;
+      return prisma.founder.upsert({
+        where: { profileKey: FOUNDER_PROFILE_KEY },
+        create: { profileKey: FOUNDER_PROFILE_KEY, ...founderData },
+        update: founderData,
+      });
+    },
+    update: async (id: string, data: any) => {
+      if (isMockMode()) {
+        return mockCrud<any>('founders').update(id, {
+          ...data,
+          profileKey: FOUNDER_PROFILE_KEY,
+        });
+      }
+      const { profileKey: _profileKey, ...founderData } = data;
+      return prisma.founder.update({
+        where: { id },
+        data: { ...founderData, profileKey: FOUNDER_PROFILE_KEY },
+      });
+    },
     delete: async (id: string) => isMockMode() ? mockCrud<any>('founders').delete(id) : prisma.founder.delete({ where: { id } }),
   },
   clientLogos: {

@@ -35,9 +35,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# prisma
-prisma/migrations/
-
 # audit and lighthouse reports
 /audit_output/
 /lighthouse_output/

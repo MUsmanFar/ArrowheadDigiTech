@@ -14,7 +14,7 @@ export function useProjectMediaBySlug(slug: string) {
   const [media, setMedia] = useState<ProjectMediaData | null>(null);
 
   useEffect(() => {
-    fetch('/api/admin/project-media')
+    fetch('/api/public/project-media')
       .then((r) => (r.ok ? r.json() : []))
       .then((list: ProjectMediaData[]) => {
         const found = list.find((m) => m.slug === slug);
@@ -30,7 +30,7 @@ export function useProjectMediaMap() {
   const [map, setMap] = useState<Map<string, ProjectMediaData>>(new Map());
 
   useEffect(() => {
-    fetch('/api/admin/project-media')
+    fetch('/api/public/project-media')
       .then((r) => (r.ok ? r.json() : []))
       .then((list: ProjectMediaData[]) => {
         const m = new Map<string, ProjectMediaData>();

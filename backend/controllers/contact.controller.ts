@@ -4,11 +4,13 @@ import { contactService, ContactLeadPayload } from '../services/contact.service'
 export class ContactController {
   async handleContactSubmission(request: Request) {
     try {
-      const body = await request.json();
-      const { firstName, lastName, email, message } = body as ContactLeadPayload;
+      const body = await request.json() as ContactLeadPayload;
+      const { email, message } = body;
+      const name =
+        body.name?.trim() ||
+        `${body.firstName || ''} ${body.lastName || ''}`.trim();
 
-      // Validate required fields
-      if (!firstName || !lastName || !email || !message) {
+      if (!name || !email?.trim() || !message?.trim()) {
         return NextResponse.json(
           { error: 'Missing required fields' },
           { status: 400 }
