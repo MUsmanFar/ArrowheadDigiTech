@@ -1,21 +1,15 @@
-'use client';
-
-import React, { useRef } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { getSchedulingUrl } from '@/lib/scheduling';
-import { useSiteSection } from '@/lib/use-site-content';
+import type { HeroContent } from '@/lib/site-content';
 
-export default function HeroSection() {
-  const { section: hero } = useSiteSection('home.hero');
-  const sectionRef = useRef<HTMLElement>(null);
-
+export default function HeroSectionServer({ hero }: { hero: HeroContent }) {
   const primaryHref = hero.primaryCta?.external
     ? getSchedulingUrl('hero')
     : hero.primaryCta?.href || getSchedulingUrl('hero');
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden bg-slate-950" aria-label="Hero">
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-slate-950" aria-label="Hero">
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
         <div
@@ -58,7 +52,7 @@ export default function HeroSection() {
                 href={primaryHref}
                 target={hero.primaryCta.external ? '_blank' : undefined}
                 rel={hero.primaryCta.external ? 'noopener noreferrer' : undefined}
-                className="group relative inline-flex items-center gap-2.5 px-9 py-4 rounded-full bg-gradient-to-b from-orange-500 to-orange-600 text-white text-base font-semibold shadow-[0_8px_24px_-4px_rgba(249,115,22,0.4)] transition-all duration-300 ease-out hover:shadow-[0_12px_36px_-6px_rgba(249,115,22,0.6)] hover:-translate-y-0.5"
+                className="group relative inline-flex items-center gap-2.5 px-9 py-4 rounded-full bg-gradient-to-b from-orange-600 to-orange-700 text-white text-base font-semibold shadow-[0_8px_24px_-4px_rgba(234,88,12,0.4)] transition-all duration-300 ease-out hover:shadow-[0_12px_36px_-6px_rgba(234,88,12,0.6)] hover:-translate-y-0.5"
               >
                 <span className="relative">{hero.primaryCta.label}</span>
                 <ArrowUpRight size={18} className="relative" aria-hidden="true" />

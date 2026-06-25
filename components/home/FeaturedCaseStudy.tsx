@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import Image from 'next/image';
+import SafeImage from '@/components/ui/SafeImage';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { useCaseStudies } from '@/lib/use-case-studies';
@@ -17,7 +17,7 @@ function IPhoneMockup({ src, alt }: { src: string | null; alt: string }) {
         </div>
         <div className="relative aspect-[9/19.5] overflow-hidden rounded-[2.25rem] bg-black">
           {src ? (
-            <Image src={src} alt={alt} fill sizes="280px" className="object-cover" priority />
+            <SafeImage src={src} alt={alt} fill sizes="280px" className="object-cover" priority />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-slate-800 to-slate-900" />
           )}
@@ -40,7 +40,7 @@ function BrowserMockup({ src, alt }: { src: string | null; alt: string }) {
         </div>
         <div className="relative aspect-[4/3] bg-slate-900">
           {src ? (
-            <Image src={src} alt={alt} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
+            <SafeImage src={src} alt={alt} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-slate-800 to-slate-900" />
           )}

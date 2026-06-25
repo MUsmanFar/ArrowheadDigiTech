@@ -1,31 +1,45 @@
-'use client';
-
-import React from 'react';
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import HeroSection from '@/components/home/HeroSection';
+import HeroSectionServer from '@/components/home/HeroSectionServer';
+import ClientLogoStrip from '@/components/home/ClientLogoStrip';
+import LazySection from '@/components/ui/LazySection';
+import { getSiteContent } from '@/lib/site-content-server';
+import { getClientLogosServer } from '@/lib/media-server';
 
-const MetricsBar = dynamic(() => import('@/components/home/MetricsBar'), { ssr: false });
-const CapabilitiesHover = dynamic(() => import('@/components/home/CapabilitiesHover'), { ssr: false });
-const FeaturedCaseStudy = dynamic(() => import('@/components/home/FeaturedCaseStudy'), { ssr: false });
-const TestimonialSection = dynamic(() => import('@/components/home/TestimonialSection'), { ssr: false });
-const CtaSection = dynamic(() => import('@/components/portfolio/CtaSection'), { ssr: false });
+const MetricsBar = dynamic(() => import('@/components/home/MetricsBar'));
+const CapabilitiesHover = dynamic(() => import('@/components/home/CapabilitiesHover'));
+const FeaturedCaseStudy = dynamic(() => import('@/components/home/FeaturedCaseStudy'));
+const TestimonialSection = dynamic(() => import('@/components/home/TestimonialSection'));
+const CtaSection = dynamic(() => import('@/components/portfolio/CtaSection'));
 
-export default function Home() {
+export const revalidate = 60;
+
+export default async function Home() {
+  const [siteContent, logos] = await Promise.all([getSiteContent(), getClientLogosServer()]);
+
   return (
     <div className="min-h-screen bg-white selection:bg-orange-200 selection:text-orange-900">
       <Navbar />
-      
       <main id="main-content">
-        <HeroSection />
-        <MetricsBar />
-        <CapabilitiesHover />
-        <FeaturedCaseStudy />
-        <TestimonialSection />
-        <CtaSection />
+        <HeroSectionServer hero={siteContent['home.hero']} />
+        <ClientLogoStrip initialLogos={logos} />
+        <LazySection minHeight={96}>
+          <MetricsBar />
+        </LazySection>
+        <LazySection minHeight={480}>
+          <CapabilitiesHover />
+        </LazySection>
+        <LazySection minHeight={480}>
+          <FeaturedCaseStudy />
+        </LazySection>
+        <LazySection minHeight={480}>
+          <TestimonialSection />
+        </LazySection>
+        <LazySection minHeight={256}>
+          <CtaSection />
+        </LazySection>
       </main>
-
       <Footer />
     </div>
   );

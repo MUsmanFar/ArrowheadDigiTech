@@ -25,8 +25,8 @@ export async function middleware(request: NextRequest) {
   let decoded = null;
   try {
     decoded = await verifyJwt(token, getJwtSecret());
-  } catch (error) {
-    console.error('Admin middleware configuration error:', error);
+  } catch {
+    decoded = null;
   }
 
   if (!decoded || decoded.role !== 'admin') {
@@ -34,8 +34,6 @@ export async function middleware(request: NextRequest) {
     response.cookies.delete('admin_token');
     return response;
   }
-
-  // User is authenticated — add noindex header for all admin pages
   const response = NextResponse.next();
   response.headers.set('X-Robots-Tag', 'noindex, nofollow');
   return response;

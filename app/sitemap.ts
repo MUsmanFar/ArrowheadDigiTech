@@ -16,6 +16,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/blog',
     '/careers',
     '/testimonials',
+    '/privacy-policy',
+    '/terms-and-conditions',
   ];
 
   const [studies, posts] = await Promise.all([getCaseStudies(), getPublishedBlogPosts()]);

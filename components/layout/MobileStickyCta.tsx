@@ -12,7 +12,7 @@ export default function MobileStickyCta() {
       <div className="flex items-center justify-center gap-3 px-4 py-3">
         <a
           href={cta.phoneHref}
-          className="flex items-center justify-center w-12 h-12 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors flex-shrink-0"
+          className="flex items-center justify-center w-12 h-12 min-w-12 min-h-12 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors flex-shrink-0"
           aria-label="Call us"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -30,6 +30,19 @@
     scroll-behavior: smooth;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
   body {
     background-color: var(--background);
     color: var(--foreground);
@@ -44,6 +57,11 @@
     letter-spacing: -0.02em;
     line-height: 1.15;
   }
+
+  .cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
+  }
 }
 
 @layer components {
@@ -53,7 +71,7 @@
     justify-content: center;
     gap: 0.5rem;
     padding: 0.75rem 1.75rem;
-    background-color: #f97316;
+    background-color: #c2410c;
     color: #ffffff;
     font-size: 0.9375rem;
     font-weight: 600;
@@ -66,8 +84,8 @@
   }
 
   .btn-primary:hover {
-    background-color: #ea580c;
-    box-shadow: 0 12px 30px -8px rgba(249, 115, 22, 0.45);
+    background-color: #9a3412;
+    box-shadow: 0 12px 30px -8px rgba(194, 65, 12, 0.45);
     transform: translateY(-1px);
   }
 

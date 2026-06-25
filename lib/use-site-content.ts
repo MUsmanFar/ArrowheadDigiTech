@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import type { SiteContentKey, SiteContentMap } from './site-content';
 import { SITE_CONTENT_DEFAULTS } from './site-content-defaults';
+import { useSiteContentContext } from './site-content-context';
 
 let cache: SiteContentMap | null = null;
 let inflight: Promise<SiteContentMap> | null = null;
@@ -25,20 +26,30 @@ async function fetchSiteContent(): Promise<SiteContentMap> {
 }
 
 export function useSiteContent() {
-  const [content, setContent] = useState<SiteContentMap>(SITE_CONTENT_DEFAULTS);
-  const [loading, setLoading] = useState(true);
+  const fromServer = useSiteContentContext();
+  const [content, setContent] = useState<SiteContentMap>(fromServer ?? SITE_CONTENT_DEFAULTS);
+  const [loading, setLoading] = useState(!fromServer);
 
   useEffect(() => {
+    if (fromServer) {
+      setContent(fromServer);
+      setLoading(false);
+      return;
+    }
     fetchSiteContent()
       .then(setContent)
       .finally(() => setLoading(false));
-  }, []);
+  }, [fromServer]);
 
   return { content, loading };
 }
 
 export function useSiteSection<K extends SiteContentKey>(key: K) {
+  const fromServer = useSiteContentContext();
   const { content, loading } = useSiteContent();
+  if (fromServer) {
+    return { section: fromServer[key], loading: false };
+  }
   return { section: content[key], loading };
 }
 

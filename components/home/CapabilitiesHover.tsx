@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
+import SafeImage from '@/components/ui/SafeImage';
 import Link from 'next/link';
 import { ArrowUpRight, Monitor, Cpu, Layout, Settings } from 'lucide-react';
 import { useCapabilityServices } from '@/lib/use-capability-services';
@@ -143,7 +143,7 @@ export default function CapabilitiesHover() {
                               <div key={project.slug} className="flex items-center gap-2">
                                 <div className="relative w-8 h-8 rounded-lg overflow-hidden bg-white/[0.04] flex-shrink-0 border border-white/[0.06]">
                                   {thumb ? (
-                                    <Image
+                                    <SafeImage
                                       src={thumb}
                                       alt={project.clientName || project.title}
                                       fill
