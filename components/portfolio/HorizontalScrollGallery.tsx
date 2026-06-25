@@ -1,49 +1,23 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, TrendingUp } from 'lucide-react';
+import { useProjects } from '@/lib/use-projects';
 import { useProjectMediaMap, thumbnailFor } from '@/lib/use-project-media';
 
-const fallbackProjects = [
-  {
-    slug: 'yalaride',
-    title: 'YalaRide',
-    industry: 'Transportation',
-    description: 'Premium ride-sharing platform with real-time tracking and seamless booking experience.',
-    metrics: '50K+ Downloads, 4.8 Rating',
-    gradient: 'from-blue-600 to-indigo-900',
-  },
-  {
-    slug: 'america-needs-nurses',
-    title: 'America Needs Nurses',
-    industry: 'Healthcare',
-    description: 'Healthcare recruitment platform connecting nurses with top medical facilities nationwide.',
-    metrics: '200+ Placements, 95% Success',
-    gradient: 'from-emerald-600 to-teal-900',
-  },
-  {
-    slug: 'go-jetter-tours',
-    title: 'Go Jetter Tours',
-    industry: 'Travel',
-    description: 'Travel booking platform with AI-powered recommendations and seamless itinerary management.',
-    metrics: '10K+ Bookings, 4.9 Rating',
-    gradient: 'from-purple-600 to-pink-900',
-  },
-  {
-    slug: 'cars-compound',
-    title: 'Cars Compound',
-    industry: 'E-Commerce',
-    description: 'Luxury car dealership platform with virtual showroom and financing integration.',
-    metrics: '$2M+ Sales, 300+ Cars',
-    gradient: 'from-orange-500 to-red-900',
-  },
+const CARD_GRADIENTS = [
+  'from-blue-600 to-indigo-900',
+  'from-emerald-600 to-teal-900',
+  'from-purple-600 to-pink-900',
+  'from-orange-500 to-red-900',
 ];
 
 export default function HorizontalScrollGallery() {
-  const [projects, setProjects] = useState<any[]>(fallbackProjects);
+  const { projects: allProjects, loading } = useProjects();
+  const projects = allProjects.filter((p) => p.featured).slice(0, 4);
   const mediaMap = useProjectMediaMap();
   const targetRef = useRef<HTMLDivElement>(null);
 
@@ -51,32 +25,21 @@ export default function HorizontalScrollGallery() {
     target: targetRef,
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
+  const x = useTransform(scrollYProgress, [0, 1], ['0%', '-75%']);
 
-  useEffect(() => {
-    async function loadProjects() {
-      try {
-        const res = await fetch('/api/projects');
-        if (res.ok) {
-          const data = await res.json();
-          const featured = data.filter((p: any) => p.featured).slice(0, 4);
-          if (featured.length >= 2) {
-            setProjects(featured);
-          }
-        }
-      } catch (err) {
-        // keep fallback
-      }
-    }
-    loadProjects();
-  }, []);
+  if (loading) {
+    return (
+      <section className="py-32 bg-slate-950 flex justify-center">
+        <div className="w-10 h-10 border-2 border-orange-200 border-t-orange-500 rounded-full animate-spin" />
+      </section>
+    );
+  }
 
   if (projects.length === 0) return null;
 
   return (
     <section ref={targetRef} className="relative h-[400vh] bg-slate-950" aria-label="Interactive Project Gallery">
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-
         <div className="absolute top-12 left-6 lg:left-12 z-20">
           <h2 className="text-3xl md:text-5xl font-bold text-white font-montserrat tracking-tight">
             Selected Works
@@ -86,8 +49,10 @@ export default function HorizontalScrollGallery() {
 
         <motion.div style={{ x }} className="flex gap-8 px-6 lg:px-12 pt-24 h-[70vh] min-h-[500px]">
           {projects.map((project, index) => {
-            const gradient = project.gradient || fallbackProjects[index % fallbackProjects.length].gradient;
-            const metricsList = project.metrics ? project.metrics.split(',').map((m: string) => m.trim()) : [];
+            const gradient = CARD_GRADIENTS[index % CARD_GRADIENTS.length];
+            const metricsList = project.metrics
+              ? String(project.metrics).split(',').map((m: string) => m.trim())
+              : [];
             const projectMedia = mediaMap.get(project.slug);
             const thumb = thumbnailFor(projectMedia) || project.thumbnail || null;
 
@@ -101,50 +66,46 @@ export default function HorizontalScrollGallery() {
                     src={thumb}
                     alt={project.title}
                     fill
-                    priority={index === 0}
-                    sizes="(max-width: 768px) 85vw, (max-width: 1200px) 60vw, 50vw"
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.19,1,0.22,1)]"
+                    sizes="50vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 ) : (
-                  <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-80 group-hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.19,1,0.22,1)]`} />
+                  <div className={`absolute inset-0 bg-gradient-to-br ${gradient}`} />
                 )}
 
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/50 to-transparent opacity-90" />
-                <div className="absolute inset-0 bg-blue-900/10 mix-blend-overlay" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
 
-                <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-between">
-                  <div className="flex justify-between items-start">
-                    <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-white bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 font-poppins">
-                      {project.industry || 'Enterprise Solution'}
+                <div className="absolute bottom-0 left-0 right-0 p-8 md:p-10">
+                  <div className="flex items-center gap-2 mb-3">
+                    <TrendingUp size={14} className="text-orange-400" />
+                    <span className="text-xs font-bold uppercase tracking-widest text-orange-400 font-poppins">
+                      {project.industry || 'Case Study'}
                     </span>
-
-                    {metricsList.length > 0 && (
-                      <div className="glass-strong border border-white/20 px-4 py-3 rounded-2xl backdrop-blur-md text-right">
-                        <div className="flex items-center gap-2 text-emerald-400 mb-1">
-                          <TrendingUp size={16} />
-                          <span className="text-xs uppercase tracking-widest font-bold font-poppins">Verified Impact</span>
-                        </div>
-                        <div className="text-2xl md:text-3xl font-black text-white font-montserrat tracking-tight">
-                          {metricsList[0]}
-                        </div>
-                      </div>
-                    )}
                   </div>
-
-                  <div className="transform group-hover:translate-y-[-10px] transition-transform duration-500">
-                    <h3 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white font-montserrat tracking-tight leading-[1.1] mb-6">
-                      {project.title}
-                    </h3>
-                    <p className="text-slate-300 font-poppins text-sm md:text-base max-w-xl leading-relaxed mb-8 line-clamp-2 md:line-clamp-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                      {project.description}
-                    </p>
-
-                    <Link href={`/case-studies/${project.slug}`}>
-                      <div className="inline-flex items-center gap-3 text-white border-b-2 border-white/30 hover:border-white pb-1 transition-colors font-semibold font-poppins group/btn">
-                        Read Case Study <ArrowRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
-                      </div>
-                    </Link>
-                  </div>
+                  <h3 className="text-3xl md:text-4xl font-bold text-white font-montserrat mb-3">
+                    {project.title}
+                  </h3>
+                  <p className="text-slate-300 font-poppins text-sm md:text-base max-w-lg mb-4 line-clamp-2">
+                    {project.description}
+                  </p>
+                  {metricsList.length > 0 && (
+                    <div className="flex flex-wrap gap-3 mb-6">
+                      {metricsList.map((metric, i) => (
+                        <span
+                          key={i}
+                          className="text-xs font-semibold text-white/80 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-lg"
+                        >
+                          {metric}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <Link
+                    href={`/case-studies/${project.slug}`}
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-orange-300 transition-colors font-poppins"
+                  >
+                    View Case Study <ArrowRight size={16} />
+                  </Link>
                 </div>
               </div>
             );

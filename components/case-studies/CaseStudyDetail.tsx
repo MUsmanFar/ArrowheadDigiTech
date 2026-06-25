@@ -6,16 +6,21 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, CheckCircle, Lightbulb, Target, BarChart3, Monitor, Calendar } from 'lucide-react';
 import { getSchedulingUrl } from '@/lib/scheduling';
-import type { CaseStudy } from '@/lib/case-studies';
-import { caseStudies } from '@/lib/case-studies';
+import type { CaseStudy } from '@/lib/case-study';
 import { useProjectMediaMap, heroImageFor, galleryImagesFor } from '@/lib/use-project-media';
 
-export default function CaseStudyDetail({ study }: { study: CaseStudy }) {
+export default function CaseStudyDetail({
+  study,
+  allStudies,
+}: {
+  study: CaseStudy;
+  allStudies: CaseStudy[];
+}) {
   const mediaMap = useProjectMediaMap();
-  const currentIndex = caseStudies.findIndex((s) => s.slug === study.slug);
-  const prev = currentIndex > 0 ? caseStudies[currentIndex - 1] : null;
-  const next = currentIndex < caseStudies.length - 1 ? caseStudies[currentIndex + 1] : null;
-  const related = caseStudies.filter((s) => s.industry === study.industry && s.slug !== study.slug).slice(0, 2);
+  const currentIndex = allStudies.findIndex((s) => s.slug === study.slug);
+  const prev = currentIndex > 0 ? allStudies[currentIndex - 1] : null;
+  const next = currentIndex < allStudies.length - 1 ? allStudies[currentIndex + 1] : null;
+  const related = allStudies.filter((s) => s.industry === study.industry && s.slug !== study.slug).slice(0, 2);
 
   const projectMedia = mediaMap.get(study.slug);
   const heroImg = heroImageFor(projectMedia) || study.thumbnail;

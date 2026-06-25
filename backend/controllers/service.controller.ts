@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { serviceService } from '../services/service.service';
-import { authenticateAdmin } from '../middleware/auth.middleware';
+import { requireAdmin } from '../middleware/auth.middleware';
+import { apiError, safeErrorMessage } from '@/lib/api-response';
+import { logger } from '@/lib/logger';
 
 export class ServiceController {
   async getServices() {
@@ -18,8 +20,8 @@ export class ServiceController {
 
   async createService(request: Request) {
     try {
-      if (!(await authenticateAdmin(request))) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      if (!(await requireAdmin(request))) {
+        return apiError('Unauthorized', 401, { code: 'UNAUTHORIZED' });
       }
       const body = await request.json();
       const service = await serviceService.createService(body);

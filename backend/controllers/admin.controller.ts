@@ -1,123 +1,135 @@
 import { NextResponse } from 'next/server';
 import { adminService } from '../services/admin.service';
-import { authenticateAdmin } from '../middleware/auth.middleware';
+import { requireAdmin } from '../middleware/auth.middleware';
+import { apiError, safeErrorMessage } from '@/lib/api-response';
+import { logger } from '@/lib/logger';
+import { enforceRateLimit, rateLimitResponse } from '@/lib/rate-limit';
+import { sanitizeEntityPayload } from '@/lib/sanitize';
+import { stripSensitive, stripSensitiveList } from '@/lib/serialize';
+import { parseJsonBody, projectMediaPutSchema } from '@/lib/validation/schemas';
+
+const ADMIN_RATE = { limit: 120, windowMs: 60_000 };
+
+function checkAdminRateLimit(request: Request): NextResponse | null {
+  const rl = enforceRateLimit(request, 'admin-api', ADMIN_RATE.limit, ADMIN_RATE.windowMs);
+  if (!rl.allowed) return rateLimitResponse(rl.retryAfterSec) as NextResponse;
+  return null;
+}
 
 export class AdminController {
   async handleGet(request: Request, entity: string) {
+    const limited = checkAdminRateLimit(request);
+    if (limited) return limited;
+
     try {
-      const targetService = adminService.getServiceForEntity(entity);
-
-      if (!targetService) {
-        return NextResponse.json({ error: 'Entity not found' }, { status: 404 });
+      if (!adminService.isAllowedEntity(entity)) {
+        return apiError('Entity not found', 404, { code: 'NOT_FOUND' });
       }
 
-      const isAuthed = await authenticateAdmin(request);
-      if (!isAuthed) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
+      const admin = await requireAdmin(request);
+      if (!admin) return apiError('Unauthorized', 401, { code: 'UNAUTHORIZED' });
 
+      const targetService = adminService.getServiceForEntity(entity)!;
       const data = await targetService.findMany();
-      return NextResponse.json(data);
-    } catch (error: any) {
-      console.error(`API Error (GET /api/admin/entity):`, error);
-      return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+      const safe = Array.isArray(data) ? stripSensitiveList(data) : stripSensitive(data);
+      return NextResponse.json(safe);
+    } catch (error) {
+      logger.error('Admin GET failed', { entity, error: safeErrorMessage(error) });
+      return apiError(safeErrorMessage(error), 500, { code: 'INTERNAL_ERROR' });
     }
   }
 
   async handlePost(request: Request, entity: string) {
+    const limited = checkAdminRateLimit(request);
+    if (limited) return limited;
+
     try {
-      const isAuthed = await authenticateAdmin(request);
-      if (!isAuthed) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
+      const admin = await requireAdmin(request);
+      if (!admin) return apiError('Unauthorized', 401, { code: 'UNAUTHORIZED' });
 
-      const targetService = adminService.getServiceForEntity(entity);
-
-      if (!targetService) {
-        return NextResponse.json({ error: 'Entity not found' }, { status: 404 });
+      if (!adminService.isAllowedEntity(entity)) {
+        return apiError('Entity not found', 404, { code: 'NOT_FOUND' });
       }
 
       const body = await request.json();
-      const data = await targetService.create(body);
-      return NextResponse.json(data);
-    } catch (error: any) {
-      console.error(`API Error (POST /api/admin/entity):`, error);
-      return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+      const payload = sanitizeEntityPayload(entity, body as Record<string, unknown>);
+      const targetService = adminService.getServiceForEntity(entity)!;
+      const data = await targetService.create(payload);
+      return NextResponse.json(stripSensitive(data));
+    } catch (error) {
+      logger.error('Admin POST failed', { entity, error: safeErrorMessage(error) });
+      return apiError(safeErrorMessage(error), 500, { code: 'INTERNAL_ERROR' });
     }
   }
 
   async handlePut(request: Request, entity: string) {
+    const limited = checkAdminRateLimit(request);
+    if (limited) return limited;
+
     try {
-      const isAuthed = await authenticateAdmin(request);
-      if (!isAuthed) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
+      const admin = await requireAdmin(request);
+      if (!admin) return apiError('Unauthorized', 401, { code: 'UNAUTHORIZED' });
 
-      const targetService = adminService.getServiceForEntity(entity);
-
-      if (!targetService) {
-        return NextResponse.json({ error: 'Entity not found' }, { status: 404 });
+      if (!adminService.isAllowedEntity(entity)) {
+        return apiError('Entity not found', 404, { code: 'NOT_FOUND' });
       }
 
       const body = await request.json();
+      const targetService = adminService.getServiceForEntity(entity)!;
 
       if (entity === 'project-media') {
-        const { id, slug, ...data } = body;
-        if (!slug) {
-          return NextResponse.json({ error: 'Missing slug for project media' }, { status: 400 });
-        }
+        const parsed = parseJsonBody(projectMediaPutSchema, body);
+        if (!parsed.success) return apiError(parsed.error, 400, { code: 'VALIDATION_ERROR' });
+        const { id, slug, ...data } = parsed.data as Record<string, unknown>;
+        const sanitized = sanitizeEntityPayload(entity, data as Record<string, unknown>);
         if (id) {
-          const updated = await targetService.update(id, { slug, ...data });
-          return NextResponse.json(updated);
+          const updated = await targetService.update(id, { slug, ...sanitized });
+          return NextResponse.json(stripSensitive(updated));
         }
-        const created = await targetService.upsert(slug, data);
-        return NextResponse.json(created);
+        const created = await targetService.upsert(slug, sanitized);
+        return NextResponse.json(stripSensitive(created));
       }
 
-      const { id, ...updateData } = body;
+      const { id, ...updateData } = body as { id?: string };
+      if (!id) return apiError('Missing ID for update', 400, { code: 'VALIDATION_ERROR' });
 
-      if (!id) {
-        return NextResponse.json({ error: 'Missing ID for update' }, { status: 400 });
-      }
-
-      const data = await targetService.update(id, updateData);
-      return NextResponse.json(data);
-    } catch (error: any) {
-      console.error(`API Error (PUT /api/admin/entity):`, error);
-      return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+      const payload = sanitizeEntityPayload(entity, updateData as Record<string, unknown>);
+      const data = await targetService.update(id, payload);
+      return NextResponse.json(stripSensitive(data));
+    } catch (error) {
+      logger.error('Admin PUT failed', { entity, error: safeErrorMessage(error) });
+      return apiError(safeErrorMessage(error), 500, { code: 'INTERNAL_ERROR' });
     }
   }
 
   async handleDelete(request: Request, entity: string) {
+    const limited = checkAdminRateLimit(request);
+    if (limited) return limited;
+
     try {
-      const isAuthed = await authenticateAdmin(request);
-      if (!isAuthed) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      const admin = await requireAdmin(request);
+      if (!admin) return apiError('Unauthorized', 401, { code: 'UNAUTHORIZED' });
+
+      if (!adminService.isAllowedEntity(entity)) {
+        return apiError('Entity not found', 404, { code: 'NOT_FOUND' });
       }
 
-      const targetService = adminService.getServiceForEntity(entity);
-
-      if (!targetService) {
-        return NextResponse.json({ error: 'Entity not found' }, { status: 404 });
-      }
-
+      const targetService = adminService.getServiceForEntity(entity)!;
       const url = new URL(request.url);
       let id = url.searchParams.get('id');
 
       if (!id) {
         const body = await request.json().catch(() => ({}));
-        id = body.id;
+        id = (body as { id?: string }).id ?? null;
       }
 
-      if (!id) {
-        return NextResponse.json({ error: 'Missing ID for deletion' }, { status: 400 });
-      }
+      if (!id) return apiError('Missing ID for deletion', 400, { code: 'VALIDATION_ERROR' });
 
       const data = await targetService.delete(id);
-      return NextResponse.json({ success: true, deleted: data });
-    } catch (error: any) {
-      console.error(`API Error (DELETE /api/admin/entity):`, error);
-      return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+      return NextResponse.json({ success: true, deleted: stripSensitive(data) });
+    } catch (error) {
+      logger.error('Admin DELETE failed', { entity, error: safeErrorMessage(error) });
+      return apiError(safeErrorMessage(error), 500, { code: 'INTERNAL_ERROR' });
     }
   }
 }

@@ -1,34 +1,43 @@
 import { NextResponse } from 'next/server';
 import { contactService, ContactLeadPayload } from '../services/contact.service';
+import { apiError, safeErrorMessage } from '@/lib/api-response';
+import { logger } from '@/lib/logger';
+import { enforceRateLimit, rateLimitResponse } from '@/lib/rate-limit';
+import { parseJsonBody, contactSchema } from '@/lib/validation/schemas';
+import { sanitizePlainText, sanitizeRichHtml } from '@/lib/sanitize';
 
 export class ContactController {
   async handleContactSubmission(request: Request) {
-    try {
-      const body = await request.json() as ContactLeadPayload;
-      const { email, message } = body;
-      const name =
-        body.name?.trim() ||
-        `${body.firstName || ''} ${body.lastName || ''}`.trim();
+    const rl = enforceRateLimit(request, 'contact', 5, 60 * 60 * 1000);
+    if (!rl.allowed) return rateLimitResponse(rl.retryAfterSec);
 
-      if (!name || !email?.trim() || !message?.trim()) {
-        return NextResponse.json(
-          { error: 'Missing required fields' },
-          { status: 400 }
-        );
+    try {
+      const body = await request.json();
+      const parsed = parseJsonBody(contactSchema, body);
+      if (!parsed.success) {
+        return apiError(parsed.error, 400, { code: 'VALIDATION_ERROR' });
       }
 
-      await contactService.processContactSubmission(body);
+      const payload: ContactLeadPayload = {
+        ...parsed.data,
+        name: parsed.data.name
+          ? sanitizePlainText(parsed.data.name)
+          : sanitizePlainText(`${parsed.data.firstName || ''} ${parsed.data.lastName || ''}`.trim()),
+        email: sanitizePlainText(parsed.data.email),
+        phone: parsed.data.phone ? sanitizePlainText(parsed.data.phone) : undefined,
+        company: parsed.data.company ? sanitizePlainText(parsed.data.company) : undefined,
+        service: parsed.data.service ? sanitizePlainText(parsed.data.service) : undefined,
+        intent: parsed.data.intent ? sanitizePlainText(parsed.data.intent) : undefined,
+        budget: parsed.data.budget ? sanitizePlainText(parsed.data.budget) : undefined,
+        message: sanitizeRichHtml(parsed.data.message),
+      };
 
-      return NextResponse.json(
-        { message: 'Message sent successfully' },
-        { status: 200 }
-      );
+      await contactService.processContactSubmission(payload);
+
+      return NextResponse.json({ message: 'Message sent successfully' }, { status: 200 });
     } catch (error) {
-      console.error('Contact form API error:', error);
-      return NextResponse.json(
-        { error: 'Failed to send message' },
-        { status: 500 }
-      );
+      logger.error('Contact form API error', { error: safeErrorMessage(error) });
+      return apiError('Failed to send message', 500, { code: 'INTERNAL_ERROR' });
     }
   }
 }

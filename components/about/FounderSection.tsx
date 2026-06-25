@@ -3,14 +3,17 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { caseStudies } from '@/lib/case-studies';
-
-const industries = [...new Set(caseStudies.map((s) => s.industry))];
-const allTechnologies = [...new Set(caseStudies.flatMap((s) => s.technologies))].sort();
-const totalProjects = caseStudies.length;
+import { useCaseStudies } from '@/lib/use-case-studies';
+import { useTestimonials } from '@/lib/use-testimonials';
 
 export default function FounderSection() {
   const [founder, setFounder] = useState<any>(null);
+  const { studies } = useCaseStudies();
+  const { testimonials } = useTestimonials();
+
+  const industries = [...new Set(studies.map((s) => s.industry))];
+  const allTechnologies = [...new Set(studies.flatMap((s) => s.technologies))].sort();
+  const totalProjects = studies.length;
 
   useEffect(() => {
     fetch('/api/public/founders')
@@ -101,7 +104,7 @@ export default function FounderSection() {
                 {[
                   { label: 'Projects Delivered', value: totalProjects.toString() },
                   { label: 'Industries Served', value: industries.length.toString() },
-                  { label: 'Client Testimonials', value: caseStudies.filter(s => s.testimonial).length.toString() },
+                  { label: 'Client Testimonials', value: testimonials.length.toString() },
                   { label: 'Technologies Used', value: allTechnologies.length.toString() },
                 ].map((stat, i) => (
                   <div key={i} className="p-4 rounded-xl bg-slate-50 border border-slate-100">
@@ -172,7 +175,7 @@ export default function FounderSection() {
                 Projects Delivered
               </h3>
               <div className="flex flex-wrap gap-2">
-                {caseStudies.slice(0, 7).map((study) => (
+                {studies.slice(0, 7).map((study) => (
                   <span
                     key={study.slug}
                     className="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 bg-slate-50 border border-slate-100"

@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { publicService } from '../services/public.service';
+import { apiError, safeErrorMessage } from '@/lib/api-response';
+import { logger } from '@/lib/logger';
 
 export class PublicController {
   async handleGet(entity: string) {
@@ -7,14 +9,16 @@ export class PublicController {
       const targetService = publicService.getServiceForEntity(entity);
 
       if (!targetService) {
-        return NextResponse.json({ error: 'Entity not found' }, { status: 404 });
+        return apiError('Entity not found', 404, { code: 'NOT_FOUND' });
       }
 
       const data = await targetService.findMany();
-      return NextResponse.json(data);
-    } catch (error: any) {
-      console.error(`API Error (GET /api/public/${entity}):`, error);
-      return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+      const response = NextResponse.json(data);
+      response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+      return response;
+    } catch (error) {
+      logger.error('Public GET failed', { entity, error: safeErrorMessage(error) });
+      return apiError(safeErrorMessage(error), 500, { code: 'INTERNAL_ERROR' });
     }
   }
 }

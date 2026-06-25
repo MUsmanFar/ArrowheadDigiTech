@@ -37,6 +37,7 @@ const navItems = [
   { label: 'Project Media', href: '/admin/project-media', icon: ImageIcon },
   { label: 'Founder', href: '/admin/founder', icon: UserCircle },
   { label: 'Client Logos', href: '/admin/client-logos', icon: Building2 },
+  { label: 'Site Content', href: '/admin/site-content', icon: Settings },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

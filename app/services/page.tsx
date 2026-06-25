@@ -10,75 +10,36 @@ import ServicesHero from '@/components/services/ServicesHero';
 import StickyServiceBlock from '@/components/services/StickyServiceBlock';
 import DynamicOutcomesTicker from '@/components/services/DynamicOutcomesTicker';
 import CtaSection from '@/components/portfolio/CtaSection';
-import { caseStudies } from '@/lib/case-studies';
+import { useCaseStudies } from '@/lib/use-case-studies';
 import { useProjectMediaMap, thumbnailFor } from '@/lib/use-project-media';
+import { useSiteSection } from '@/lib/use-site-content';
 
-const fallbackServices = [
-  {
-    slug: 'web-development',
-    title: 'Website Development',
-    description:
-      'Custom, high-performance websites built with Next.js, React, and modern architectures. Fast, scalable, and conversion-optimized.',
-    features: ['Next.js & React', 'Responsive Design', 'SEO Optimized'],
-  },
-  {
-    slug: 'ai-chatbots',
-    title: 'AI Website Creation',
-    description:
-      'Intelligent AI-powered web experiences with smart chatbots, personalized content, and automated customer engagement.',
-    features: ['AI Chatbots', 'Personalization', 'Automation'],
-  },
-  {
-    slug: 'lead-generation',
-    title: 'Landing Page Development',
-    description:
-      'High-converting landing pages designed to capture leads, drive sales, and maximize your marketing ROI.',
-    features: ['Conversion Focused', 'A/B Testing', 'Analytics'],
-  },
-  {
-    slug: 'digital-strategy',
-    title: 'Website Management',
-    description:
-      'Ongoing maintenance, security updates, performance optimization, and content management to keep your site at its best.',
-    features: ['24/7 Monitoring', 'Security Updates', 'Performance Tuning'],
-  },
-  {
-    slug: 'mobile-apps',
-    title: 'Mobile Apps',
-    description:
-      'Native and cross-platform mobile applications for iOS and Android with exceptional user experiences.',
-    features: ['iOS & Android', 'React Native', 'App Store Submission'],
-  },
-  {
-    slug: 'seo',
-    title: 'SEO',
-    description:
-      'Comprehensive SEO strategies to improve your search rankings and drive organic traffic to your website.',
-    features: ['Keyword Research', 'On-page SEO', 'Link Building'],
-  },
+const CARD_GRADIENTS = [
+  'from-blue-600 to-indigo-900',
+  'from-emerald-600 to-teal-900',
+  'from-purple-600 to-pink-900',
+  'from-orange-500 to-red-900',
 ];
 
 export default function ServicesPage() {
   const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const { studies } = useCaseStudies();
+  const { section: trustedBy } = useSiteSection('services.trusted-by');
   const mediaMap = useProjectMediaMap();
 
   useEffect(() => {
     async function loadServices() {
       try {
-        const res = await fetch('/api/services');
+        const res = await fetch('/api/public/services');
         if (res.ok) {
           const data = await res.json();
-          if (data.length > 0) {
-            setServices(data);
-          } else {
-            setServices(fallbackServices);
+          if (Array.isArray(data)) {
+            setServices([...data].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)));
           }
-        } else {
-          setServices(fallbackServices);
         }
       } catch {
-        setServices(fallbackServices);
+        // empty state shown below
       } finally {
         setLoading(false);
       }
@@ -97,6 +58,8 @@ export default function ServicesPage() {
           <div className="py-32 flex justify-center">
             <div className="w-10 h-10 border-2 border-orange-200 border-t-orange-500 rounded-full animate-spin" />
           </div>
+        ) : services.length === 0 ? (
+          <div className="py-32 text-center text-slate-500 font-inter">No services published yet.</div>
         ) : (
           <section className="py-20 md:py-28 bg-white relative z-10">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -122,11 +85,7 @@ export default function ServicesPage() {
                         .split(',')
                         .map((f: string) => f.trim())
                         .slice(0, 3)
-                    : service.features || [
-                        'Premium Design',
-                        'Scalable Architecture',
-                        'High ROI',
-                      ];
+                    : [];
 
                   return (
                     <StickyServiceBlock
@@ -155,15 +114,15 @@ export default function ServicesPage() {
               className="text-center mb-12"
             >
               <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide text-orange-600 bg-orange-50 border border-orange-100/60">
-                Trusted By
+                {trustedBy.badge}
               </span>
               <h2 className="mt-4 text-3xl md:text-4xl font-bold text-slate-900 font-poppins tracking-tight">
-                Companies that rely on us.
+                {trustedBy.headline}
               </h2>
             </motion.div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {caseStudies.slice(0, 4).map((study, i) => {
+              {studies.slice(0, 4).map((study, i) => {
                 const studyMedia = mediaMap.get(study.slug);
                 const thumb = thumbnailFor(studyMedia) || study.thumbnail;
                 return (

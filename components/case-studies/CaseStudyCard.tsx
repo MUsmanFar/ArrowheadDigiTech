@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
-import type { CaseStudy } from '@/lib/case-studies';
+import type { CaseStudy } from '@/lib/case-study';
 import { useProjectMediaMap, thumbnailFor } from '@/lib/use-project-media';
 
 const industryColors: Record<string, { border: string; bg: string; text: string }> = {

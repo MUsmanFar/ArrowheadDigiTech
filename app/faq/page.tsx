@@ -7,11 +7,13 @@ import Footer from '@/components/layout/Footer';
 import FAQSection from '@/components/ui/FAQSection';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { useSiteSection } from '@/lib/use-site-content';
 
 export default function FAQPage() {
   const [faqs, setFaqs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const { section: page } = useSiteSection('faq.page');
 
   useEffect(() => {
     async function loadFaqs() {
@@ -51,10 +53,10 @@ export default function FAQPage() {
             className="text-center max-w-4xl mx-auto"
           >
             <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6 font-montserrat tracking-tight">
-              Frequently Asked <span className="text-gradient-blue">Questions</span>
+              {page.heroTitle} <span className="text-gradient-blue">{page.heroTitleAccent}</span>
             </h1>
             <p className="text-xl text-slate-600 mb-8 font-poppins leading-relaxed">
-              Find instant answers to common questions about our agency services, billing packages, timeline scopes, and technical workflows.
+              {page.heroDescription}
             </p>
           </motion.div>
         </div>
@@ -107,7 +109,7 @@ export default function FAQPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            Still Have Questions?
+            {page.ctaTitle}
           </motion.h2>
           <motion.p
             className="text-xl mb-8 text-slate-300 font-poppins"
@@ -116,7 +118,7 @@ export default function FAQPage() {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            Our team is here to help. Reach out and we&apos;ll get back to you within 24 hours.
+            {page.ctaDescription}
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -124,9 +126,9 @@ export default function FAQPage() {
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
           >
-            <Link href="/contact">
+            <Link href={page.ctaButtonHref}>
               <Button size="lg" className="bg-white text-slate-900 hover:bg-slate-50 rounded-xl font-semibold shadow-lg">
-                Contact Us
+                {page.ctaButtonLabel}
               </Button>
             </Link>
           </motion.div>

@@ -29,8 +29,7 @@ export async function middleware(request: NextRequest) {
     console.error('Admin middleware configuration error:', error);
   }
 
-  if (!decoded) {
-    // If token invalid, redirect to login and clear invalid cookie
+  if (!decoded || decoded.role !== 'admin') {
     const response = NextResponse.redirect(new URL('/admin/login', request.url));
     response.cookies.delete('admin_token');
     return response;

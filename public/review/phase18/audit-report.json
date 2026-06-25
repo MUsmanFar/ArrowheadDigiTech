@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-06-25T00:00:00.000Z",
+  "buildGates": {
+    "npm_run_lint": { "exit": 0, "result": "PASS", "notes": "2 warnings in lib/use-capability-services.ts" },
+    "npx_tsc_noEmit": { "exit": 2, "result": "FAIL", "error": "scripts/phase17-live-cms-verification.ts:218 TS2367" },
+    "npm_run_build": { "exit": 1, "result": "FAIL", "error": "prisma generate EPERM (dev server file lock) OR next build TS check same as tsc" },
+    "npx_next_build": { "exit": 1, "result": "FAIL", "error": "Compiled OK; TypeScript step failed on phase17 script" }
+  },
+  "scores": {
+    "backend": 72,
+    "database": 78,
+    "security": 58,
+    "cms": 74,
+    "frontend": 68,
+    "deployment": 48,
+    "overall": 62
+  },
+  "lighthouse": {
+    "home_mobile": { "performance": 52, "accessibility": 96, "bestPractices": 96, "seo": 100, "lcp": "4.8s", "tbt": "4140ms", "cls": 0, "tti": "8.7s" },
+    "home_desktop": { "performance": 77, "accessibility": 96, "bestPractices": 96, "seo": 100 },
+    "portfolio_mobile": { "performance": 57, "seo": 100 },
+    "case_studies_mobile": { "performance": 61, "seo": 100 }
+  },
+  "critical": [
+    "Production build fails TypeScript (phase17 script in tsconfig include)",
+    "GET /api/admin/users returns password hashes to authenticated admin",
+    "Local filesystem uploads not viable on Hostinger ephemeral hosting",
+    "Blog dangerouslySetInnerHTML without sanitization (stored XSS)",
+    "SVG uploads allowed from same origin"
+  ],
+  "high": [
+    "No rate limiting on login or contact",
+    "Zod installed but unused — no request validation",
+    "Site-content JSON editor without schema validation",
+    "Mobile Core Web Vitals fail (LCP/TBT)",
+    "Default admin123 in seed and .env.example",
+    "No custom error.tsx / not-found.tsx",
+    "No CI/CD pipeline",
+    "SMTP unconfigured — contact alerts fail silently",
+    "images.remotePatterns hostname ** too permissive"
+  ],
+  "medium": [
+    "Client site-content cache stale until reload",
+    "No Cache-Control on public APIs",
+    "JWT role not enforced (no RBAC)",
+    "eslint-config-next 15 vs Next 16",
+    "Missing upload files (404 thumbnails)",
+    "Founders table empty in Neon",
+    "Blog hydration warning in dev",
+    "Pricing empty-state flash before client fetch"
+  ],
+  "low": [
+    "ESLint hook dependency warnings",
+    "NEXTAUTH dead env vars in .env.example",
+    "localStorage admin_user on login",
+    "Node engine >=20 <21 vs host Node 24",
+    "No structured logging"
+  ],
+  "verdict": "NOT PRODUCTION READY — CMS functional; build blocked; security and deployment gaps must be resolved before paying-client launch"
+}

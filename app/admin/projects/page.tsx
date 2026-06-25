@@ -21,6 +21,8 @@ interface Project {
   testimonialId?: string;
   caseStudy: boolean;
   order: number;
+  serviceSlugs?: string[];
+  caseStudyContent?: unknown;
 }
 
 interface Testimonial {
@@ -50,6 +52,8 @@ export default function AdminProjectsPage() {
   const [caseStudy, setCaseStudy] = useState(true);
   const [featured, setFeatured] = useState(false);
   const [order, setOrder] = useState(0);
+  const [serviceSlugs, setServiceSlugs] = useState('');
+  const [caseStudyContentJson, setCaseStudyContentJson] = useState('');
 
   const fetchData = async () => {
     try {
@@ -91,6 +95,8 @@ export default function AdminProjectsPage() {
     setCaseStudy(true);
     setFeatured(false);
     setOrder(projects.length + 1);
+    setServiceSlugs('');
+    setCaseStudyContentJson('');
     setIsModalOpen(true);
   };
 
@@ -107,6 +113,10 @@ export default function AdminProjectsPage() {
     setCaseStudy(project.caseStudy);
     setFeatured(project.featured);
     setOrder(project.order);
+    setServiceSlugs((project.serviceSlugs || []).join(', '));
+    setCaseStudyContentJson(
+      project.caseStudyContent ? JSON.stringify(project.caseStudyContent, null, 2) : '',
+    );
     setIsModalOpen(true);
   };
 
@@ -128,6 +138,16 @@ export default function AdminProjectsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    let caseStudyContent: unknown = null;
+    if (caseStudyContentJson.trim()) {
+      try {
+        caseStudyContent = JSON.parse(caseStudyContentJson);
+      } catch {
+        setError('Case study content must be valid JSON.');
+        return;
+      }
+    }
+
     const payload = {
       title,
       slug,
@@ -140,6 +160,11 @@ export default function AdminProjectsPage() {
       caseStudy,
       featured,
       order: Number(order),
+      serviceSlugs: serviceSlugs
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean),
+      caseStudyContent,
     };
 
     try {
@@ -421,6 +446,26 @@ export default function AdminProjectsPage() {
                       </option>
                     ))}
                   </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Linked Service Slugs</label>
+                  <Input
+                    value={serviceSlugs}
+                    onChange={(e) => setServiceSlugs(e.target.value)}
+                    placeholder="web-development, ai-chatbots"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Case Study Content (JSON)</label>
+                  <textarea
+                    value={caseStudyContentJson}
+                    onChange={(e) => setCaseStudyContentJson(e.target.value)}
+                    rows={8}
+                    placeholder='{"summary":"...","technologies":["Next.js"],...}'
+                    className="w-full border border-slate-200 rounded-xl p-3 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  />
                 </div>
 
                 <div>

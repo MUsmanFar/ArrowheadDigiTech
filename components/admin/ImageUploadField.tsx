@@ -17,7 +17,7 @@ export function ImageUploadField({
   value,
   onChange,
   label = 'Upload Image',
-  helperText = 'Recommended: PNG, JPG, WEBP, SVG or GIF. Max 5MB.',
+  helperText = 'Recommended: PNG, JPG, WEBP or GIF. Max 5MB.',
   subdir,
 }: ImageUploadFieldProps) {
   const [uploading, setUploading] = useState(false);
@@ -32,9 +32,9 @@ export function ImageUploadField({
       return;
     }
 
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'];
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     if (!allowedTypes.includes(file.type)) {
-      setError('Unsupported file type. Please upload a JPEG, PNG, WEBP, GIF, or SVG image.');
+      setError('Unsupported file type. Please upload a JPEG, PNG, WEBP, or GIF image.');
       return;
     }
 
@@ -49,9 +49,9 @@ export function ImageUploadField({
       // If there is an existing image, attempt to delete it from the server
       if (value) {
         const prevFilename = value.split('/').pop();
-        if (prevFilename && prevFilename.includes('-')) { // Only delete custom uploads with timestamp
+        if (prevFilename && prevFilename.includes('-')) {
           try {
-            await fetch(`/api/admin/upload?filename=${prevFilename}`, { method: 'DELETE' });
+            await fetch(`/api/admin/upload?url=${encodeURIComponent(value)}`, { method: 'DELETE' });
           } catch (e) {
             console.warn('Failed to delete old image, continuing upload...', e);
           }
@@ -88,15 +88,12 @@ export function ImageUploadField({
     if (!value) return;
     setUploading(true);
     try {
-      const filename = value.split('/').pop();
-      if (filename) {
-        const res = await fetch(`/api/admin/upload?filename=${filename}`, {
-          method: 'DELETE',
-        });
-        if (!res.ok) {
-          const errData = await res.json();
-          console.warn('Delete warning:', errData.error);
-        }
+      const res = await fetch(`/api/admin/upload?url=${encodeURIComponent(value)}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) {
+        const errData = await res.json();
+        console.warn('Delete warning:', errData.error);
       }
       onChange('');
       setError('');

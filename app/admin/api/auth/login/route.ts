@@ -3,73 +3,79 @@ import { dbService } from '@/lib/db';
 import { signJwt } from '@/lib/jwt';
 import bcrypt from 'bcryptjs';
 import { getJwtSecret } from '@/lib/env';
+import { apiError, safeErrorMessage } from '@/lib/api-response';
+import { logger } from '@/lib/logger';
+import { enforceRateLimit, rateLimitResponse } from '@/lib/rate-limit';
+import { parseJsonBody, loginSchema } from '@/lib/validation/schemas';
 
 export async function POST(request: Request) {
-  try {
-    const { email, password } = await request.json();
+  const rl = enforceRateLimit(request, 'admin-login', 10, 15 * 60 * 1000);
+  if (!rl.allowed) return rateLimitResponse(rl.retryAfterSec);
 
-    // 1. Fetch user from dbService (handles mock mode and database mode)
+  try {
+    const body = await request.json();
+    const parsed = parseJsonBody(loginSchema, body);
+    if (!parsed.success) return apiError(parsed.error, 400, { code: 'VALIDATION_ERROR' });
+
+    const { email, password } = parsed.data;
+
     let user = await dbService.users.findUnique(email);
 
-    // If mock mode is active and user is not found, check default env credentials
     if (!user && process.env.DB_MOCK === 'true') {
       const defaultEmail = process.env.ADMIN_EMAIL || 'admin@arrowheaddigitech.com';
       const defaultPassword = process.env.ADMIN_PASSWORD || 'admin123';
-      
+
       if (email === defaultEmail) {
         user = {
           id: 'usr_1',
           email: defaultEmail,
           password: bcrypt.hashSync(defaultPassword, 10),
           name: 'Super Admin',
-          role: 'admin'
+          role: 'admin',
         };
       }
     }
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'Invalid credentials' },
-        { status: 401 }
-      );
+      return apiError('Invalid credentials', 401, { code: 'INVALID_CREDENTIALS' });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-
     if (!isPasswordValid) {
-      return NextResponse.json(
-        { error: 'Invalid credentials' },
-        { status: 401 }
-      );
+      logger.warn('Failed admin login attempt', { email });
+      return apiError('Invalid credentials', 401, { code: 'INVALID_CREDENTIALS' });
     }
 
-    // 2. Sign JWT Token
+    if (user.role !== 'admin') {
+      return apiError('Unauthorized', 403, { code: 'FORBIDDEN' });
+    }
+
     const token = await signJwt(
       {
         id: user.id,
         email: user.email,
         role: user.role,
-        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7 days
+        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
       },
-      getJwtSecret()
+      getJwtSecret(),
     );
 
-    // 3. Set HttpOnly Cookie
-    const response = NextResponse.json({ success: true, user: { email: user.email, name: user.name, role: user.role } });
+    const response = NextResponse.json({
+      success: true,
+      user: { email: user.email, name: user.name, role: user.role },
+    });
     response.cookies.set('admin_token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: 60 * 60 * 24 * 7,
     });
 
+    logger.info('Admin login success', { email: user.email });
     return response;
   } catch (error) {
-    console.error('Login error:', error);
-    return NextResponse.json(
-      { error: 'An error occurred' },
-      { status: 500 }
-    );
+    logger.error('Login error', { error: safeErrorMessage(error) });
+    return apiError('An error occurred', 500, { code: 'INTERNAL_ERROR' });
   }
 }

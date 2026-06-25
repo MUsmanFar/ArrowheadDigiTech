@@ -1,16 +1,35 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
-
-const stats = [
-  { value: '7', label: 'Completed Projects' },
-  { value: '5', label: 'Industries Served' },
-  { value: '50K+', label: 'App Downloads' },
-  { value: '10K+', label: 'Bookings Processed' }
-];
+import { useProjects } from '@/lib/use-projects';
+import { useCaseStudies } from '@/lib/use-case-studies';
 
 export default function MetricsBar() {
+  const { projects } = useProjects();
+  const { studies } = useCaseStudies();
+
+  const stats = useMemo(() => {
+    const projectCount = projects.length || studies.length;
+    const industries = new Set(
+      [...projects.map((p) => p.industry), ...studies.map((s) => s.industry)].filter(Boolean),
+    );
+    const highlightMetrics = studies
+      .flatMap((s) => s.metrics)
+      .filter((m) => m.value && m.label)
+      .slice(0, 2);
+
+    const rows = [
+      { value: String(projectCount), label: 'Completed Projects' },
+      { value: String(industries.size), label: 'Industries Served' },
+      ...highlightMetrics.map((m) => ({ value: m.value, label: m.label })),
+    ];
+
+    return rows.length > 0 ? rows : [];
+  }, [projects, studies]);
+
+  if (stats.length === 0) return null;
+
   return (
     <section className="relative py-20 bg-slate-950 overflow-hidden" aria-label="Key Metrics">
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
@@ -21,7 +40,7 @@ export default function MetricsBar() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {stats.map((stat, index) => (
             <motion.div
-              key={index}
+              key={`${stat.label}-${index}`}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

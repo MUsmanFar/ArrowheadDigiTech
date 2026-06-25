@@ -3,23 +3,15 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-
-const navItems = [
-  { name: 'Services', href: '/services' },
-  { name: 'Portfolio', href: '/portfolio' },
-  { name: 'Case Studies', href: '/case-studies' },
-  { name: 'About', href: '/about' },
-  { name: 'Contact', href: '/contact' },
-];
+import { useSiteSection } from '@/lib/use-site-content';
 
 export default function Navbar() {
+  const { section: nav } = useSiteSection('site.nav');
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -30,29 +22,24 @@ export default function Navbar() {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? 'glass-premium'
-          : 'bg-transparent'
+        scrolled ? 'glass-premium' : 'bg-transparent'
       }`}
     >
       <div className="container-premium">
         <div className="flex items-center justify-between h-20">
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 group"
-          >
+          <Link href="/" className="flex items-center gap-2.5 group">
             <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 text-white text-sm font-bold shadow-sm">
               ▲
             </span>
             <span className="text-lg font-semibold text-slate-900 font-poppins tracking-tight">
-              Arrowhead
+              {nav.brandName}
             </span>
           </Link>
 
           <div className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => (
+            {nav.items.map((item) => (
               <Link
-                key={item.name}
+                key={item.href}
                 href={item.href}
                 className="relative px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors duration-200 rounded-full hover:bg-slate-100/60"
               >
@@ -60,8 +47,8 @@ export default function Navbar() {
               </Link>
             ))}
             <div className="ml-3 pl-3 border-l border-slate-200">
-              <Link href="/contact" className="btn-primary text-sm py-2.5 px-5">
-                Book A Call
+              <Link href={nav.ctaHref} className="btn-primary text-sm py-2.5 px-5">
+                {nav.ctaLabel}
               </Link>
             </div>
           </div>
@@ -99,9 +86,9 @@ export default function Navbar() {
             className="fixed inset-0 z-40 bg-white md:hidden"
           >
             <div className="flex flex-col items-center justify-center h-full gap-8">
-              {navItems.map((item, i) => (
+              {nav.items.map((item, i) => (
                 <motion.div
-                  key={item.name}
+                  key={item.href}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
@@ -122,11 +109,11 @@ export default function Navbar() {
                 className="mt-4"
               >
                 <Link
-                  href="/contact"
+                  href={nav.ctaHref}
                   className="btn-primary text-base py-4 px-8"
                   onClick={() => setIsOpen(false)}
                 >
-                  Book A Call
+                  {nav.ctaLabel}
                 </Link>
               </motion.div>
             </div>

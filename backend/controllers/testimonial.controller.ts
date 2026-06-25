@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { testimonialService } from '../services/testimonial.service';
-import { authenticateAdmin } from '../middleware/auth.middleware';
+import { requireAdmin } from '../middleware/auth.middleware';
+import { apiError } from '@/lib/api-response';
 
 export class TestimonialController {
   async getTestimonials() {
@@ -18,8 +19,8 @@ export class TestimonialController {
 
   async createTestimonial(request: Request) {
     try {
-      if (!(await authenticateAdmin(request))) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      if (!(await requireAdmin(request))) {
+        return apiError('Unauthorized', 401, { code: 'UNAUTHORIZED' });
       }
       const body = await request.json();
       const testimonial = await testimonialService.createTestimonial(body);

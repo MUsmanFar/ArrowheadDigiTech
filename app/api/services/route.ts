@@ -1,7 +1,8 @@
+import { publicController } from '@/backend/controllers/public.controller';
 import { serviceController } from '@/backend/controllers/service.controller';
 
 export async function GET() {
-  return serviceController.getServices();
+  return publicController.handleGet('services');
 }
 
 export async function POST(request: Request) {

@@ -5,13 +5,8 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
-import { caseStudies } from '@/lib/case-studies';
+import { useCaseStudies } from '@/lib/use-case-studies';
 import { useProjectMediaMap, thumbnailFor, heroImageFor } from '@/lib/use-project-media';
-
-const allProjects = caseStudies.slice(0, 7);
-
-const heroProject = allProjects[0];
-const supportingProjects = allProjects.slice(1, 4);
 
 function IPhoneMockup({ src, alt }: { src: string | null; alt: string }) {
   return (
@@ -56,6 +51,7 @@ function BrowserMockup({ src, alt }: { src: string | null; alt: string }) {
 }
 
 export default function FeaturedCaseStudy() {
+  const { studies, loading } = useCaseStudies();
   const mediaMap = useProjectMediaMap();
   const sectionRef = React.useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -64,6 +60,10 @@ export default function FeaturedCaseStudy() {
   });
   const imageY = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
+  if (loading || studies.length === 0) return null;
+
+  const heroProject = studies[0];
+  const supportingProjects = studies.slice(1, 4);
   const heroMedia = mediaMap.get(heroProject.slug);
   const heroImg = heroImageFor(heroMedia) || heroProject.thumbnail;
 

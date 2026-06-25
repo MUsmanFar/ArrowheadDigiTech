@@ -20,10 +20,9 @@ validateProductionEnvironment();
 const nextConfig = {
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
+      { protocol: 'https', hostname: 'arrowheaddigitech.com' },
+      { protocol: 'https', hostname: 'www.arrowheaddigitech.com' },
+      { protocol: 'http', hostname: 'localhost' },
     ],
   },
   experimental: {

@@ -657,7 +657,14 @@ const mockCrud = <T extends { id: string }>(entityName: string) => {
 
 export const dbService = {
   users: {
-    findMany: async () => isMockMode() ? mockCrud<any>('users').findMany() : prisma.user.findMany(),
+    findMany: async () => {
+      if (isMockMode()) {
+        return (await mockCrud<any>('users').findMany()).map(({ password: _p, ...rest }: any) => rest);
+      }
+      return prisma.user.findMany({
+        select: { id: true, email: true, name: true, role: true, createdAt: true, updatedAt: true },
+      });
+    },
     findUnique: async (email: string) => {
       if (isMockMode()) {
         return mockCrud<any>('users').findFirst((u) => u.email === email);

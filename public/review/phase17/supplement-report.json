@@ -1,0 +1,150 @@
+{
+  "marker": "P17-SUP-1782342567401",
+  "timestamp": "2026-06-24T23:09:31.704Z",
+  "results": [
+    {
+      "section": "Entity: projects",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "PENDING_BROWSER",
+      "status": "PASS",
+      "evidence": "CREATE cmqsoqv9t000mv6tsyoxae3n0 | DB title=P17-SUP-1782342567401 | public projects API: found | UPDATE: OK | DELETE: OK"
+    },
+    {
+      "section": "Entity: founders",
+      "admin": "FAIL",
+      "database": "FAIL",
+      "api": "FAIL",
+      "frontend": "SKIP",
+      "status": "FAIL",
+      "evidence": "Error: create 500 {\"error\":\"\\nInvalid `__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__[\\\"prisma\\\"].founder.upsert()` invocation in\\nD:\\\\Projects\\\\ArrowheaddigiTech\\\\.next\\\\dev\\\\server\\\\chunks\\\\[root-of-the-server]__1jhxw3u._.js:1223:150\\n\\n  1220     });\\n  1221 }\\n  1222 const { profileKey: _profileKey, ...founderData } = data;\\n→ 1223 return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__[\\\"prisma\\\"].founder.upsert({\\n         where: {\\n           profileKey: \\\"primary\\\"\\n         },\\n         create: {\\n           profileKey: \\\"primary\\\",\\n           name: \\\"P17-SUP-1782342567401\\\",\\n           title: \\\"Phase 17 Founder\\\",\\n           bio: \\\"Test bio\\\",\\n           image: \\\"/uploads/founder/test.png\\\",\\n           order: 99,\\n       +   position: String\\n         },\\n         update: {\\n           name: \\\"P17-SUP-1782342567401\\\",\\n           title: \\\"Phase 17 Founder\\\",\\n           bio: \\\"Test bio\\\",\\n           image: \\\"/uploads/founder/test.png\\\",\\n           order: 99\\n         }\\n       })\\n\\nArgument `position` is missing.\"}"
+    },
+    {
+      "section": "Entity: leads (contact create)",
+      "admin": "N/A",
+      "database": "FAIL",
+      "api": "FAIL",
+      "frontend": "SKIP",
+      "status": "FAIL",
+      "evidence": "POST /api/public/leads: 405"
+    },
+    {
+      "section": "Media: reorder gallery",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "SKIP",
+      "status": "PASS",
+      "evidence": "reorder PUT: OK | db order: OK"
+    },
+    {
+      "section": "Frontend (client fetch): Homepage",
+      "admin": "N/A",
+      "database": "N/A",
+      "api": "PASS",
+      "frontend": "PASS",
+      "status": "PASS",
+      "evidence": "home.hero.headline = \"Building Websites That\""
+    },
+    {
+      "section": "Frontend (client fetch): About",
+      "admin": "N/A",
+      "database": "N/A",
+      "api": "PASS",
+      "frontend": "PASS",
+      "status": "PASS",
+      "evidence": "about.hero.headline = \"We build digital platforms that deliver measurable outcomes.\""
+    },
+    {
+      "section": "Frontend (client fetch): Services",
+      "admin": "N/A",
+      "database": "N/A",
+      "api": "PASS",
+      "frontend": "PASS",
+      "status": "PASS",
+      "evidence": "services.hero.headline = \"Everything you need\""
+    },
+    {
+      "section": "Frontend (client fetch): Portfolio",
+      "admin": "N/A",
+      "database": "N/A",
+      "api": "PASS",
+      "frontend": "PASS",
+      "status": "PASS",
+      "evidence": "portfolio.hero.headline = \"Real work.\""
+    },
+    {
+      "section": "Frontend (client fetch): Case Studies",
+      "admin": "N/A",
+      "database": "N/A",
+      "api": "PASS",
+      "frontend": "PASS",
+      "status": "PASS",
+      "evidence": "case-studies.hero.headline = \"Behind every project is a business problem solved.\""
+    },
+    {
+      "section": "Frontend (client fetch): Blog",
+      "admin": "N/A",
+      "database": "N/A",
+      "api": "PASS",
+      "frontend": "PASS",
+      "status": "PASS",
+      "evidence": "blog.page.heroTitle = \"Our\""
+    },
+    {
+      "section": "Frontend (client fetch): Pricing",
+      "admin": "N/A",
+      "database": "N/A",
+      "api": "PASS",
+      "frontend": "PASS",
+      "status": "PASS",
+      "evidence": "pricing.page.heroTitle = \"Simple, Transparent\""
+    },
+    {
+      "section": "Frontend (client fetch): FAQ",
+      "admin": "N/A",
+      "database": "N/A",
+      "api": "PASS",
+      "frontend": "PASS",
+      "status": "PASS",
+      "evidence": "faq.page.heroTitle = \"Frequently Asked\""
+    },
+    {
+      "section": "Frontend (client fetch): Contact",
+      "admin": "N/A",
+      "database": "N/A",
+      "api": "PASS",
+      "frontend": "PASS",
+      "status": "PASS",
+      "evidence": "contact.page.headline = \"Let's build something\""
+    },
+    {
+      "section": "Frontend (client fetch): Careers",
+      "admin": "N/A",
+      "database": "N/A",
+      "api": "PASS",
+      "frontend": "PASS",
+      "status": "PASS",
+      "evidence": "careers.page.heroTitle = \"Join Our\""
+    },
+    {
+      "section": "Frontend (client fetch): Footer",
+      "admin": "N/A",
+      "database": "N/A",
+      "api": "PASS",
+      "frontend": "PASS",
+      "status": "PASS",
+      "evidence": "site.footer.tagline = \"Building Digital Experiences That Drive Growth\""
+    },
+    {
+      "section": "Frontend (client fetch): Navigation",
+      "admin": "N/A",
+      "database": "N/A",
+      "api": "PASS",
+      "frontend": "PASS",
+      "status": "PASS",
+      "evidence": "site.nav.brandName = \"Arrowhead\""
+    }
+  ]
+}

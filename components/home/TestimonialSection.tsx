@@ -1,18 +1,16 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { caseStudies } from '@/lib/case-studies';
 
-const testimonials = caseStudies
-  .filter((s) => s.testimonial)
-  .slice(0, 3)
-  .map((s) => ({
-    ...s.testimonial!,
-    slug: s.slug,
-    client: s.client,
-    industry: s.industry,
-  }));
+interface Testimonial {
+  id: string;
+  name: string;
+  role?: string | null;
+  company?: string | null;
+  content: string;
+  featured?: boolean;
+}
 
 const cardBgGradients = [
   'from-orange-500/5 via-orange-500/[0.02] to-transparent',
@@ -21,6 +19,20 @@ const cardBgGradients = [
 ];
 
 export default function TestimonialSection() {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+
+  useEffect(() => {
+    fetch('/api/public/testimonials')
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data) => {
+        if (!Array.isArray(data)) return;
+        const featured = data.filter((t) => t.featured);
+        const source = featured.length > 0 ? featured : data;
+        setTestimonials(source.slice(0, 3));
+      })
+      .catch(() => {});
+  }, []);
+
   if (testimonials.length === 0) return null;
 
   return (
@@ -46,7 +58,7 @@ export default function TestimonialSection() {
         <div className="grid md:grid-cols-3 gap-5">
           {testimonials.map((t, i) => (
             <motion.div
-              key={t.slug}
+              key={t.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -73,7 +85,7 @@ export default function TestimonialSection() {
                       <cite className="not-italic text-sm font-semibold text-white font-poppins block truncate">
                         {t.name}
                       </cite>
-                      <span className="text-xs text-slate-500 font-inter">{t.role}</span>
+                      <span className="text-xs text-slate-500 font-inter">{t.role || t.company || ''}</span>
                     </div>
                   </div>
                 </div>

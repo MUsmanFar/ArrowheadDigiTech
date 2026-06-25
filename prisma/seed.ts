@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { CASE_STUDY_SEED_BY_SLUG } from '../lib/seed-case-study-content';
 
 const prisma = new PrismaClient();
 
@@ -353,7 +354,14 @@ async function main() {
   ];
 
   for (const prj of projectsData) {
-    await prisma.project.create({ data: prj });
+    const extra = CASE_STUDY_SEED_BY_SLUG[prj.slug];
+    await prisma.project.create({
+      data: {
+        ...prj,
+        caseStudyContent: extra?.caseStudyContent,
+        serviceSlugs: extra?.serviceSlugs ?? [],
+      },
+    });
   }
   console.log(`Seeded ${projectsData.length} projects`);
 
@@ -465,6 +473,14 @@ async function main() {
       value: 'info@arrowheaddigitech.com',
     }
   });
+
+  const { SITE_CONTENT_DEFAULTS } = await import('../lib/site-content-defaults');
+  for (const [key, value] of Object.entries(SITE_CONTENT_DEFAULTS)) {
+    await prisma.setting.create({
+      data: { key, value: JSON.stringify(value) },
+    });
+  }
+  console.log(`Seeded ${Object.keys(SITE_CONTENT_DEFAULTS).length} site content sections`);
   console.log('Seeded settings');
 
   console.log('Database seeding finished successfully!');

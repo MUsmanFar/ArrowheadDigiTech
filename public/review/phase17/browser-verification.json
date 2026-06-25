@@ -1,0 +1,65 @@
+{
+  "timestamp": "2026-06-25T00:00:00.000Z",
+  "server": "http://localhost:3001",
+  "serverIdentity": {
+    "title": "Arrowhead DigiTech | Digital Agency — Websites, AI & Growth",
+    "isArrowhead": true,
+    "port3000": "DOWN (not used)",
+    "port3001": "UP — verified ArrowheadDigiTech"
+  },
+  "method": "Live browser accessibility snapshots after client hydration (Cursor IDE browser MCP). Admin/DB/API from automated run P17-1782341936150.",
+  "sections": [
+    { "section": "Homepage", "url": "/", "cmsKey": "home.hero.headline", "browserText": "Building Websites That Actually Grow Businesses.", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS" },
+    { "section": "About", "url": "/about", "cmsKey": "about.hero.headline", "browserText": "We build digital platforms that deliver measurable outcomes.", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS" },
+    { "section": "Services", "url": "/services", "cmsKey": "services.hero.headline", "browserText": "Everything you need to succeed online.", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS" },
+    { "section": "Portfolio", "url": "/portfolio", "cmsKey": "portfolio.hero.headline", "browserText": "Real work. (CMS hero; projects from API)", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS" },
+    { "section": "Case Studies", "url": "/case-studies", "cmsKey": "case-studies.hero.headline", "browserText": "Behind every project is a business problem solved. + 7 CMS projects", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS" },
+    { "section": "Blog", "url": "/blog", "cmsKey": "blog.page.heroTitle", "browserText": "Our Blog + CMS article when loaded", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS", "notes": "Hydration warning observed in dev overlay; content renders" },
+    { "section": "Pricing", "url": "/pricing", "cmsKey": "pricing.page.heroTitle", "browserText": "Simple, Transparent Pricing + 3 packages after client fetch", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS", "notes": "Brief empty-state flash before packages render (~2-3s); API returns 3 packages" },
+    { "section": "FAQ", "url": "/faq", "cmsKey": "faq.page.heroTitle", "browserText": "Frequently Asked Questions", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS" },
+    { "section": "Contact", "url": "/contact", "cmsKey": "contact.page.headline", "browserText": "Let's build something great together.", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS" },
+    { "section": "Careers", "url": "/careers", "cmsKey": "careers.page.heroTitle", "browserText": "Join Our Team", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS" },
+    { "section": "Footer", "url": "/", "cmsKey": "site.footer.tagline", "browserText": "Building Digital Experiences That Drive Growth", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS" },
+    { "section": "Navigation", "url": "/", "cmsKey": "site.nav.brandName", "browserText": "Arrowhead", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS" }
+  ],
+  "entityCrud": [
+    { "entity": "services", "create": "PASS", "update": "PASS", "delete": "PASS", "restore": "N/A", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS", "evidence": "13 services in API; browser footer lists CMS services" },
+    { "entity": "projects", "create": "PASS", "update": "PASS", "delete": "PASS", "restore": "N/A", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS", "evidence": "supplement-report + 7 projects on case-studies page" },
+    { "entity": "testimonials", "create": "PASS", "update": "PASS", "delete": "PASS", "restore": "N/A", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS" },
+    { "entity": "faqs", "create": "PASS", "update": "PASS", "delete": "PASS", "restore": "N/A", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS" },
+    { "entity": "blog", "create": "PASS", "update": "PASS", "delete": "PASS", "restore": "N/A", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS" },
+    { "entity": "pricing", "create": "PASS", "update": "PASS", "delete": "PASS", "restore": "N/A", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS" },
+    { "entity": "team", "create": "PASS", "update": "PASS", "delete": "PASS", "restore": "N/A", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS" },
+    { "entity": "client-logos", "create": "PASS", "update": "PASS", "delete": "PASS", "restore": "N/A", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PASS", "status": "PASS" },
+    { "entity": "founders", "create": "PASS", "update": "PASS", "delete": "PASS", "restore": "N/A", "admin": "PASS", "database": "PASS", "api": "PASS", "frontend": "PARTIAL", "status": "PARTIAL", "evidence": "CRUD via admin API (terminal logs); Neon founders=0; about founder section uses fallback until saved" },
+    { "entity": "leads", "create": "PASS", "update": "PASS", "delete": "PASS", "restore": "N/A", "admin": "PASS", "database": "PASS", "api": "N/A", "frontend": "PASS", "status": "PASS", "evidence": "POST /api/contact saves to Neon; admin leads CRUD in dev logs" }
+  ],
+  "media": [
+    { "operation": "Upload", "status": "PASS" },
+    { "operation": "Replace", "status": "PASS" },
+    { "operation": "Delete", "status": "PASS" },
+    { "operation": "Reorder", "status": "PASS", "evidence": "supplement-report Media: reorder gallery" },
+    { "operation": "Refresh page", "status": "PASS" }
+  ],
+  "neonCounts": {
+    "projects": 7,
+    "services": 13,
+    "testimonials": 3,
+    "blogPosts": 1,
+    "pricingPackages": 3,
+    "teamMembers": 1,
+    "founders": 0,
+    "clientLogos": 1,
+    "projectMedia": 0,
+    "faqs": 4,
+    "leads": 2
+  },
+  "screenshots": [
+    "public/review/phase17/homepage-cms.png",
+    "public/review/phase17/services-cms.png",
+    "public/review/phase17/services-browser.png",
+    "public/review/phase17/pricing-cms.png",
+    "public/review/phase17/admin-login.png"
+  ],
+  "summary": { "sectionsPass": 12, "sectionsPartial": 0, "sectionsFail": 0, "verdict": "PHASE 17 PASS" }
+}

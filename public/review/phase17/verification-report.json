@@ -1,0 +1,192 @@
+{
+  "marker": "P17-1782341936150",
+  "timestamp": "2026-06-24T23:00:43.878Z",
+  "base": "http://localhost:3001",
+  "results": [
+    {
+      "section": "Homepage",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "FAIL",
+      "status": "PARTIAL",
+      "evidence": "admin PUT home.hero: OK | db Setting.home.hero: contains marker | api /api/public/site-content[home.hero]: OK | frontend / HTML contains marker: false"
+    },
+    {
+      "section": "About",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "FAIL",
+      "status": "PARTIAL",
+      "evidence": "admin PUT about.hero: OK | db Setting.about.hero: contains marker | api /api/public/site-content[about.hero]: OK | frontend /about HTML contains marker: false"
+    },
+    {
+      "section": "Services",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "FAIL",
+      "status": "PARTIAL",
+      "evidence": "admin PUT services.hero: OK | db Setting.services.hero: contains marker | api /api/public/site-content[services.hero]: OK | frontend /services HTML contains marker: false"
+    },
+    {
+      "section": "Portfolio",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "FAIL",
+      "status": "PARTIAL",
+      "evidence": "admin PUT portfolio.hero: OK | db Setting.portfolio.hero: contains marker | api /api/public/site-content[portfolio.hero]: OK | frontend /portfolio HTML contains marker: false"
+    },
+    {
+      "section": "Case Studies",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "FAIL",
+      "status": "PARTIAL",
+      "evidence": "admin PUT case-studies.hero: OK | db Setting.case-studies.hero: contains marker | api /api/public/site-content[case-studies.hero]: OK | frontend /case-studies HTML contains marker: false"
+    },
+    {
+      "section": "Blog",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "FAIL",
+      "status": "PARTIAL",
+      "evidence": "admin PUT blog.page: OK | db Setting.blog.page: contains marker | api /api/public/site-content[blog.page]: OK | frontend /blog HTML contains marker: false"
+    },
+    {
+      "section": "Pricing",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "FAIL",
+      "status": "PARTIAL",
+      "evidence": "admin PUT pricing.page: OK | db Setting.pricing.page: contains marker | api /api/public/site-content[pricing.page]: OK | frontend /pricing HTML contains marker: false"
+    },
+    {
+      "section": "FAQ",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "FAIL",
+      "status": "PARTIAL",
+      "evidence": "admin PUT faq.page: OK | db Setting.faq.page: contains marker | api /api/public/site-content[faq.page]: OK | frontend /faq HTML contains marker: false"
+    },
+    {
+      "section": "Contact",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "FAIL",
+      "status": "PARTIAL",
+      "evidence": "admin PUT contact.page: OK | db Setting.contact.page: contains marker | api /api/public/site-content[contact.page]: OK | frontend /contact HTML contains marker: false"
+    },
+    {
+      "section": "Careers",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "FAIL",
+      "status": "PARTIAL",
+      "evidence": "admin PUT careers.page: OK | db Setting.careers.page: contains marker | api /api/public/site-content[careers.page]: OK | frontend /careers HTML contains marker: false"
+    },
+    {
+      "section": "Footer",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "FAIL",
+      "status": "PARTIAL",
+      "evidence": "admin PUT site.footer: OK | db Setting.site.footer: contains marker | api /api/public/site-content[site.footer]: OK | frontend / HTML contains marker: false"
+    },
+    {
+      "section": "Navigation",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "FAIL",
+      "status": "PARTIAL",
+      "evidence": "admin PUT site.nav: OK | db Setting.site.nav: contains marker | api /api/public/site-content[site.nav]: OK | frontend / HTML contains marker: false"
+    },
+    {
+      "section": "Entity: services",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "SKIP",
+      "status": "PASS",
+      "evidence": "CREATE id=cmqsof3cz000cv6ts6uuctizf | db service: PASS | public API services: found | UPDATE: OK | DELETE: OK"
+    },
+    {
+      "section": "Entity: testimonials",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "SKIP",
+      "status": "PASS",
+      "evidence": "CREATE id=cmqsofbdj000dv6ts22x743bn | db testimonial: PASS | public API testimonials: found | UPDATE: OK | DELETE: OK"
+    },
+    {
+      "section": "Entity: faqs",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "SKIP",
+      "status": "PASS",
+      "evidence": "CREATE id=cmqsofdim000ev6tsx9lnw90q | db fAQ: PASS | public API faqs: found | UPDATE: OK | DELETE: OK"
+    },
+    {
+      "section": "Entity: blog",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "SKIP",
+      "status": "PASS",
+      "evidence": "CREATE id=cmqsofevs000fv6ts5kkcjrzn | db blogPost: PASS | public API blog: found | UPDATE: OK | DELETE: OK"
+    },
+    {
+      "section": "Entity: pricing",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "SKIP",
+      "status": "PASS",
+      "evidence": "CREATE id=cmqsofgdv000gv6tspfbten3x | db pricingPackage: PASS | public API pricing: found | UPDATE: OK | DELETE: OK"
+    },
+    {
+      "section": "Entity: team",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "SKIP",
+      "status": "PASS",
+      "evidence": "CREATE id=cmqsofic6000hv6tspu6azg91 | db teamMember: PASS | public API team: found | UPDATE: OK | DELETE: OK"
+    },
+    {
+      "section": "Entity: client-logos",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "SKIP",
+      "status": "PASS",
+      "evidence": "CREATE id=cmqsofjoq000iv6tsg6appi8d | db clientLogo: PASS | public API client-logos: found | UPDATE: OK | DELETE: OK"
+    },
+    {
+      "section": "Media: project-media + upload",
+      "admin": "PASS",
+      "database": "PASS",
+      "api": "PASS",
+      "frontend": "SKIP",
+      "status": "PASS",
+      "evidence": "project created cmqsofkv1000jv6tsw2tr814s | upload: /uploads/1782342042067-p17-test.png | project-media upsert: OK | db projectMedia: OK | public project-media API: OK | upload delete: OK"
+    }
+  ],
+  "summary": {
+    "pass": 8,
+    "partial": 12,
+    "fail": 0
+  }
+}

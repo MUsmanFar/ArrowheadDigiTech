@@ -48,6 +48,8 @@ model Project {
   thumbnail     String?
   featured      Boolean   @default(false)
   metrics       String?
+  caseStudyContent Json?
+  serviceSlugs  String[]  @default([])
   testimonialId String?
   testimonial   Testimonial?  @relation(fields: [testimonialId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   projectMedia  ProjectMedia?

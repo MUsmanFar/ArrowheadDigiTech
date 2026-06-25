@@ -3,10 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import type { ClientLogoData } from '@/lib/media';
 import { getClientLogos } from '@/lib/media';
+import { useSiteSection } from '@/lib/use-site-content';
 
 export default function ClientLogoStrip() {
   const [logos, setLogos] = useState<ClientLogoData[]>([]);
   const [loading, setLoading] = useState(true);
+  const { section: strip } = useSiteSection('site.client-logos');
 
   useEffect(() => {
     getClientLogos()
@@ -23,7 +25,7 @@ export default function ClientLogoStrip() {
     <div className="w-full bg-white border-t border-b border-slate-100 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
         <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 text-center mb-5 font-poppins">
-          Trusted by
+          {strip.label}
         </p>
         <div className="relative overflow-hidden">
           <div className="flex gap-10 items-center animate-scroll">

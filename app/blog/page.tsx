@@ -1,44 +1,44 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Calendar, User, ArrowRight } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { useSiteSection } from '@/lib/use-site-content';
 
-const blogPosts = [
-  {
-    slug: 'future-of-digital-marketing',
-    title: 'The Future of Digital Marketing in 2026',
-    excerpt: 'Explore the latest trends and technologies shaping the digital marketing landscape.',
-    author: 'Sarah Johnson',
-    date: '2024-01-15',
-    category: 'Marketing',
-    image: 'bg-gradient-to-br from-blue-400 to-cyan-400',
-  },
-  {
-    slug: 'ai-automation-business',
-    title: 'How AI Automation is Transforming Business Operations',
-    excerpt: 'Discover how artificial intelligence is revolutionizing the way businesses operate.',
-    author: 'Michael Chen',
-    date: '2024-01-10',
-    category: 'Technology',
-    image: 'bg-gradient-to-br from-purple-400 to-pink-400',
-  },
-  {
-    slug: 'web-development-best-practices',
-    title: 'Web Development Best Practices for 2026',
-    excerpt: 'Learn the essential techniques and tools for building modern web applications.',
-    author: 'John Smith',
-    date: '2024-01-05',
-    category: 'Development',
-    image: 'bg-gradient-to-br from-green-400 to-emerald-400',
-  },
+const imageGradients = [
+  'bg-gradient-to-br from-blue-400 to-cyan-400',
+  'bg-gradient-to-br from-purple-400 to-pink-400',
+  'bg-gradient-to-br from-green-400 to-emerald-400',
 ];
 
+interface BlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  coverImage?: string | null;
+  author?: string | null;
+  publishedAt?: string | null;
+  createdAt: string;
+}
+
 export default function BlogPage() {
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const { section: page } = useSiteSection('blog.page');
+
+  useEffect(() => {
+    fetch('/api/public/blog')
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data) => {
+        if (Array.isArray(data)) setBlogPosts(data);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -53,11 +53,9 @@ export default function BlogPage() {
             className="text-center max-w-4xl mx-auto"
           >
             <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6 font-montserrat">
-              Our <span className="text-gradient-blue">Blog</span>
+              {page.heroTitle} <span className="text-gradient-blue">{page.heroTitleAccent}</span>
             </h1>
-            <p className="text-xl text-slate-600 mb-8">
-              Insights, trends, and expert perspectives on digital transformation
-            </p>
+            <p className="text-xl text-slate-600 mb-8">{page.heroDescription}</p>
           </motion.div>
         </div>
       </section>
@@ -77,21 +75,27 @@ export default function BlogPage() {
               >
                 <Link href={`/blog/${post.slug}`}>
                   <Card className="h-full hover:shadow-2xl transition-all duration-300 group cursor-pointer">
-                    <div className={`aspect-video ${post.image} rounded-t-xl`} />
+                    {post.coverImage ? (
+                      <div
+                        className="aspect-video rounded-t-xl bg-cover bg-center"
+                        style={{ backgroundImage: `url(${post.coverImage})` }}
+                      />
+                    ) : (
+                      <div className={`aspect-video ${imageGradients[index % imageGradients.length]} rounded-t-xl`} />
+                    )}
                     <CardHeader>
                       <div className="flex items-center gap-4 text-sm text-slate-500 mb-2">
                         <span className="flex items-center">
                           <Calendar size={16} className="mr-1" />
-                          {new Date(post.date).toLocaleDateString()}
+                          {new Date(post.publishedAt || post.createdAt).toLocaleDateString()}
                         </span>
-                        <span className="flex items-center">
-                          <User size={16} className="mr-1" />
-                          {post.author}
-                        </span>
+                        {post.author && (
+                          <span className="flex items-center">
+                            <User size={16} className="mr-1" />
+                            {post.author}
+                          </span>
+                        )}
                       </div>
-                      <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium mb-2">
-                        {post.category}
-                      </span>
                       <CardTitle className="group-hover:text-blue-600 transition-colors">
                         {post.title}
                       </CardTitle>
@@ -119,7 +123,7 @@ export default function BlogPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            Stay Updated
+            {page.newsletterTitle}
           </motion.h2>
           <motion.p
             className="text-xl mb-8 text-blue-100"
@@ -128,7 +132,7 @@ export default function BlogPage() {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            Subscribe to our newsletter for the latest insights
+            {page.newsletterDescription}
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -144,8 +148,8 @@ export default function BlogPage() {
               placeholder="Enter your email"
               className="px-6 py-3 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white"
             />
-            <button className="px-8 py-3 bg-white text-blue-600 rounded-full font-semibold hover:bg-blue-50 transition-colors">
-              Subscribe
+            <button type="button" className="px-8 py-3 bg-white text-blue-600 rounded-full font-semibold hover:bg-blue-50 transition-colors">
+              {page.newsletterButtonLabel}
             </button>
           </motion.div>
         </div>

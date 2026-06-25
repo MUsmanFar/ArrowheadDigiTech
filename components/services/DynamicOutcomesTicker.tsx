@@ -1,18 +1,22 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
-
-const outcomes = [
-  'Real-time Trip Tracking',
-  '50% Faster Applications',
-  '40% More Mobile Bookings',
-  'Zero Double-Booking Incidents',
-  '35% Higher Conversions',
-  '25% Less Abandonment',
-];
+import { useCaseStudies } from '@/lib/use-case-studies';
 
 export default function DynamicOutcomesTicker() {
+  const { studies } = useCaseStudies();
+
+  const outcomes = useMemo(() => {
+    const fromKeyResults = studies.flatMap((s) => s.keyResults).filter(Boolean);
+    if (fromKeyResults.length > 0) return fromKeyResults;
+    return studies
+      .flatMap((s) => s.metrics.map((m) => `${m.value} ${m.label}`.trim()))
+      .filter(Boolean);
+  }, [studies]);
+
+  if (outcomes.length === 0) return null;
+
   return (
     <section className="bg-slate-50 border-y border-slate-100 py-10 overflow-hidden" aria-label="Key Outcomes">
       <div className="flex">
