@@ -3,7 +3,7 @@ import { contactService, ContactLeadPayload } from '../services/contact.service'
 import { apiError, safeErrorMessage } from '@/lib/api-response';
 import { logger } from '@/lib/logger';
 import { enforceRateLimit, rateLimitResponse } from '@/lib/rate-limit';
-import { parseJsonBody, contactSchema } from '@/lib/validation/schemas';
+import { parseJsonBody, contactSchema, readJsonBody } from '@/lib/validation/schemas';
 import { sanitizePlainText, sanitizeRichHtml } from '@/lib/sanitize';
 
 export class ContactController {
@@ -12,8 +12,10 @@ export class ContactController {
     if (!rl.allowed) return rateLimitResponse(rl.retryAfterSec);
 
     try {
-      const body = await request.json();
-      const parsed = parseJsonBody(contactSchema, body);
+      const bodyResult = await readJsonBody(request);
+      if (!bodyResult.ok) return apiError(bodyResult.error, 400, { code: 'INVALID_JSON' });
+
+      const parsed = parseJsonBody(contactSchema, bodyResult.data);
       if (!parsed.success) {
         return apiError(parsed.error, 400, { code: 'VALIDATION_ERROR' });
       }

@@ -6,15 +6,17 @@ import { getJwtSecret } from '@/lib/env';
 import { apiError, safeErrorMessage } from '@/lib/api-response';
 import { logger } from '@/lib/logger';
 import { enforceRateLimit, rateLimitResponse } from '@/lib/rate-limit';
-import { parseJsonBody, loginSchema } from '@/lib/validation/schemas';
+import { parseJsonBody, loginSchema, readJsonBody } from '@/lib/validation/schemas';
 
 export async function POST(request: Request) {
   const rl = enforceRateLimit(request, 'admin-login', 10, 15 * 60 * 1000);
   if (!rl.allowed) return rateLimitResponse(rl.retryAfterSec);
 
   try {
-    const body = await request.json();
-    const parsed = parseJsonBody(loginSchema, body);
+    const bodyResult = await readJsonBody(request);
+    if (!bodyResult.ok) return apiError(bodyResult.error, 400, { code: 'INVALID_JSON' });
+
+    const parsed = parseJsonBody(loginSchema, bodyResult.data);
     if (!parsed.success) return apiError(parsed.error, 400, { code: 'VALIDATION_ERROR' });
 
     const { email, password } = parsed.data;

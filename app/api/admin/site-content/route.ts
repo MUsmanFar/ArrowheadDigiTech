@@ -9,6 +9,7 @@ import { apiError, safeErrorMessage } from '@/lib/api-response';
 import { logger } from '@/lib/logger';
 import { enforceRateLimit, rateLimitResponse } from '@/lib/rate-limit';
 import { sanitizeSiteContentSection } from '@/lib/sanitize';
+import { parseJsonBody, siteContentPutSchema, readJsonBody } from '@/lib/validation/schemas';
 
 export async function GET(request: Request) {
   const rl = enforceRateLimit(request, 'admin-site-content', 60, 60_000);
@@ -34,16 +35,21 @@ export async function PUT(request: Request) {
     return apiError('Unauthorized', 401, { code: 'UNAUTHORIZED' });
   }
   try {
-    const body = await request.json();
-    const { key, value } = body as { key: SiteContentKey; value: unknown };
-    if (!key || !SITE_CONTENT_KEYS.includes(key)) {
+    const bodyResult = await readJsonBody(request);
+    if (!bodyResult.ok) return apiError(bodyResult.error, 400, { code: 'INVALID_JSON' });
+
+    const parsed = parseJsonBody(siteContentPutSchema, bodyResult.data);
+    if (!parsed.success) return apiError(parsed.error, 400, { code: 'VALIDATION_ERROR' });
+
+    const { key, value } = parsed.data;
+    if (!SITE_CONTENT_KEYS.includes(key as SiteContentKey)) {
       return apiError('Invalid site content key', 400, { code: 'VALIDATION_ERROR' });
     }
     if (value == null || typeof value !== 'object') {
       return apiError('Invalid site content value', 400, { code: 'VALIDATION_ERROR' });
     }
     const sanitized = sanitizeSiteContentSection(value) as SiteContentMapValue;
-    await upsertSiteSection(key, sanitized);
+    await upsertSiteSection(key as SiteContentKey, sanitized);
     return NextResponse.json({ success: true });
   } catch (error) {
     logger.error('PUT /api/admin/site-content failed', { error: safeErrorMessage(error) });

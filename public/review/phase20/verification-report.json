@@ -1,0 +1,630 @@
+{
+  "marker": "P20-1782380796804",
+  "baseUrl": "http://localhost:3001",
+  "timestamp": "2026-06-25T09:47:00.982Z",
+  "total": 102,
+  "pass": 101,
+  "fail": 0,
+  "warn": 1,
+  "criticalFails": 0,
+  "highFails": 0,
+  "checks": [
+    {
+      "category": "database",
+      "name": "table User",
+      "status": "PASS",
+      "evidence": "count=1"
+    },
+    {
+      "category": "database",
+      "name": "table Service",
+      "status": "PASS",
+      "evidence": "count=13"
+    },
+    {
+      "category": "database",
+      "name": "table Project",
+      "status": "PASS",
+      "evidence": "count=7"
+    },
+    {
+      "category": "database",
+      "name": "table ProjectMedia",
+      "status": "PASS",
+      "evidence": "count=0"
+    },
+    {
+      "category": "database",
+      "name": "table Founder",
+      "status": "PASS",
+      "evidence": "count=0"
+    },
+    {
+      "category": "database",
+      "name": "table ClientLogo",
+      "status": "PASS",
+      "evidence": "count=1"
+    },
+    {
+      "category": "database",
+      "name": "table Testimonial",
+      "status": "PASS",
+      "evidence": "count=3"
+    },
+    {
+      "category": "database",
+      "name": "table FAQ",
+      "status": "PASS",
+      "evidence": "count=4"
+    },
+    {
+      "category": "database",
+      "name": "table BlogPost",
+      "status": "PASS",
+      "evidence": "count=1"
+    },
+    {
+      "category": "database",
+      "name": "table PricingPackage",
+      "status": "PASS",
+      "evidence": "count=3"
+    },
+    {
+      "category": "database",
+      "name": "table Lead",
+      "status": "PASS",
+      "evidence": "count=3"
+    },
+    {
+      "category": "database",
+      "name": "table TeamMember",
+      "status": "PASS",
+      "evidence": "count=1"
+    },
+    {
+      "category": "database",
+      "name": "table Setting",
+      "status": "PASS",
+      "evidence": "count=13"
+    },
+    {
+      "category": "database",
+      "name": "migrations applied",
+      "status": "PASS",
+      "evidence": "4 total, 0 pending"
+    },
+    {
+      "category": "database",
+      "name": "ProjectMedia FK integrity",
+      "status": "PASS",
+      "evidence": "orphan rows=0"
+    },
+    {
+      "category": "auth",
+      "name": "admin login",
+      "status": "PASS",
+      "evidence": "200 + HttpOnly cookie set"
+    },
+    {
+      "category": "auth",
+      "name": "admin API without cookie",
+      "status": "PASS",
+      "evidence": "HTTP 401"
+    },
+    {
+      "category": "auth",
+      "name": "login invalid JSON",
+      "status": "PASS",
+      "evidence": "HTTP 400 code=INVALID_JSON"
+    },
+    {
+      "category": "auth",
+      "name": "login wrong password",
+      "status": "PASS",
+      "evidence": "HTTP 401"
+    },
+    {
+      "category": "auth",
+      "name": "tampered JWT",
+      "status": "PASS",
+      "evidence": "HTTP 401",
+      "severity": "high"
+    },
+    {
+      "category": "security",
+      "name": "users API removed",
+      "status": "PASS",
+      "evidence": "HTTP 404",
+      "severity": "critical"
+    },
+    {
+      "category": "auth",
+      "name": "logout",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "auth",
+      "name": "admin login",
+      "status": "PASS",
+      "evidence": "200 + HttpOnly cookie set"
+    },
+    {
+      "category": "auth",
+      "name": "admin login",
+      "status": "PASS",
+      "evidence": "200 + HttpOnly cookie set"
+    },
+    {
+      "category": "api",
+      "name": "GET /api/public/services",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "performance",
+      "name": "cache /api/public/services",
+      "status": "PASS",
+      "evidence": "public, s-maxage=60, stale-while-revalidate=300"
+    },
+    {
+      "category": "api",
+      "name": "GET /api/public/projects",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "performance",
+      "name": "cache /api/public/projects",
+      "status": "PASS",
+      "evidence": "public, s-maxage=60, stale-while-revalidate=300"
+    },
+    {
+      "category": "api",
+      "name": "GET /api/public/case-studies",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "performance",
+      "name": "cache /api/public/case-studies",
+      "status": "PASS",
+      "evidence": "public, s-maxage=60, stale-while-revalidate=300"
+    },
+    {
+      "category": "api",
+      "name": "GET /api/public/testimonials",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "performance",
+      "name": "cache /api/public/testimonials",
+      "status": "PASS",
+      "evidence": "public, s-maxage=60, stale-while-revalidate=300"
+    },
+    {
+      "category": "api",
+      "name": "GET /api/public/faqs",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "performance",
+      "name": "cache /api/public/faqs",
+      "status": "PASS",
+      "evidence": "public, s-maxage=60, stale-while-revalidate=300"
+    },
+    {
+      "category": "api",
+      "name": "GET /api/public/blog",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "performance",
+      "name": "cache /api/public/blog",
+      "status": "PASS",
+      "evidence": "public, s-maxage=60, stale-while-revalidate=300"
+    },
+    {
+      "category": "api",
+      "name": "GET /api/public/pricing",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "performance",
+      "name": "cache /api/public/pricing",
+      "status": "PASS",
+      "evidence": "public, s-maxage=60, stale-while-revalidate=300"
+    },
+    {
+      "category": "api",
+      "name": "GET /api/public/team",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "performance",
+      "name": "cache /api/public/team",
+      "status": "PASS",
+      "evidence": "public, s-maxage=60, stale-while-revalidate=300"
+    },
+    {
+      "category": "api",
+      "name": "GET /api/public/founders",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "performance",
+      "name": "cache /api/public/founders",
+      "status": "PASS",
+      "evidence": "public, s-maxage=60, stale-while-revalidate=300"
+    },
+    {
+      "category": "api",
+      "name": "GET /api/public/client-logos",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "performance",
+      "name": "cache /api/public/client-logos",
+      "status": "PASS",
+      "evidence": "public, s-maxage=60, stale-while-revalidate=300"
+    },
+    {
+      "category": "api",
+      "name": "GET /api/public/site-content",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "performance",
+      "name": "cache /api/public/site-content",
+      "status": "PASS",
+      "evidence": "public, s-maxage=60, stale-while-revalidate=300"
+    },
+    {
+      "category": "validation",
+      "name": "contact invalid payload",
+      "status": "PASS",
+      "evidence": "HTTP 400 code=VALIDATION_ERROR"
+    },
+    {
+      "category": "validation",
+      "name": "contact invalid JSON",
+      "status": "PASS",
+      "evidence": "HTTP 400"
+    },
+    {
+      "category": "validation",
+      "name": "admin POST invalid JSON",
+      "status": "PASS",
+      "evidence": "HTTP 400 code=INVALID_JSON"
+    },
+    {
+      "category": "cms",
+      "name": "services CREATE",
+      "status": "PASS",
+      "evidence": "id=cmqtbigdd0009ocmwrqoth2yx"
+    },
+    {
+      "category": "cms",
+      "name": "services READ",
+      "status": "PASS",
+      "evidence": "in admin list"
+    },
+    {
+      "category": "cms",
+      "name": "services public API",
+      "status": "PASS",
+      "evidence": "visible"
+    },
+    {
+      "category": "cms",
+      "name": "services UPDATE",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "cms",
+      "name": "faqs CREATE",
+      "status": "PASS",
+      "evidence": "id=cmqtbigz0000aocmwlcv05fq4"
+    },
+    {
+      "category": "cms",
+      "name": "faqs READ",
+      "status": "PASS",
+      "evidence": "in admin list"
+    },
+    {
+      "category": "cms",
+      "name": "faqs public API",
+      "status": "PASS",
+      "evidence": "visible"
+    },
+    {
+      "category": "cms",
+      "name": "faqs UPDATE",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "cms",
+      "name": "testimonials CREATE",
+      "status": "PASS",
+      "evidence": "id=cmqtbihkt000bocmwbm1g2oc4"
+    },
+    {
+      "category": "cms",
+      "name": "testimonials READ",
+      "status": "PASS",
+      "evidence": "in admin list"
+    },
+    {
+      "category": "cms",
+      "name": "testimonials public API",
+      "status": "PASS",
+      "evidence": "visible"
+    },
+    {
+      "category": "cms",
+      "name": "testimonials UPDATE",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "cms",
+      "name": "blog CREATE",
+      "status": "PASS",
+      "evidence": "id=cmqtbiisk000cocmwce9zhe39"
+    },
+    {
+      "category": "cms",
+      "name": "blog READ",
+      "status": "PASS",
+      "evidence": "in admin list"
+    },
+    {
+      "category": "cms",
+      "name": "blog public API",
+      "status": "WARN",
+      "evidence": "not in public list (may be expected)"
+    },
+    {
+      "category": "cms",
+      "name": "blog UPDATE",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "cms",
+      "name": "team CREATE",
+      "status": "PASS",
+      "evidence": "id=cmqtbijba000docmwagb222yy"
+    },
+    {
+      "category": "cms",
+      "name": "team READ",
+      "status": "PASS",
+      "evidence": "in admin list"
+    },
+    {
+      "category": "cms",
+      "name": "team public API",
+      "status": "PASS",
+      "evidence": "visible"
+    },
+    {
+      "category": "cms",
+      "name": "team UPDATE",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "cms",
+      "name": "pricing CREATE",
+      "status": "PASS",
+      "evidence": "id=cmqtbijv9000eocmw0tvk01y2"
+    },
+    {
+      "category": "cms",
+      "name": "pricing READ",
+      "status": "PASS",
+      "evidence": "in admin list"
+    },
+    {
+      "category": "cms",
+      "name": "pricing public API",
+      "status": "PASS",
+      "evidence": "visible"
+    },
+    {
+      "category": "cms",
+      "name": "pricing UPDATE",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "cms",
+      "name": "founders CREATE",
+      "status": "PASS",
+      "evidence": "id=cmqtbikdw000focmwy9gzu2nn"
+    },
+    {
+      "category": "cms",
+      "name": "founders READ",
+      "status": "PASS",
+      "evidence": "in admin list"
+    },
+    {
+      "category": "cms",
+      "name": "founders public API",
+      "status": "PASS",
+      "evidence": "visible"
+    },
+    {
+      "category": "cms",
+      "name": "founders UPDATE",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "cms",
+      "name": "client-logos CREATE",
+      "status": "PASS",
+      "evidence": "id=cmqtbikxr000gocmw131st61q"
+    },
+    {
+      "category": "cms",
+      "name": "client-logos READ",
+      "status": "PASS",
+      "evidence": "in admin list"
+    },
+    {
+      "category": "cms",
+      "name": "client-logos public API",
+      "status": "PASS",
+      "evidence": "visible"
+    },
+    {
+      "category": "cms",
+      "name": "client-logos UPDATE",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "cms",
+      "name": "site-content PUT",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "cms",
+      "name": "site-content public read",
+      "status": "PASS",
+      "evidence": "marker in API"
+    },
+    {
+      "category": "cms",
+      "name": "leads via contact",
+      "status": "PASS",
+      "evidence": "HTTP 200 (SMTP may be unconfigured)"
+    },
+    {
+      "category": "media",
+      "name": "valid PNG upload",
+      "status": "PASS",
+      "evidence": "HTTP 200 url=/uploads/projects/p20-P20-1782380796804/1782380815667-test.png"
+    },
+    {
+      "category": "media",
+      "name": "uploaded file served",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "security",
+      "name": "SVG upload blocked",
+      "status": "PASS",
+      "evidence": "HTTP 400",
+      "severity": "high"
+    },
+    {
+      "category": "security",
+      "name": "upload without auth",
+      "status": "PASS",
+      "evidence": "HTTP 401",
+      "severity": "high"
+    },
+    {
+      "category": "security",
+      "name": "upload path traversal",
+      "status": "PASS",
+      "evidence": "url=/uploads/etc/1782380815742-test.png",
+      "severity": "high"
+    },
+    {
+      "category": "frontend",
+      "name": "page /",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "page /about",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "page /services",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "page /portfolio",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "page /case-studies",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "page /blog",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "page /pricing",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "page /faq",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "page /contact",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "page /careers",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "page /privacy-policy",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "page /terms-and-conditions",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "page /not-a-real-page",
+      "status": "PASS",
+      "evidence": "HTTP 404"
+    }
+  ]
+}

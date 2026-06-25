@@ -6,7 +6,7 @@ import { logger } from '@/lib/logger';
 import { enforceRateLimit, rateLimitResponse } from '@/lib/rate-limit';
 import { sanitizeEntityPayload } from '@/lib/sanitize';
 import { stripSensitive, stripSensitiveList } from '@/lib/serialize';
-import { parseJsonBody, projectMediaPutSchema } from '@/lib/validation/schemas';
+import { parseJsonBody, projectMediaPutSchema, readJsonBody } from '@/lib/validation/schemas';
 
 const ADMIN_RATE = { limit: 120, windowMs: 60_000 };
 
@@ -51,8 +51,10 @@ export class AdminController {
         return apiError('Entity not found', 404, { code: 'NOT_FOUND' });
       }
 
-      const body = await request.json();
-      const payload = sanitizeEntityPayload(entity, body as Record<string, unknown>);
+      const bodyResult = await readJsonBody(request);
+      if (!bodyResult.ok) return apiError(bodyResult.error, 400, { code: 'INVALID_JSON' });
+
+      const payload = sanitizeEntityPayload(entity, bodyResult.data as Record<string, unknown>);
       const targetService = adminService.getServiceForEntity(entity)!;
       const data = await targetService.create(payload);
       return NextResponse.json(stripSensitive(data));
@@ -74,7 +76,10 @@ export class AdminController {
         return apiError('Entity not found', 404, { code: 'NOT_FOUND' });
       }
 
-      const body = await request.json();
+      const bodyResult = await readJsonBody(request);
+      if (!bodyResult.ok) return apiError(bodyResult.error, 400, { code: 'INVALID_JSON' });
+
+      const body = bodyResult.data;
       const targetService = adminService.getServiceForEntity(entity)!;
 
       if (entity === 'project-media') {

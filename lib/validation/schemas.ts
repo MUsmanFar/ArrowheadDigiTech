@@ -23,7 +23,7 @@ export const contactSchema = z.object({
 
 export const siteContentPutSchema = z.object({
   key: z.string().min(1),
-  value: z.unknown(),
+  value: z.record(z.unknown()),
 });
 
 export const idBodySchema = z.object({ id: z.string().min(1) });
@@ -43,4 +43,14 @@ export function parseJsonBody<T>(schema: z.ZodSchema<T>, body: unknown):
   const parsed = schema.safeParse(body);
   if (!parsed.success) return { success: false, error: formatZodError(parsed.error) };
   return { success: true, data: parsed.data };
+}
+
+export async function readJsonBody(
+  request: Request,
+): Promise<{ ok: true; data: unknown } | { ok: false; error: string }> {
+  try {
+    return { ok: true, data: await request.json() };
+  } catch {
+    return { ok: false, error: 'Invalid JSON body' };
+  }
 }
