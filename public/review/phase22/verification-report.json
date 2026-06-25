@@ -1,0 +1,208 @@
+{
+  "marker": "P22-1782388317950",
+  "timestamp": "2026-06-25T11:52:37.854Z",
+  "baseUrl": "http://localhost:3001",
+  "r2Configured": false,
+  "storageBackend": "local",
+  "totals": {
+    "pass": 30,
+    "fail": 0,
+    "skip": 1,
+    "warn": 1,
+    "total": 32
+  },
+  "checks": [
+    {
+      "category": "config",
+      "name": "R2 configured",
+      "status": "WARN",
+      "evidence": "local fallback"
+    },
+    {
+      "category": "config",
+      "name": "storage backend",
+      "status": "PASS",
+      "evidence": "local (dev)"
+    },
+    {
+      "category": "helpers",
+      "name": "isLocalMediaUrl",
+      "status": "PASS",
+      "evidence": "/uploads/logos/test.png"
+    },
+    {
+      "category": "helpers",
+      "name": "buildObjectKey",
+      "status": "PASS",
+      "evidence": "uploads/logos/test.png"
+    },
+    {
+      "category": "helpers",
+      "name": "objectKeyFromLocal",
+      "status": "PASS",
+      "evidence": "uploads/logos/test.png"
+    },
+    {
+      "category": "helpers",
+      "name": "R2 URL helpers",
+      "status": "SKIP",
+      "evidence": "R2 not configured in env"
+    },
+    {
+      "category": "helpers",
+      "name": "isManagedMediaUrl local",
+      "status": "PASS",
+      "evidence": "local path"
+    },
+    {
+      "category": "server",
+      "name": "BASE_URL reachable",
+      "status": "PASS",
+      "evidence": "http://localhost:3001"
+    },
+    {
+      "category": "auth",
+      "name": "admin login",
+      "status": "PASS",
+      "evidence": "200"
+    },
+    {
+      "category": "security",
+      "name": "file too large",
+      "status": "PASS",
+      "evidence": "HTTP 400"
+    },
+    {
+      "category": "security",
+      "name": "SVG rejected",
+      "status": "PASS",
+      "evidence": "HTTP 400"
+    },
+    {
+      "category": "security",
+      "name": "unauthorized upload",
+      "status": "PASS",
+      "evidence": "HTTP 401"
+    },
+    {
+      "category": "upload",
+      "name": "upload-founder",
+      "status": "PASS",
+      "evidence": "/uploads/founder/1782388344274-P22-1782388317950-upload-founder.png (storage=local)"
+    },
+    {
+      "category": "delete",
+      "name": "delete-founder",
+      "status": "PASS",
+      "evidence": "removed /uploads/founder/1782388344274-P22-1782388317950-upload-founder.png"
+    },
+    {
+      "category": "upload",
+      "name": "upload-logos",
+      "status": "PASS",
+      "evidence": "/uploads/logos/1782388344363-P22-1782388317950-upload-logos.png (storage=local)"
+    },
+    {
+      "category": "delete",
+      "name": "delete-logos",
+      "status": "PASS",
+      "evidence": "removed /uploads/logos/1782388344363-P22-1782388317950-upload-logos.png"
+    },
+    {
+      "category": "upload",
+      "name": "upload-projects/yalaride",
+      "status": "PASS",
+      "evidence": "/uploads/projects/yalaride/1782388344431-yalaride.png (storage=local)"
+    },
+    {
+      "category": "delete",
+      "name": "delete-projects/yalaride",
+      "status": "PASS",
+      "evidence": "removed /uploads/projects/yalaride/1782388344431-yalaride.png"
+    },
+    {
+      "category": "upload",
+      "name": "upload-services",
+      "status": "PASS",
+      "evidence": "/uploads/services/1782388344508-P22-1782388317950-upload-services.png (storage=local)"
+    },
+    {
+      "category": "delete",
+      "name": "delete-services",
+      "status": "PASS",
+      "evidence": "removed /uploads/services/1782388344508-P22-1782388317950-upload-services.png"
+    },
+    {
+      "category": "upload",
+      "name": "replace-first-logos",
+      "status": "PASS",
+      "evidence": "/uploads/logos/1782388344574-P22-1782388317950-replace-first-logos.png (storage=local)"
+    },
+    {
+      "category": "replace",
+      "name": "logos",
+      "status": "PASS",
+      "evidence": "/uploads/logos/1782388344574-P22-1782388317950-replace-first-logos.png -> /uploads/logos/1782388344634-P22-1782388317950-replace.png"
+    },
+    {
+      "category": "compat",
+      "name": "homepage renders",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "compat",
+      "name": "legacy /uploads/ URL",
+      "status": "PASS",
+      "evidence": "http://localhost:3001/uploads/logos/1782222831635-test-logo.png HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/portfolio",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/about",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/services",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/case-studies",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/blog",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/pricing",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/contact",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    }
+  ]
+}

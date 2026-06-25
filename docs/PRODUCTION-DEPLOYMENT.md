@@ -34,19 +34,32 @@ npm run start
 
 Use **Node.js 20.x** (see `package.json` engines).
 
-## Upload strategy (important)
+## Upload strategy (Phase 22 — Cloudflare R2)
 
-Current uploads write to `public/uploads/` on the local filesystem.
+New uploads use **Cloudflare R2** when `R2_*` environment variables are set. In production (`NODE_ENV=production`), R2 is **required** — uploads return HTTP 503 if not configured.
 
-**Hostinger Node.js hosting uses an ephemeral filesystem** — uploaded files may be lost on redeploy or restart.
+Legacy assets under `/uploads/...` in `public/uploads/` continue to work for backward compatibility. They are not deleted automatically.
 
-### Recommended architecture (not migrated in Phase 19)
+### Required R2 variables (production)
 
-1. **Object storage** — Cloudflare R2, AWS S3, or Hostinger Object Storage
-2. Store URLs in the database (projects, logos, media)
-3. Serve via CDN URL; keep upload API but stream to object storage instead of disk
+| Variable | Purpose |
+|----------|---------|
+| `R2_ACCOUNT_ID` | Cloudflare account ID |
+| `R2_ACCESS_KEY_ID` | R2 API access key |
+| `R2_SECRET_ACCESS_KEY` | R2 API secret |
+| `R2_BUCKET` | Bucket name |
+| `R2_PUBLIC_URL` | Public CDN base URL (no trailing slash) |
 
-Until migration, treat local uploads as **development/staging only**.
+Full setup: [docs/CLOUDFLARE-R2-SETUP.md](./CLOUDFLARE-R2-SETUP.md)
+
+Optional: `USE_R2_UPLOADS=false` in development forces local disk even when R2 is configured.
+
+To migrate existing local files to R2 (optional, does not update DB):
+
+```bash
+node scripts/migrate-local-uploads-to-r2.mjs          # dry-run
+node scripts/migrate-local-uploads-to-r2.mjs --execute  # upload only
+```
 
 ## Security checklist (Phase 19)
 

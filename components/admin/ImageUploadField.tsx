@@ -46,15 +46,12 @@ export function ImageUploadField({
       formData.append('file', file);
       if (subdir) formData.append('subdir', subdir);
 
-      // If there is an existing image, attempt to delete it from the server
+      // Replace: remove previous managed upload before saving the new one
       if (value) {
-        const prevFilename = value.split('/').pop();
-        if (prevFilename && prevFilename.includes('-')) {
-          try {
-            await fetch(`/api/admin/upload?url=${encodeURIComponent(value)}`, { method: 'DELETE' });
-          } catch (e) {
-            console.warn('Failed to delete old image, continuing upload...', e);
-          }
+        try {
+          await fetch(`/api/admin/upload?url=${encodeURIComponent(value)}`, { method: 'DELETE' });
+        } catch (e) {
+          console.warn('Failed to delete old image, continuing upload...', e);
         }
       }
 

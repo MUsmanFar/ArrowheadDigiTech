@@ -1,10 +1,16 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 import { requireAdmin } from '@/backend/middleware/auth.middleware';
 import { apiError, safeErrorMessage } from '@/lib/api-response';
+import { deleteFromLocal, uploadToLocal } from '@/lib/local-storage';
 import { logger } from '@/lib/logger';
+import { isManagedMediaUrl, isR2MediaUrl } from '@/lib/media-url';
 import { enforceRateLimit, rateLimitResponse } from '@/lib/rate-limit';
+import {
+  requiresR2InProduction,
+  r2NotConfiguredError,
+  shouldUseR2Storage,
+} from '@/lib/r2-config';
+import { deleteFromR2, uploadToR2 } from '@/lib/r2-storage';
 import {
   ALLOWED_UPLOAD_MIMES,
   MAX_UPLOAD_BYTES,
@@ -13,36 +19,6 @@ import {
   sanitizeUploadSubdir,
 } from '@/lib/upload-security';
 
-function uploadsRoot(): string {
-  return path.join(process.cwd(), 'public', 'uploads');
-}
-
-function resolveUploadFile(input: string): string | null {
-  const root = uploadsRoot();
-  const normalized = input.replace(/\\/g, '/');
-  if (normalized.startsWith('/uploads/')) {
-    const relative = normalized.slice('/uploads/'.length);
-    const candidate = path.normalize(path.join(root, relative));
-    if (candidate.startsWith(root) && fs.existsSync(candidate)) return candidate;
-  }
-
-  const safeFilename = path.basename(normalized);
-  const walk = (dir: string): string | null => {
-    if (!fs.existsSync(dir)) return null;
-    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-      const fullPath = path.join(dir, entry.name);
-      if (entry.isDirectory()) {
-        const nested = walk(fullPath);
-        if (nested) return nested;
-      } else if (entry.name === safeFilename) {
-        return fullPath;
-      }
-    }
-    return null;
-  };
-  return walk(root);
-}
-
 export async function POST(request: Request) {
   const rl = enforceRateLimit(request, 'upload', 20, 60 * 60 * 1000);
   if (!rl.allowed) return rateLimitResponse(rl.retryAfterSec);
@@ -50,6 +26,10 @@ export async function POST(request: Request) {
   try {
     if (!(await requireAdmin(request))) {
       return apiError('Unauthorized', 401, { code: 'UNAUTHORIZED' });
+    }
+
+    if (requiresR2InProduction() && !shouldUseR2Storage()) {
+      return apiError(r2NotConfiguredError(), 503, { code: 'STORAGE_UNAVAILABLE' });
     }
 
     const formData = await request.formData();
@@ -72,28 +52,44 @@ export async function POST(request: Request) {
     }
 
     const subdir = sanitizeUploadSubdir(subdirRaw || undefined);
-    const uploadDir = subdir ? path.join(uploadsRoot(), subdir) : uploadsRoot();
-    if (!path.normalize(uploadDir).startsWith(uploadsRoot())) {
-      return apiError('Invalid upload directory', 400, { code: 'VALIDATION_ERROR' });
-    }
-
-    if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
-
     const originalName = (file as File).name || 'upload.bin';
     const sanitizedName = sanitizeUploadFilename(originalName);
     const ext = detectedMime.split('/')[1] === 'jpeg' ? 'jpg' : detectedMime.split('/')[1];
     const filename = `${Date.now()}-${sanitizedName.replace(/\.[^.]+$/, '')}.${ext}`;
-    const filepath = path.join(uploadDir, filename);
 
-    fs.writeFileSync(filepath, buffer);
+    const result = shouldUseR2Storage()
+      ? await uploadToR2(buffer, subdir, filename, detectedMime)
+      : uploadToLocal(buffer, subdir, filename, detectedMime);
 
-    const url = subdir ? `/uploads/${subdir}/${filename}` : `/uploads/${filename}`;
-    logger.info('Upload saved', { url, mime: detectedMime, bytes: buffer.length });
+    logger.info('Upload saved', {
+      url: result.url,
+      storage: result.storage,
+      mime: result.mime,
+      bytes: result.bytes,
+    });
 
-    return NextResponse.json({ url, secure_url: url, public_id: filename, mime: detectedMime });
+    return NextResponse.json({
+      url: result.url,
+      secure_url: result.url,
+      public_id: filename,
+      mime: result.mime,
+      storage: result.storage,
+    });
   } catch (error) {
-    logger.error('Upload failed', { error: safeErrorMessage(error) });
-    return apiError(safeErrorMessage(error), 500, { code: 'INTERNAL_ERROR' });
+    const message = safeErrorMessage(error);
+    const isNetwork =
+      message.includes('ECONNREFUSED') ||
+      message.includes('ETIMEDOUT') ||
+      message.includes('ENOTFOUND') ||
+      message.includes('timeout');
+
+    logger.error('Upload failed', { error: message });
+    if (isNetwork) {
+      return apiError('Storage service unavailable. Please retry.', 503, {
+        code: 'STORAGE_UNAVAILABLE',
+      });
+    }
+    return apiError(message, 500, { code: 'INTERNAL_ERROR' });
   }
 }
 
@@ -110,15 +106,26 @@ export async function DELETE(request: Request) {
     const urlParam = searchParams.get('url') || searchParams.get('filename') || '';
     if (!urlParam) return apiError('No filename provided', 400, { code: 'VALIDATION_ERROR' });
 
-    const filepath = resolveUploadFile(urlParam);
-    if (filepath) {
-      fs.unlinkSync(filepath);
+    if (!isManagedMediaUrl(urlParam)) {
+      return apiError('URL is not a managed upload', 400, { code: 'VALIDATION_ERROR' });
+    }
+
+    let deleted = false;
+    if (isR2MediaUrl(urlParam)) {
+      deleted = await deleteFromR2(urlParam);
+    } else {
+      deleted = deleteFromLocal(urlParam);
+    }
+
+    if (deleted) {
       logger.info('Upload deleted', { url: urlParam });
       return NextResponse.json({ success: true, message: 'File deleted successfully' });
     }
+
     return apiError('File not found', 404, { code: 'NOT_FOUND' });
   } catch (error) {
-    logger.error('Upload delete failed', { error: safeErrorMessage(error) });
-    return apiError(safeErrorMessage(error), 500, { code: 'INTERNAL_ERROR' });
+    const message = safeErrorMessage(error);
+    logger.error('Upload delete failed', { error: message });
+    return apiError(message, 500, { code: 'INTERNAL_ERROR' });
   }
 }
