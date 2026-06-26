@@ -1,0 +1,106 @@
+{
+  "marker": "P221-1782432342998",
+  "timestamp": "2026-06-26T00:05:57.977Z",
+  "baseUrl": "http://localhost:3001",
+  "r2PublicUrl": "https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev",
+  "storageBackend": "r2",
+  "uploadUrls": {
+    "founder": "https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/founder/1782432345140-P221-1782432342998-founder.png",
+    "client-logos": "https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/logos/1782432347656-P221-1782432342998-client-logos.png",
+    "services": "https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/services/1782432348971-P221-1782432342998-services.png",
+    "project-media": "https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/projects/yalaride/1782432350236-P221-1782432342998-project-media.png"
+  },
+  "results": [
+    {
+      "name": "env:R2_ACCOUNT_ID",
+      "ok": true,
+      "evidence": "SET"
+    },
+    {
+      "name": "env:R2_ACCESS_KEY_ID",
+      "ok": true,
+      "evidence": "SET"
+    },
+    {
+      "name": "env:R2_SECRET_ACCESS_KEY",
+      "ok": true,
+      "evidence": "SET"
+    },
+    {
+      "name": "env:R2_BUCKET",
+      "ok": true,
+      "evidence": "SET"
+    },
+    {
+      "name": "env:R2_PUBLIC_URL",
+      "ok": true,
+      "evidence": "SET"
+    },
+    {
+      "name": "config:r2",
+      "ok": true,
+      "evidence": "true"
+    },
+    {
+      "name": "auth",
+      "ok": true,
+      "evidence": "admin login OK"
+    },
+    {
+      "name": "upload:founder",
+      "ok": true,
+      "evidence": "url=https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/founder/1782432345140-P221-1782432342998-founder.png storage=r2 bucket_exists=true http=200"
+    },
+    {
+      "name": "upload:client-logos",
+      "ok": true,
+      "evidence": "url=https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/logos/1782432347656-P221-1782432342998-client-logos.png storage=r2 bucket_exists=true http=200"
+    },
+    {
+      "name": "upload:services",
+      "ok": true,
+      "evidence": "url=https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/services/1782432348971-P221-1782432342998-services.png storage=r2 bucket_exists=true http=200"
+    },
+    {
+      "name": "upload:project-media",
+      "ok": true,
+      "evidence": "url=https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/projects/yalaride/1782432350236-P221-1782432342998-project-media.png storage=r2 bucket_exists=true http=200"
+    },
+    {
+      "name": "delete",
+      "ok": true,
+      "evidence": "removed=true exists_after=false"
+    },
+    {
+      "name": "replace",
+      "ok": true,
+      "evidence": "https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/founder/1782432353022-P221-1782432342998-replace-a.png -> https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/founder/1782432354038-P221-1782432342998-replace-b.png"
+    },
+    {
+      "name": "db:founder",
+      "ok": true,
+      "evidence": "photo=https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/founder/1782432345140-P221-1782432342998-founder.png"
+    },
+    {
+      "name": "db:client-logo",
+      "ok": true,
+      "evidence": "logo=https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/logos/1782432347656-P221-1782432342998-client-logos.png"
+    },
+    {
+      "name": "db:service",
+      "ok": true,
+      "evidence": "thumbnail=https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/services/1782432348971-P221-1782432342998-services.png"
+    },
+    {
+      "name": "db:project-media",
+      "ok": true,
+      "evidence": "homepageFeaturedImage=https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/projects/yalaride/1782432350236-P221-1782432342998-project-media.png"
+    }
+  ],
+  "dbEvidence": {
+    "founderPhoto": "https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/founder/1782432345140-P221-1782432342998-founder.png",
+    "clientLogo": "https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/logos/1782432347656-P221-1782432342998-client-logos.png",
+    "serviceThumbnail": "https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/services/1782432348971-P221-1782432342998-services.png",
+    "projectMediaHomepage": "https://pub-7f0d6c478d2e4a1087782a4f4a3ed91e.r2.dev/uploads/projects/yalaride/1782432350236-P221-1782432342998-project-media.png"
+  }
+}

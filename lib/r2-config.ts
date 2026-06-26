@@ -15,6 +15,16 @@ function trim(v: string | undefined): string {
   return v?.trim() || '';
 }
 
+export function validateR2CredentialLengths(config: R2Config): string | null {
+  if (config.accessKeyId.length !== 32) {
+    return `R2_ACCESS_KEY_ID must be 32 characters (currently ${config.accessKeyId.length}). Regenerate credentials in Cloudflare R2 → Manage API Tokens and copy the full Access Key ID.`;
+  }
+  if (config.secretAccessKey.length !== 64) {
+    return `R2_SECRET_ACCESS_KEY must be 64 characters (currently ${config.secretAccessKey.length}). Regenerate credentials in Cloudflare R2 → Manage API Tokens.`;
+  }
+  return null;
+}
+
 export function getR2Config(): R2Config | null {
   const accountId = trim(process.env.R2_ACCOUNT_ID);
   const accessKeyId = trim(process.env.R2_ACCESS_KEY_ID);

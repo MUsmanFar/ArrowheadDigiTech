@@ -9,6 +9,8 @@ import {
   requiresR2InProduction,
   r2NotConfiguredError,
   shouldUseR2Storage,
+  getR2Config,
+  validateR2CredentialLengths,
 } from '@/lib/r2-config';
 import { deleteFromR2, uploadToR2 } from '@/lib/r2-storage';
 import {
@@ -30,6 +32,14 @@ export async function POST(request: Request) {
 
     if (requiresR2InProduction() && !shouldUseR2Storage()) {
       return apiError(r2NotConfiguredError(), 503, { code: 'STORAGE_UNAVAILABLE' });
+    }
+
+    if (shouldUseR2Storage()) {
+      const r2Config = getR2Config();
+      const credErr = r2Config ? validateR2CredentialLengths(r2Config) : null;
+      if (credErr) {
+        return apiError(credErr, 503, { code: 'STORAGE_UNAVAILABLE' });
+      }
     }
 
     const formData = await request.formData();
