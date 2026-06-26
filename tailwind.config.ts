@@ -11,7 +11,7 @@ const config: Config = {
       fontFamily: {
         poppins: ["var(--font-poppins)", "sans-serif"],
         inter: ["var(--font-inter)", "system-ui", "-apple-system", "sans-serif"],
-        montserrat: ["var(--font-poppins)", "sans-serif"],
+        montserrat: ["var(--font-montserrat)", "var(--font-poppins)", "sans-serif"],
       },
       colors: {
         background: "var(--background)",
@@ -48,9 +48,13 @@ const config: Config = {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-16px)" },
         },
-        scroll: {
-          "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" },
+        shimmer: {
+          "0%": { backgroundPosition: "200% 0" },
+          "100%": { backgroundPosition: "-200% 0" },
+        },
+        "pulse-soft": {
+          "0%, 100%": { opacity: "0.4" },
+          "50%": { opacity: "0.7" },
         },
       },
       animation: {
@@ -58,6 +62,8 @@ const config: Config = {
         "fade-in-up": "fade-in-up 0.9s ease-out forwards",
         float: "float 6s ease-in-out infinite",
         scroll: "scroll 40s linear infinite",
+        shimmer: "shimmer 8s linear infinite",
+        "pulse-soft": "pulse-soft 4s ease-in-out infinite",
       },
     },
   },

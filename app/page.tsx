@@ -1,18 +1,30 @@
 import dynamic from 'next/dynamic';
+import { Montserrat } from 'next/font/google';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import HeroSectionServer from '@/components/home/HeroSectionServer';
-import ClientLogoStrip from '@/components/home/ClientLogoStrip';
 import LazySection from '@/components/ui/LazySection';
+import HeroRedesign from '@/components/home/redesign/HeroRedesign';
+import ClientLogosMarquee from '@/components/home/redesign/ClientLogosMarquee';
 import { getSiteContent, getSiteSection } from '@/lib/site-content-server';
 import { getClientLogosServer } from '@/lib/media-server';
 import { cmsPageMetadata } from '@/lib/page-metadata';
 
-const MetricsBar = dynamic(() => import('@/components/home/MetricsBar'));
-const CapabilitiesHover = dynamic(() => import('@/components/home/CapabilitiesHover'));
-const FeaturedCaseStudy = dynamic(() => import('@/components/home/FeaturedCaseStudy'));
-const TestimonialSection = dynamic(() => import('@/components/home/TestimonialSection'));
-const CtaSection = dynamic(() => import('@/components/portfolio/CtaSection'));
+const ServicesShowcase = dynamic(() => import('@/components/home/redesign/ServicesShowcase'));
+const PortfolioMagazine = dynamic(() => import('@/components/home/redesign/PortfolioMagazine'));
+const ProcessTimeline = dynamic(() => import('@/components/home/redesign/ProcessTimeline'));
+const TestimonialsCarousel = dynamic(() => import('@/components/home/redesign/TestimonialsCarousel'));
+const TechStackGrid = dynamic(() => import('@/components/home/redesign/TechStackGrid'));
+const IndustriesShowcase = dynamic(() => import('@/components/home/redesign/IndustriesShowcase'));
+const MetricsShowcase = dynamic(() => import('@/components/home/redesign/MetricsShowcase'));
+const CtaPremium = dynamic(() => import('@/components/home/redesign/CtaPremium'));
+const FooterPreview = dynamic(() => import('@/components/home/redesign/FooterPreview'));
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  variable: '--font-montserrat',
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+});
 
 export const revalidate = 60;
 
@@ -25,26 +37,38 @@ export default async function Home() {
   const [siteContent, logos] = await Promise.all([getSiteContent(), getClientLogosServer()]);
 
   return (
-    <div className="min-h-screen bg-white selection:bg-orange-200 selection:text-orange-900">
+    <div
+      className={`${montserrat.variable} min-h-screen bg-[#fafafa] selection:bg-orange-100 selection:text-orange-900`}
+    >
       <Navbar />
-      <main id="main-content">
-        <HeroSectionServer hero={siteContent['home.hero']} />
-        <ClientLogoStrip initialLogos={logos} />
-        <LazySection minHeight={96}>
-          <MetricsBar />
+      <main id="main-content" className="overflow-x-hidden">
+        <HeroRedesign hero={siteContent['home.hero']} logos={logos} />
+        <ClientLogosMarquee initialLogos={logos} />
+        <LazySection minHeight={520}>
+          <ServicesShowcase />
         </LazySection>
-        <LazySection minHeight={480}>
-          <CapabilitiesHover />
+        <LazySection minHeight={600}>
+          <PortfolioMagazine />
         </LazySection>
-        <LazySection minHeight={480}>
-          <FeaturedCaseStudy />
+        <LazySection minHeight={400}>
+          <ProcessTimeline />
         </LazySection>
-        <LazySection minHeight={480}>
-          <TestimonialSection />
+        <LazySection minHeight={420}>
+          <TestimonialsCarousel />
         </LazySection>
-        <LazySection minHeight={256}>
-          <CtaSection />
+        <LazySection minHeight={200}>
+          <TechStackGrid />
         </LazySection>
+        <LazySection minHeight={360}>
+          <IndustriesShowcase />
+        </LazySection>
+        <LazySection minHeight={280}>
+          <MetricsShowcase />
+        </LazySection>
+        <LazySection minHeight={320}>
+          <CtaPremium />
+        </LazySection>
+        <FooterPreview />
       </main>
       <Footer />
     </div>
