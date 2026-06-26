@@ -1,0 +1,180 @@
+{
+  "marker": "P23-1782433787349",
+  "timestamp": "2026-06-26T00:30:21.603Z",
+  "baseUrl": "http://localhost:3001",
+  "totals": {
+    "pass": 28,
+    "fail": 0,
+    "warn": 0
+  },
+  "checks": [
+    {
+      "category": "security",
+      "name": "POST /api/services deprecated",
+      "status": "PASS",
+      "evidence": "HTTP 410"
+    },
+    {
+      "category": "security",
+      "name": "POST /api/projects deprecated",
+      "status": "PASS",
+      "evidence": "HTTP 410"
+    },
+    {
+      "category": "security",
+      "name": "POST /api/testimonials deprecated",
+      "status": "PASS",
+      "evidence": "HTTP 410"
+    },
+    {
+      "category": "security",
+      "name": "admin API without cookie",
+      "status": "PASS",
+      "evidence": "HTTP 401"
+    },
+    {
+      "category": "frontend",
+      "name": "/",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/about",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/services",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/portfolio",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/case-studies",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/pricing",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/contact",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/faq",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/blog",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/careers",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/testimonials",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/privacy-policy",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/terms-and-conditions",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "architecture",
+      "name": "/admin redirect",
+      "status": "PASS",
+      "evidence": "HTTP 307"
+    },
+    {
+      "category": "seo",
+      "name": "sitemap.xml",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "seo",
+      "name": "sitemap includes /services/",
+      "status": "PASS",
+      "evidence": "found"
+    },
+    {
+      "category": "seo",
+      "name": "robots.txt",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "deployment",
+      "name": "R2_ACCOUNT_ID",
+      "status": "PASS",
+      "evidence": "SET"
+    },
+    {
+      "category": "deployment",
+      "name": "R2_ACCESS_KEY_ID",
+      "status": "PASS",
+      "evidence": "SET"
+    },
+    {
+      "category": "deployment",
+      "name": "R2_SECRET_ACCESS_KEY",
+      "status": "PASS",
+      "evidence": "SET"
+    },
+    {
+      "category": "deployment",
+      "name": "R2_BUCKET",
+      "status": "PASS",
+      "evidence": "SET"
+    },
+    {
+      "category": "deployment",
+      "name": "R2_PUBLIC_URL",
+      "status": "PASS",
+      "evidence": "SET"
+    },
+    {
+      "category": "security",
+      "name": "page-metadata helper",
+      "status": "PASS",
+      "evidence": "lib/page-metadata.ts"
+    },
+    {
+      "category": "architecture",
+      "name": "admin page redirect",
+      "status": "PASS",
+      "evidence": "app/admin/page.tsx"
+    }
+  ]
+}

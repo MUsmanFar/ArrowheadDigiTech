@@ -1,23 +1,34 @@
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://arrowheaddigitech.com';
+import { getSiteSection } from '@/lib/site-content-server';
+import { siteBaseUrl } from '@/lib/page-metadata';
 
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: 'Arrowhead DigiTech',
-  url: baseUrl,
-  logo: `${baseUrl}/favicon.ico`,
-  description:
-    'Custom websites, AI-powered experiences, and digital solutions designed to generate leads and accelerate growth.',
-  contactPoint: {
-    '@type': 'ContactPoint',
-    contactType: 'sales',
-    email: 'info@arrowheaddigitech.com',
-    availableLanguage: 'English',
-  },
-  sameAs: [],
-};
+export default async function OrganizationJsonLd() {
+  const [meta, footer] = await Promise.all([
+    getSiteSection('site.metadata'),
+    getSiteSection('site.footer'),
+  ]);
 
-export default function OrganizationJsonLd() {
+  const baseUrl = siteBaseUrl();
+  const social = footer.social || {};
+  const sameAs = [social.linkedin, social.twitter, social.facebook].filter(
+    (url): url is string => typeof url === 'string' && url.startsWith('http'),
+  );
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Arrowhead DigiTech',
+    url: baseUrl,
+    logo: `${baseUrl}/icon`,
+    description: meta.description,
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'sales',
+      email: footer.email || 'info@arrowheaddigitech.com',
+      availableLanguage: 'English',
+    },
+    sameAs,
+  };
+
   return (
     <script
       type="application/ld+json"

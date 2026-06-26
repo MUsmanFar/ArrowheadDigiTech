@@ -7,6 +7,7 @@ import Footer from '@/components/layout/Footer';
 import { dbService } from '@/lib/db';
 import FAQSection from '@/components/ui/FAQSection';
 import CtaSection from '@/components/portfolio/CtaSection';
+import { pageMetadata } from '@/lib/page-metadata';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -17,21 +18,19 @@ export async function generateMetadata({ params }: PageProps) {
   const service = await dbService.services.findUnique(slug);
 
   if (!service) {
-    return {
-      title: 'Service Not Found - Arrowhead DigiTech',
+    return pageMetadata({
+      title: 'Service Not Found',
       description: 'The requested service could not be found.',
-    };
+      path: `/services/${slug}`,
+      noIndex: true,
+    });
   }
 
-  return {
-    title: `${service.title} Services | Arrowhead DigiTech`,
+  return pageMetadata({
+    title: service.title,
     description: service.description,
-    openGraph: {
-      title: `${service.title} - Digital Agency Solutions`,
-      description: service.description,
-      type: 'website',
-    },
-  };
+    path: `/services/${slug}`,
+  });
 }
 
 function parseList(value: string | null | undefined): string[] {

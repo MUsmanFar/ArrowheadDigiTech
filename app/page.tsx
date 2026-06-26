@@ -4,8 +4,9 @@ import Footer from '@/components/layout/Footer';
 import HeroSectionServer from '@/components/home/HeroSectionServer';
 import ClientLogoStrip from '@/components/home/ClientLogoStrip';
 import LazySection from '@/components/ui/LazySection';
-import { getSiteContent } from '@/lib/site-content-server';
+import { getSiteContent, getSiteSection } from '@/lib/site-content-server';
 import { getClientLogosServer } from '@/lib/media-server';
+import { cmsPageMetadata } from '@/lib/page-metadata';
 
 const MetricsBar = dynamic(() => import('@/components/home/MetricsBar'));
 const CapabilitiesHover = dynamic(() => import('@/components/home/CapabilitiesHover'));
@@ -14,6 +15,11 @@ const TestimonialSection = dynamic(() => import('@/components/home/TestimonialSe
 const CtaSection = dynamic(() => import('@/components/portfolio/CtaSection'));
 
 export const revalidate = 60;
+
+export async function generateMetadata() {
+  const meta = await getSiteSection('site.metadata');
+  return cmsPageMetadata('/', 'Home', meta.description);
+}
 
 export default async function Home() {
   const [siteContent, logos] = await Promise.all([getSiteContent(), getClientLogosServer()]);

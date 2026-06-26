@@ -4,11 +4,13 @@ import Footer from '@/components/layout/Footer';
 import CaseStudiesHero from '@/components/case-studies/CaseStudiesHero';
 import CaseStudyCard from '@/components/case-studies/CaseStudyCard';
 import { getCaseStudies } from '@/lib/cms-server';
+import { getSiteSection } from '@/lib/site-content-server';
+import { cmsPageMetadata } from '@/lib/page-metadata';
 
-export const metadata: Metadata = {
-  title: 'Case Studies | Arrowhead DigiTech',
-  description: 'Explore the product decisions and measurable outcomes behind selected Arrowhead DigiTech client work.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const hero = await getSiteSection('case-studies.hero');
+  return cmsPageMetadata('/case-studies', 'Case Studies', hero.subheadline);
+}
 
 export default async function CaseStudiesPage() {
   const caseStudies = await getCaseStudies();

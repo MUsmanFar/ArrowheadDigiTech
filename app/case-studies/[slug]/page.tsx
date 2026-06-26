@@ -5,6 +5,7 @@ import Footer from '@/components/layout/Footer';
 import CaseStudyDetail from '@/components/case-studies/CaseStudyDetail';
 import CtaSection from '@/components/portfolio/CtaSection';
 import { getCaseStudies, getCaseStudyBySlug } from '@/lib/cms-server';
+import { pageMetadata } from '@/lib/page-metadata';
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -14,10 +15,21 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const study = await getCaseStudyBySlug((await params).slug);
-  return study
-    ? { title: `${study.title} Case Study | Arrowhead DigiTech`, description: study.summary }
-    : {};
+  const slug = (await params).slug;
+  const study = await getCaseStudyBySlug(slug);
+  if (!study) {
+    return pageMetadata({
+      title: 'Case Study Not Found',
+      description: 'The requested case study could not be found.',
+      path: `/case-studies/${slug}`,
+      noIndex: true,
+    });
+  }
+  return pageMetadata({
+    title: study.title,
+    description: study.summary,
+    path: `/case-studies/${slug}`,
+  });
 }
 
 export default async function CaseStudyPage({ params }: PageProps) {

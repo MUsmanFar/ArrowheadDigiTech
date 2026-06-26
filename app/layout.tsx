@@ -34,9 +34,6 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description: meta.description,
     keywords: meta.keywords.split(',').map((k) => k.trim()),
-    alternates: {
-      canonical: '/',
-    },
     openGraph: {
       title: meta.title,
       description: meta.description,

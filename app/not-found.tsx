@@ -1,6 +1,14 @@
 import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { pageMetadata } from '@/lib/page-metadata';
+
+export const metadata = pageMetadata({
+  title: 'Page Not Found',
+  description: 'The page you requested does not exist on Arrowhead DigiTech.',
+  path: '/404',
+  noIndex: true,
+});
 
 export default function NotFound() {
   return (

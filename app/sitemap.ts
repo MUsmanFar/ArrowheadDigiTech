@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { getCaseStudies, getPublishedBlogPosts } from '@/lib/cms-server';
+import { dbService } from '@/lib/db';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://arrowheaddigitech.com';
@@ -20,7 +21,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/terms-and-conditions',
   ];
 
-  const [studies, posts] = await Promise.all([getCaseStudies(), getPublishedBlogPosts()]);
+  const [studies, posts, services] = await Promise.all([
+    getCaseStudies(),
+    getPublishedBlogPosts(),
+    dbService.services.findMany(),
+  ]);
 
   const staticEntries = staticRoutes.map((route) => ({
     url: `${baseUrl}${route}`,
@@ -28,6 +33,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: 'weekly' as const,
     priority: route === '' ? 1 : 0.8,
   }));
+
+  const serviceEntries = (Array.isArray(services) ? services : []).map(
+    (service: { slug: string; updatedAt?: string | Date }) => ({
+      url: `${baseUrl}/services/${service.slug}`,
+      lastModified: service.updatedAt ? new Date(service.updatedAt) : new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.75,
+    }),
+  );
 
   const caseStudyEntries = studies.map((study) => ({
     url: `${baseUrl}/case-studies/${study.slug}`,
@@ -43,5 +57,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticEntries, ...caseStudyEntries, ...blogEntries];
+  return [...staticEntries, ...serviceEntries, ...caseStudyEntries, ...blogEntries];
 }

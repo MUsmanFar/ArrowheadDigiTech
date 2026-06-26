@@ -6,6 +6,7 @@ import Footer from '@/components/layout/Footer';
 import { getPublishedBlogPost } from '@/lib/cms-server';
 import { sanitizeRichHtml } from '@/lib/sanitize';
 import { Calendar, User, ArrowLeft } from 'lucide-react';
+import { pageMetadata } from '@/lib/page-metadata';
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -16,10 +17,22 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const post = await getPublishedBlogPost((await params).slug);
-  return post
-    ? { title: `${post.title} | Arrowhead DigiTech Blog`, description: post.excerpt }
-    : {};
+  const slug = (await params).slug;
+  const post = await getPublishedBlogPost(slug);
+  if (!post) {
+    return pageMetadata({
+      title: 'Blog Post Not Found',
+      description: 'The requested blog post could not be found.',
+      path: `/blog/${slug}`,
+      noIndex: true,
+    });
+  }
+  return pageMetadata({
+    title: post.title,
+    description: post.excerpt,
+    path: `/blog/${slug}`,
+    ogType: 'article',
+  });
 }
 
 export default async function BlogPostPage({ params }: PageProps) {

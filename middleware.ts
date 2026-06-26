@@ -11,7 +11,11 @@ export async function middleware(request: NextRequest) {
     pathname === '/admin/login' ||
     pathname.startsWith('/admin/api/auth')
   ) {
-    return NextResponse.next();
+    const response = NextResponse.next();
+    if (pathname === '/admin/login') {
+      response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+    }
+    return response;
   }
 
   // 2. Check for cookie
