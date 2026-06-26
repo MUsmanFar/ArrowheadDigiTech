@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Play, Quote, Star } from 'lucide-react';
 import { useSiteSection } from '@/lib/use-site-content';
+import SectionBackdrop from './shared/SectionBackdrop';
 
 interface Testimonial {
   id: string;
@@ -14,10 +15,45 @@ interface Testimonial {
   featured?: boolean;
 }
 
+function TestimonialCard({ t }: { t: Testimonial }) {
+  return (
+    <article className="home-glass mx-3 w-[340px] shrink-0 rounded-[1.75rem] p-7 md:w-[380px]">
+      <div className="flex items-center justify-between">
+        <Quote className="h-8 w-8 text-[#E46F1E]/30" aria-hidden="true" />
+        <div className="flex gap-0.5" aria-hidden="true">
+          {[...Array(5)].map((_, i) => (
+            <Star key={i} className="h-3 w-3 fill-[#E46F1E] text-[#E46F1E]" />
+          ))}
+        </div>
+      </div>
+      <blockquote className="mt-4 line-clamp-4 text-sm font-montserrat leading-relaxed text-slate-600 md:text-base">
+        &ldquo;{t.content}&rdquo;
+      </blockquote>
+      <div className="mt-6 flex items-center gap-3 border-t border-[#E5E7EB]/80 pt-5">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#E46F1E] to-[#2B6EF2] text-sm font-bold font-poppins text-white">
+          {t.name.charAt(0)}
+        </div>
+        <div className="min-w-0">
+          <cite className="not-italic text-sm font-bold font-poppins text-[#111827]">{t.name}</cite>
+          <p className="truncate text-xs font-montserrat text-slate-400">
+            {t.role || t.company || ''}
+          </p>
+        </div>
+        <button
+          type="button"
+          className="ml-auto flex h-9 w-9 items-center justify-center rounded-full border border-[#E5E7EB] bg-white/80 text-slate-400"
+          aria-label={`Video testimonial placeholder for ${t.name}`}
+        >
+          <Play className="h-3.5 w-3.5" aria-hidden="true" />
+        </button>
+      </div>
+    </article>
+  );
+}
+
 export default function TestimonialsCarousel() {
   const { section: page } = useSiteSection('testimonials.page');
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [index, setIndex] = useState(0);
 
   useEffect(() => {
     fetch('/api/public/testimonials')
@@ -25,99 +61,50 @@ export default function TestimonialsCarousel() {
       .then((data) => {
         if (!Array.isArray(data)) return;
         const featured = data.filter((t) => t.featured);
-        setTestimonials((featured.length > 0 ? featured : data).slice(0, 6));
+        setTestimonials((featured.length > 0 ? featured : data).slice(0, 8));
       })
       .catch(() => {});
   }, []);
 
   if (testimonials.length === 0) return null;
 
-  const current = testimonials[index];
+  const row1 = [...testimonials, ...testimonials];
+  const row2 = [...testimonials.slice().reverse(), ...testimonials.slice().reverse()];
 
   return (
-    <section className="relative py-28 md:py-36 bg-white" aria-label="Testimonials">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid lg:grid-cols-12 gap-12 items-center">
+    <SectionBackdrop variant="warm" className="py-28 md:py-40">
+      <section aria-label="Testimonials">
+        <div className="container-premium mb-12">
           <motion.div
-            initial={{ opacity: 0, x: -24 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="lg:col-span-4"
+            className="max-w-2xl"
           >
-            <p className="text-xs font-montserrat font-semibold uppercase tracking-[0.2em] text-orange-500 mb-4">
+            <p className="mb-4 text-xs font-montserrat font-semibold uppercase tracking-[0.2em] text-[#E46F1E]">
               {page.badge}
             </p>
-            <h2 className="text-4xl md:text-5xl font-bold font-poppins text-slate-900 tracking-tight leading-[1.05]">
+            <h2 className="text-4xl font-bold font-poppins leading-[1.04] tracking-tight text-[#111827] md:text-5xl">
               {page.headline}
-              <span className="block text-slate-400">{page.headlineAccent}</span>
+              <span className="mt-1 block text-gradient-blue">{page.headlineAccent}</span>
             </h2>
-            <p className="mt-4 text-slate-500 font-montserrat">{page.subheadline}</p>
-
-            <div className="mt-8 flex gap-3">
-              <button
-                type="button"
-                onClick={() => setIndex((i) => (i - 1 + testimonials.length) % testimonials.length)}
-                className="w-12 h-12 rounded-xl border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-colors"
-                aria-label="Previous testimonial"
-              >
-                <ChevronLeft size={20} />
-              </button>
-              <button
-                type="button"
-                onClick={() => setIndex((i) => (i + 1) % testimonials.length)}
-                className="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center hover:bg-slate-800 transition-colors"
-                aria-label="Next testimonial"
-              >
-                <ChevronRight size={20} />
-              </button>
-            </div>
+            <p className="mt-4 font-montserrat text-slate-500">{page.subheadline}</p>
           </motion.div>
+        </div>
 
-          <div className="lg:col-span-8 relative min-h-[320px]">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={current.id}
-                initial={{ opacity: 0, y: 24, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -16, scale: 0.98 }}
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                className="relative rounded-[2rem] bg-white/60 backdrop-blur-2xl border border-white shadow-[0_30px_80px_-30px_rgba(15,23,42,0.15)] p-10 md:p-14"
-              >
-                <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-orange-50/50 via-white to-blue-50/30 pointer-events-none" />
-                <Quote className="relative w-10 h-10 text-orange-200 mb-6" />
-                <blockquote className="relative text-xl md:text-2xl font-montserrat text-slate-700 leading-relaxed">
-                  &ldquo;{current.content}&rdquo;
-                </blockquote>
-                <div className="relative mt-8 pt-6 border-t border-slate-200/60 flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold font-poppins">
-                    {current.name.charAt(0)}
-                  </div>
-                  <div>
-                    <cite className="not-italic font-bold font-poppins text-slate-900">{current.name}</cite>
-                    <p className="text-sm text-slate-500 font-montserrat">
-                      {current.role || current.company || ''}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-
-            <div className="flex justify-center gap-2 mt-6">
-              {testimonials.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setIndex(i)}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    i === index ? 'w-8 bg-orange-500' : 'w-2 bg-slate-200'
-                  }`}
-                  aria-label={`Go to testimonial ${i + 1}`}
-                />
-              ))}
-            </div>
+        <div className="space-y-6 overflow-hidden">
+          <div className="flex w-max animate-scroll">
+            {row1.map((t, i) => (
+              <TestimonialCard key={`${t.id}-a-${i}`} t={t} />
+            ))}
+          </div>
+          <div className="flex w-max animate-scroll [animation-direction:reverse] [animation-duration:55s]">
+            {row2.map((t, i) => (
+              <TestimonialCard key={`${t.id}-b-${i}`} t={t} />
+            ))}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </SectionBackdrop>
   );
 }

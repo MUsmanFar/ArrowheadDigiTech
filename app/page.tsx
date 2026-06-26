@@ -12,7 +12,7 @@ const ServicesShowcase = dynamic(() => import('@/components/home/redesign/Servic
 const PortfolioMagazine = dynamic(() => import('@/components/home/redesign/PortfolioMagazine'));
 const ProcessTimeline = dynamic(() => import('@/components/home/redesign/ProcessTimeline'));
 const TestimonialsCarousel = dynamic(() => import('@/components/home/redesign/TestimonialsCarousel'));
-const TechStackGrid = dynamic(() => import('@/components/home/redesign/TechStackGrid'));
+const WhyChooseUs = dynamic(() => import('@/components/home/redesign/WhyChooseUs'));
 const IndustriesShowcase = dynamic(() => import('@/components/home/redesign/IndustriesShowcase'));
 const MetricsShowcase = dynamic(() => import('@/components/home/redesign/MetricsShowcase'));
 const CtaPremium = dynamic(() => import('@/components/home/redesign/CtaPremium'));
@@ -41,13 +41,13 @@ export default async function Home() {
           <PortfolioMagazine />
         </LazySection>
         <LazySection minHeight={400}>
+          <WhyChooseUs />
+        </LazySection>
+        <LazySection minHeight={400}>
           <ProcessTimeline />
         </LazySection>
         <LazySection minHeight={420}>
           <TestimonialsCarousel />
-        </LazySection>
-        <LazySection minHeight={200}>
-          <TechStackGrid />
         </LazySection>
         <LazySection minHeight={360}>
           <IndustriesShowcase />

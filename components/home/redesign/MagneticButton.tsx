@@ -35,8 +35,8 @@ export default function MagneticButton({
 
   const base =
     variant === 'primary'
-      ? 'bg-gradient-to-br from-orange-500 via-orange-500 to-amber-500 text-white shadow-[0_12px_40px_-8px_rgba(249,115,22,0.55)] hover:shadow-[0_20px_50px_-10px_rgba(249,115,22,0.65)]'
-      : 'bg-white/80 text-slate-800 border border-slate-200/80 shadow-[0_8px_30px_-12px_rgba(15,23,42,0.12)] hover:border-slate-300 hover:bg-white';
+      ? 'bg-gradient-to-br from-[#E46F1E] via-[#E46F1E] to-[#f59e42] text-white shadow-[0_12px_40px_-8px_rgba(228,111,30,0.55)] hover:shadow-[0_20px_50px_-10px_rgba(228,111,30,0.65)]'
+      : 'bg-white/80 text-[#111827] border border-[#E5E7EB]/90 shadow-[0_8px_30px_-12px_rgba(17,24,39,0.12)] hover:border-[#E5E7EB] hover:bg-white';
 
   const classes = `inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl text-sm font-semibold font-montserrat transition-[box-shadow,background-color,border-color] duration-300 will-change-transform ${base} ${className}`;
 

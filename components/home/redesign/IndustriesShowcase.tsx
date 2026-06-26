@@ -5,14 +5,12 @@ import { motion } from 'framer-motion';
 import { useProjects } from '@/lib/use-projects';
 import { useCaseStudies } from '@/lib/use-case-studies';
 import { useSiteSection } from '@/lib/use-site-content';
+import SectionBackdrop from './shared/SectionBackdrop';
 
-const INDUSTRY_COLORS = [
-  'from-orange-500 to-amber-400',
-  'from-blue-500 to-cyan-400',
-  'from-violet-500 to-purple-400',
-  'from-emerald-500 to-teal-400',
-  'from-rose-500 to-pink-400',
-  'from-slate-600 to-slate-400',
+const ACCENTS = [
+  'from-[#E46F1E] to-[#f59e42]',
+  'from-[#2B6EF2] to-[#60a5fa]',
+  'from-[#111827] to-[#374151]',
 ];
 
 export default function IndustriesShowcase() {
@@ -30,46 +28,46 @@ export default function IndustriesShowcase() {
   if (industries.length === 0) return null;
 
   return (
-    <section className="relative py-28 md:py-36 bg-[#fafafa]" aria-label="Industries">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-14"
-        >
-          <p className="text-xs font-montserrat font-semibold uppercase tracking-[0.2em] text-orange-500 mb-4">
-            {caseHero.badge}
-          </p>
-          <h2 className="text-4xl md:text-5xl font-bold font-poppins text-slate-900 tracking-tight max-w-xl">
-            {caseHero.headline}
-          </h2>
-          <p className="mt-4 text-slate-500 font-montserrat max-w-lg">{caseHero.subheadline}</p>
-        </motion.div>
+    <SectionBackdrop variant="silver" className="py-28 md:py-36">
+      <section aria-label="Industries">
+        <div className="container-premium">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-14 max-w-xl"
+          >
+            <p className="mb-4 text-xs font-montserrat font-semibold uppercase tracking-[0.2em] text-[#E46F1E]">
+              {caseHero.badge}
+            </p>
+            <h2 className="text-4xl font-bold font-poppins tracking-tight text-[#111827] md:text-5xl">
+              {caseHero.headline}
+            </h2>
+            <p className="mt-4 font-montserrat text-slate-500">{caseHero.subheadline}</p>
+          </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {industries.map((industry, i) => (
-            <motion.div
-              key={industry}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.06 }}
-              className="group relative rounded-[1.5rem] bg-white border border-slate-100 p-8 shadow-[0_16px_50px_-24px_rgba(15,23,42,0.1)] hover:shadow-[0_24px_60px_-20px_rgba(15,23,42,0.15)] transition-all duration-500 overflow-hidden"
-            >
-              <div
-                className={`absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b ${INDUSTRY_COLORS[i % INDUSTRY_COLORS.length]} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
-              />
-              <div
-                className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${INDUSTRY_COLORS[i % INDUSTRY_COLORS.length]} opacity-90 mb-5 flex items-center justify-center text-white font-bold font-poppins text-lg`}
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {industries.map((industry, i) => (
+              <motion.div
+                key={industry}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+                className="home-glass group overflow-hidden rounded-[1.75rem] p-8 transition-all duration-500 hover:-translate-y-1"
               >
-                {industry.charAt(0)}
-              </div>
-              <h3 className="text-xl font-bold font-poppins text-slate-900">{industry}</h3>
-            </motion.div>
-          ))}
+                <div
+                  className={`mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${ACCENTS[i % ACCENTS.length]} text-lg font-bold font-poppins text-white shadow-lg`}
+                >
+                  {industry.charAt(0)}
+                </div>
+                <h3 className="text-xl font-bold font-poppins text-[#111827]">{industry}</h3>
+                <div className="mt-4 h-0.5 w-0 bg-gradient-to-r from-[#E46F1E] to-[#2B6EF2] transition-all duration-500 group-hover:w-full" />
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </SectionBackdrop>
   );
 }
