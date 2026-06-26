@@ -56,6 +56,10 @@ const config: Config = {
           "0%, 100%": { opacity: "0.4" },
           "50%": { opacity: "0.7" },
         },
+        scroll: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "fade-in": "fade-in 0.7s ease-out forwards",

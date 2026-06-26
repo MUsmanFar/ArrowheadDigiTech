@@ -1,5 +1,4 @@
 import dynamic from 'next/dynamic';
-import { Montserrat } from 'next/font/google';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import LazySection from '@/components/ui/LazySection';
@@ -19,13 +18,6 @@ const MetricsShowcase = dynamic(() => import('@/components/home/redesign/Metrics
 const CtaPremium = dynamic(() => import('@/components/home/redesign/CtaPremium'));
 const FooterPreview = dynamic(() => import('@/components/home/redesign/FooterPreview'));
 
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  variable: '--font-montserrat',
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-});
-
 export const revalidate = 60;
 
 export async function generateMetadata() {
@@ -37,9 +29,7 @@ export default async function Home() {
   const [siteContent, logos] = await Promise.all([getSiteContent(), getClientLogosServer()]);
 
   return (
-    <div
-      className={`${montserrat.variable} min-h-screen bg-[#fafafa] selection:bg-orange-100 selection:text-orange-900`}
-    >
+    <div className="min-h-screen bg-page-surface selection:bg-orange-100 selection:text-orange-900">
       <Navbar />
       <main id="main-content" className="overflow-x-hidden">
         <HeroRedesign hero={siteContent['home.hero']} logos={logos} />

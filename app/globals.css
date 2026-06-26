@@ -18,6 +18,9 @@
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    --page-surface: #fafafa;
+    --section-gap: 7rem;
+    --transition-premium: 0.35s cubic-bezier(0.25, 0.1, 0, 1);
   }
 
   * {
@@ -99,6 +102,13 @@
 
   .btn-primary:hover svg {
     transform: translateX(2px) translateY(-2px);
+  }
+
+  .btn-primary:focus-visible,
+  .btn-secondary:focus-visible,
+  .btn-ghost:focus-visible {
+    outline: 2px solid #f97316;
+    outline-offset: 2px;
   }
 
   .btn-secondary {
@@ -219,5 +229,25 @@
 
   .animate-reveal {
     clip-path: inset(0 0 0 0);
+  }
+
+  .bg-page-surface {
+    background-color: var(--page-surface);
+  }
+
+  .section-shell {
+    padding-top: var(--section-gap);
+    padding-bottom: var(--section-gap);
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --section-gap: 9rem;
+    }
+  }
+
+  .nav-link-active {
+    color: #0f172a;
+    background: rgba(248, 250, 252, 0.9);
   }
 }

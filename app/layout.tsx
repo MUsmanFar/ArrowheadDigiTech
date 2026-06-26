@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Poppins, Inter } from 'next/font/google';
+import { Poppins, Inter, Montserrat } from 'next/font/google';
 import './globals.css';
 import { getSiteContent, getSiteSection } from '@/lib/site-content-server';
 import { SiteContentProvider } from '@/lib/site-content-context';
@@ -18,6 +18,14 @@ const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   weight: ['400', '500', '600'],
+  display: 'swap',
+  preload: true,
+});
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  variable: '--font-montserrat',
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
   preload: true,
 });
@@ -74,7 +82,7 @@ export default async function RootLayout({
         <OrganizationJsonLd />
       </head>
       <body
-        className={`${poppins.variable} ${inter.variable} font-inter antialiased bg-white min-h-screen pb-16 md:pb-0`}
+        className={`${poppins.variable} ${inter.variable} ${montserrat.variable} font-inter antialiased bg-white min-h-screen pb-16 md:pb-0`}
       >
         <a
           href="#main-content"
