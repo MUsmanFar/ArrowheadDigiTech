@@ -1,7 +1,7 @@
 # Phase 27 — Enterprise Design System + About & Services Redesign
 
 **Baseline:** `53b380b`  
-**Phase commit:** _(see git log after push)_
+**Phase commit:** `876da60`
 
 ## Summary
 
