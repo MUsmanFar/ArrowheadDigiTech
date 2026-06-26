@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { useCaseStudies } from '@/lib/use-case-studies';
 import { useProjectMediaMap, thumbnailFor, heroImageFor } from '@/lib/use-project-media';
+import { useSiteSection } from '@/lib/use-site-content';
 
 function IPhoneMockup({ src, alt }: { src: string | null; alt: string }) {
   return (
@@ -52,6 +53,7 @@ function BrowserMockup({ src, alt }: { src: string | null; alt: string }) {
 
 export default function FeaturedCaseStudy() {
   const { studies, loading } = useCaseStudies();
+  const { section: copy } = useSiteSection('home.featured-work');
   const mediaMap = useProjectMediaMap();
   const sectionRef = React.useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -83,11 +85,10 @@ export default function FeaturedCaseStudy() {
           className="max-w-2xl mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold text-white font-poppins tracking-tight">
-            Featured work.
+            {copy.headline}
           </h2>
           <p className="mt-3 text-lg text-slate-400 font-inter leading-relaxed">
-            Real projects for real businesses. Every screenshot is a live
-            application we built.
+            {copy.description}
           </p>
         </motion.div>
 
@@ -127,7 +128,7 @@ export default function FeaturedCaseStudy() {
                     </div>
                     <div className="pt-2">
                       <span className="inline-flex items-center gap-2 text-sm font-medium text-orange-400 group-hover:text-orange-300 transition-colors duration-300">
-                        View Case Study
+                        {copy.viewCaseStudyLabel}
                         <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                       </span>
                     </div>
@@ -187,7 +188,7 @@ export default function FeaturedCaseStudy() {
             href="/case-studies"
             className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-white/[0.04] text-slate-300 font-semibold text-sm border border-white/[0.08] backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.08] hover:border-white/[0.15] hover:-translate-y-0.5"
           >
-            View All Projects
+            {copy.viewAllLabel}
             <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
         </motion.div>

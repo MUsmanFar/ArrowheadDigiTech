@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { useSiteSection } from '@/lib/use-site-content';
 
 interface TeamMember {
   id: string;
@@ -15,6 +16,7 @@ interface TeamMember {
 
 export default function TeamSection() {
   const [members, setMembers] = useState<TeamMember[]>([]);
+  const { section: labels } = useSiteSection('about.section-labels');
 
   useEffect(() => {
     fetch('/api/public/team')
@@ -39,7 +41,7 @@ export default function TeamSection() {
           className="max-w-2xl mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 font-poppins tracking-tight">
-            Our team.
+            {labels.teamHeadline}
           </h2>
         </motion.div>
 

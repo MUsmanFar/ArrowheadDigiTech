@@ -5,11 +5,13 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useCaseStudies } from '@/lib/use-case-studies';
 import { useTestimonials } from '@/lib/use-testimonials';
+import { useSiteSection } from '@/lib/use-site-content';
 
 export default function FounderSection() {
   const [founder, setFounder] = useState<any>(null);
   const { studies } = useCaseStudies();
   const { testimonials } = useTestimonials();
+  const { section: labels } = useSiteSection('about.section-labels');
 
   const industries = [...new Set(studies.map((s) => s.industry))];
   const allTechnologies = [...new Set(studies.flatMap((s) => s.technologies))].sort();
@@ -75,7 +77,7 @@ export default function FounderSection() {
               transition={{ duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
             >
               <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide text-orange-600 bg-orange-50 border border-orange-100/60">
-                Founder
+                {labels.founderBadge}
               </span>
 
               <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 font-poppins tracking-tight">
@@ -98,14 +100,14 @@ export default function FounderSection() {
               className="mt-12"
             >
               <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 font-inter mb-4">
-                Experience
+                {labels.experienceTitle}
               </h3>
               <div className="grid gap-4 sm:grid-cols-2">
                 {[
-                  { label: 'Projects Delivered', value: totalProjects.toString() },
-                  { label: 'Industries Served', value: industries.length.toString() },
-                  { label: 'Client Testimonials', value: testimonials.length.toString() },
-                  { label: 'Technologies Used', value: allTechnologies.length.toString() },
+                  { label: labels.statProjectsDelivered, value: totalProjects.toString() },
+                  { label: labels.statIndustriesServed, value: industries.length.toString() },
+                  { label: labels.statClientTestimonials, value: testimonials.length.toString() },
+                  { label: labels.statTechnologiesUsed, value: allTechnologies.length.toString() },
                 ].map((stat, i) => (
                   <div key={i} className="p-4 rounded-xl bg-slate-50 border border-slate-100">
                     <p className="text-2xl font-bold text-orange-500 font-poppins">{stat.value}</p>
@@ -126,7 +128,7 @@ export default function FounderSection() {
               className="mt-10"
             >
               <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 font-inter mb-4">
-                Core Expertise
+                {labels.coreExpertiseTitle}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {allTechnologies.map((tech) => (
@@ -149,7 +151,7 @@ export default function FounderSection() {
               className="mt-10"
             >
               <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 font-inter mb-4">
-                Industries Served
+                {labels.industriesServedTitle}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {industries.map((industry) => (
@@ -172,7 +174,7 @@ export default function FounderSection() {
               className="mt-10"
             >
               <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 font-inter mb-4">
-                Projects Delivered
+                {labels.projectsDeliveredTitle}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {studies.slice(0, 7).map((study) => (

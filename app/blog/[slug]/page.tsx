@@ -6,7 +6,8 @@ import Footer from '@/components/layout/Footer';
 import { getPublishedBlogPost } from '@/lib/cms-server';
 import { sanitizeRichHtml } from '@/lib/sanitize';
 import { Calendar, User, ArrowLeft } from 'lucide-react';
-import { pageMetadata } from '@/lib/page-metadata';
+import { pageMetadata, siteBaseUrl } from '@/lib/page-metadata';
+import JsonLd, { breadcrumbJsonLd } from '@/components/seo/JsonLd';
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -40,8 +41,34 @@ export default async function BlogPostPage({ params }: PageProps) {
   const post = await getPublishedBlogPost(slug);
   if (!post) notFound();
 
+  const baseUrl = siteBaseUrl();
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.createdAt,
+    dateModified: post.updatedAt || post.createdAt,
+    author: { '@type': 'Person', name: post.author || 'Arrowhead DigiTech' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Arrowhead DigiTech',
+      logo: { '@type': 'ImageObject', url: `${baseUrl}/icon` },
+    },
+    mainEntityOfPage: `${baseUrl}/blog/${slug}`,
+    ...(post.coverImage ? { image: post.coverImage } : {}),
+  };
+
   return (
     <div className="min-h-screen">
+      <JsonLd data={articleSchema} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'Blog', path: '/blog' },
+          { name: post.title, path: `/blog/${slug}` },
+        ])}
+      />
       <Navbar />
       <main id="main-content" className="pt-32 pb-24 px-6 lg:px-8">
         <article className="max-w-3xl mx-auto">

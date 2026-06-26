@@ -7,7 +7,9 @@ import Footer from '@/components/layout/Footer';
 import { dbService } from '@/lib/db';
 import FAQSection from '@/components/ui/FAQSection';
 import CtaSection from '@/components/portfolio/CtaSection';
-import { pageMetadata } from '@/lib/page-metadata';
+import { pageMetadata, siteBaseUrl } from '@/lib/page-metadata';
+import { getSiteSection } from '@/lib/site-content-server';
+import JsonLd, { breadcrumbJsonLd } from '@/components/seo/JsonLd';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -55,9 +57,29 @@ export default async function ServiceDetailPage({ params }: PageProps) {
   const deliverablesList = parseList(service.deliverables);
   const packages = service.pricingPackages || [];
   const faqs = await dbService.faqs.findMany();
+  const labels = await getSiteSection('services.detail-labels');
+  const baseUrl = siteBaseUrl();
+
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: service.title,
+    description: service.description,
+    provider: { '@type': 'Organization', name: 'Arrowhead DigiTech', url: baseUrl },
+    url: `${baseUrl}/services/${slug}`,
+    ...(service.thumbnail ? { image: service.thumbnail } : {}),
+  };
 
   return (
     <div className="min-h-screen bg-white selection:bg-orange-200 selection:text-orange-900">
+      <JsonLd data={serviceSchema} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'Services', path: '/services' },
+          { name: service.title, path: `/services/${slug}` },
+        ])}
+      />
       <Navbar />
 
       {/* Hero */}
@@ -70,7 +92,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               href="/services"
               className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-orange-600 transition-colors font-inter mb-8"
             >
-              <ArrowLeft size={16} /> Back to Services
+              <ArrowLeft size={16} /> {labels.backToServices}
             </Link>
 
             <span className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-orange-50 border border-orange-100 text-3xl mb-6">
@@ -89,7 +111,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               href="/contact"
               className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-orange-500 text-white text-base font-semibold transition-all duration-300 ease-out hover:bg-orange-600 hover:shadow-[0_12px_30px_-8px_rgba(249,115,22,0.5)] hover:-translate-y-0.5"
             >
-              Get Started
+              {labels.getStarted}
               <ArrowUpRight
                 size={18}
                 className="transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
@@ -106,10 +128,10 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="p-8 md:p-10 rounded-2xl bg-slate-50 border border-slate-100">
                 <span className="text-xs font-semibold tracking-wider uppercase text-red-500 font-inter">
-                  The Problem
+                  {labels.problemTitle}
                 </span>
                 <h3 className="mt-2 text-xl font-bold text-slate-900 font-poppins mb-4">
-                  What businesses face
+                  {labels.problemSubtitle}
                 </h3>
                 <p className="text-slate-600 font-inter leading-relaxed">
                   {service.problem}
@@ -118,10 +140,10 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
               <div className="p-8 md:p-10 rounded-2xl bg-orange-50 border border-orange-100">
                 <span className="text-xs font-semibold tracking-wider uppercase text-orange-600 font-inter">
-                  Our Solution
+                  {labels.solutionTitle}
                 </span>
                 <h3 className="mt-2 text-xl font-bold text-slate-900 font-poppins mb-4">
-                  How we solve it
+                  {labels.solutionSubtitle}
                 </h3>
                 <p className="text-slate-600 font-inter leading-relaxed">
                   {service.solution}
@@ -138,10 +160,10 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           <div className="max-w-7xl mx-auto">
             <div className="max-w-xl mb-14">
               <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide text-orange-600 bg-orange-50 border border-orange-100/60">
-                Our Process
+                {labels.processTitle}
               </span>
               <h2 className="mt-4 text-3xl md:text-4xl font-bold text-slate-900 font-poppins tracking-tight">
-                How we deliver
+                {labels.processSubtitle}
               </h2>
             </div>
 
@@ -173,7 +195,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             {benefitsList.length > 0 && (
               <div>
                 <h2 className="text-2xl md:text-3xl font-bold text-slate-900 font-poppins tracking-tight mb-8">
-                  Key Benefits
+                  {labels.benefitsTitle}
                 </h2>
                 <div className="space-y-4">
                   {benefitsList.map((benefit: string) => (
@@ -197,7 +219,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             {deliverablesList.length > 0 && (
               <div>
                 <h2 className="text-2xl md:text-3xl font-bold text-slate-900 font-poppins tracking-tight mb-8">
-                  What You Get
+                  {labels.deliverablesTitle}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {deliverablesList.map((deliv: string) => (
@@ -227,10 +249,10 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           <div className="max-w-7xl mx-auto">
             <div className="max-w-xl mb-14">
               <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide text-orange-600 bg-orange-50 border border-orange-100/60">
-                Pricing
+                {labels.pricingTitle}
               </span>
               <h2 className="mt-4 text-3xl md:text-4xl font-bold text-slate-900 font-poppins tracking-tight">
-                Choose your plan
+                {labels.pricingSubtitle}
               </h2>
             </div>
 
@@ -246,7 +268,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                 >
                   {plan.popular && (
                     <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-orange-500 text-white rounded-full text-[10px] font-bold uppercase tracking-wider">
-                      Most Popular
+                      {labels.mostPopular}
                     </span>
                   )}
                   <div className="flex-1">
@@ -283,7 +305,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                         : 'bg-transparent text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                     }`}
                   >
-                    {plan.popular ? 'Get Started' : 'Inquire Now'}
+                    {plan.popular ? labels.getStarted : labels.inquireNow}
                   </Link>
                 </div>
               ))}
@@ -298,10 +320,10 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-14">
               <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide text-orange-600 bg-orange-50 border border-orange-100/60">
-                FAQ
+                {labels.faqTitle}
               </span>
               <h2 className="mt-4 text-3xl md:text-4xl font-bold text-slate-900 font-poppins tracking-tight">
-                Frequently Asked Questions
+                {labels.faqSubtitle}
               </h2>
             </div>
             <FAQSection faqs={faqs} />

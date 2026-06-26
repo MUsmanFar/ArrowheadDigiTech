@@ -6,11 +6,13 @@ import { Quote } from 'lucide-react';
 import { useProjects } from '@/lib/use-projects';
 import { useTestimonials } from '@/lib/use-testimonials';
 import { useCaseStudies } from '@/lib/use-case-studies';
+import { useSiteSection } from '@/lib/use-site-content';
 
 export default function AboutTrustLayer() {
   const { projects } = useProjects();
   const { testimonials } = useTestimonials();
   const { studies } = useCaseStudies();
+  const { section: labels } = useSiteSection('about.section-labels');
 
   const caseStudyProjects = projects.filter((p) => p.caseStudy);
   const industries = [...new Set(caseStudyProjects.map((p) => p.industry).filter(Boolean))];
@@ -24,10 +26,10 @@ export default function AboutTrustLayer() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
             {[
-              { value: caseStudyProjects.length.toString(), label: 'Projects Delivered' },
-              { value: industries.length.toString(), label: 'Industries Served' },
-              { value: caseStudyProjects.length.toString(), label: 'Case Studies' },
-              { value: displayTestimonials.length.toString(), label: 'Client Testimonials' },
+              { value: caseStudyProjects.length.toString(), label: labels.statProjectsDelivered },
+              { value: industries.length.toString(), label: labels.statIndustriesServed },
+              { value: caseStudyProjects.length.toString(), label: labels.statCaseStudies },
+              { value: displayTestimonials.length.toString(), label: labels.statClientTestimonials },
             ].map((stat, i) => (
               <motion.div
                 key={i}
@@ -59,10 +61,10 @@ export default function AboutTrustLayer() {
               transition={{ duration: 0.5 }}
             >
               <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide text-orange-600 bg-orange-50 border border-orange-100/60">
-                Technologies
+                {labels.technologiesTitle}
               </span>
               <h2 className="mt-4 text-2xl md:text-3xl font-bold text-slate-900 font-poppins tracking-tight">
-                What we work with.
+                {labels.technologiesSubtitle}
               </h2>
               <div className="mt-6 flex flex-wrap gap-2">
                 {allTechnologies.map((tech) => (
@@ -89,10 +91,10 @@ export default function AboutTrustLayer() {
               transition={{ duration: 0.5 }}
             >
               <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide text-orange-600 bg-orange-50 border border-orange-100/60">
-                Testimonials
+                {labels.testimonialsTitle}
               </span>
               <h2 className="mt-4 text-2xl md:text-3xl font-bold text-slate-900 font-poppins tracking-tight">
-                What clients say.
+                {labels.testimonialsSubtitle}
               </h2>
             </motion.div>
             <div className="mt-8 grid md:grid-cols-3 gap-6">

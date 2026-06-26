@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUpRight, TrendingUp } from 'lucide-react';
 import { useProjectMediaMap, thumbnailFor } from '@/lib/use-project-media';
+import { useSiteSection } from '@/lib/use-site-content';
 
 const industryColors: Record<string, { border: string; bg: string; text: string; gradient: string }> = {
   Transportation: {
@@ -71,6 +72,7 @@ export default function ProjectShowcase() {
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const mediaMap = useProjectMediaMap();
+  const { section: copy } = useSiteSection('portfolio.showcase');
 
   useEffect(() => {
     async function loadProjects() {
@@ -115,16 +117,16 @@ export default function ProjectShowcase() {
           className="max-w-xl mb-16"
         >
           <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide text-orange-600 bg-orange-50 border border-orange-100/60">
-            Selected Projects
+            {copy.headline}
           </span>
           <h2 className="mt-4 text-3xl md:text-4xl font-bold text-slate-900 font-poppins tracking-tight">
-            Featured work
+            {copy.subheadline}
           </h2>
         </motion.div>
 
         {featured.length === 0 && secondary.length === 0 && (
           <div className="text-center py-20 text-slate-400 font-inter">
-            No projects to display yet.
+            {copy.emptyMessage}
           </div>
         )}
 
@@ -210,7 +212,7 @@ export default function ProjectShowcase() {
                         )}
 
                         <div className="mt-6 flex items-center gap-2 text-sm font-semibold text-orange-600 group/link">
-                          <span>View Case Study</span>
+                          <span>{copy.viewCaseStudyLabel}</span>
                           <ArrowUpRight
                             size={15}
                             className="transition-transform duration-300 ease-out group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"

@@ -145,6 +145,66 @@ export type SiteContentMap = {
   'testimonials.page': HeroContent;
   'legal.privacy': LegalPageContent;
   'legal.terms': LegalPageContent;
+  'home.featured-work': {
+    headline: string;
+    description: string;
+    viewCaseStudyLabel: string;
+    viewAllLabel: string;
+  };
+  'home.metrics-labels': { projectsLabel: string; industriesLabel: string };
+  'portfolio.showcase': {
+    headline: string;
+    subheadline: string;
+    viewCaseStudyLabel: string;
+    emptyMessage: string;
+  };
+  'services.list-intro': { headline: string; subheadline: string };
+  'services.detail-labels': {
+    backToServices: string;
+    getStarted: string;
+    problemTitle: string;
+    problemSubtitle: string;
+    solutionTitle: string;
+    solutionSubtitle: string;
+    processTitle: string;
+    processSubtitle: string;
+    benefitsTitle: string;
+    benefitsSubtitle: string;
+    deliverablesTitle: string;
+    pricingTitle: string;
+    pricingSubtitle: string;
+    mostPopular: string;
+    inquireNow: string;
+    faqTitle: string;
+    faqSubtitle: string;
+  };
+  'about.section-labels': {
+    founderBadge: string;
+    experienceTitle: string;
+    coreExpertiseTitle: string;
+    industriesServedTitle: string;
+    projectsDeliveredTitle: string;
+    statProjectsDelivered: string;
+    statIndustriesServed: string;
+    statClientTestimonials: string;
+    statTechnologiesUsed: string;
+    statCaseStudies: string;
+    teamHeadline: string;
+    technologiesTitle: string;
+    technologiesSubtitle: string;
+    testimonialsTitle: string;
+    testimonialsSubtitle: string;
+  };
+  'contact.form': {
+    headline: string;
+    subheadline: string;
+    successTitle: string;
+    successMessage: string;
+    submitLabel: string;
+    sendingLabel: string;
+    bookCallLabel: string;
+    successSchedulingLabel: string;
+  };
 };
 
 function deepMerge<T>(defaults: T, override: Partial<T> | undefined): T {

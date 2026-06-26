@@ -4,12 +4,14 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, CheckCircle2, Loader2, Calendar } from 'lucide-react';
 import { getSchedulingUrl } from '@/lib/scheduling';
+import { useSiteSection } from '@/lib/use-site-content';
 
 type Step = 'form' | 'success';
 
 export default function ConversationalForm() {
   const [step, setStep] = useState<Step>('form');
   const [loading, setLoading] = useState(false);
+  const { section: copy } = useSiteSection('contact.form');
 
   const [formData, setFormData] = useState({
     intent: '',
@@ -71,10 +73,10 @@ export default function ConversationalForm() {
             className="w-full"
           >
             <h2 className="text-3xl font-bold font-montserrat text-slate-900 mb-2 leading-tight">
-              Tell us about your project.
+              {copy.headline}
             </h2>
             <p className="text-slate-400 font-poppins text-sm mb-8">
-              Share what you&apos;re working on and we&apos;ll get back to you within 24 hours.
+              {copy.subheadline}
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -171,9 +173,9 @@ export default function ConversationalForm() {
                   className="flex-1 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white py-4 px-8 rounded-full font-semibold font-poppins transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-[0_0_30px_-8px_rgba(249,115,22,0.4)]"
                 >
                   {loading ? (
-                    <><Loader2 size={18} className="animate-spin" /> Sending...</>
+                    <><Loader2 size={18} className="animate-spin" /> {copy.sendingLabel}</>
                   ) : (
-                    <><ArrowRight size={18} /> Send Inquiry</>
+                    <><ArrowRight size={18} /> {copy.submitLabel}</>
                   )}
                 </button>
                 <a
@@ -183,7 +185,7 @@ export default function ConversationalForm() {
                   className="flex items-center justify-center gap-2 px-6 py-4 rounded-full border border-slate-200 text-slate-600 font-semibold font-poppins text-sm hover:border-slate-300 hover:bg-slate-50 transition-all"
                 >
                   <Calendar size={16} />
-                  Book a Call Instead
+                  {copy.bookCallLabel}
                 </a>
               </div>
             </form>
@@ -210,10 +212,10 @@ export default function ConversationalForm() {
             </motion.div>
 
             <h2 className="text-3xl font-bold font-montserrat text-slate-900 mb-3">
-              Thanks, {formData.name.split(' ')[0]}.
+              {copy.successTitle}
             </h2>
             <p className="text-base text-slate-500 font-poppins max-w-md mx-auto leading-relaxed mb-6">
-              We&apos;ve received your inquiry. One of our team will review it and reach out within 24 hours.
+              {copy.successMessage}
             </p>
             <a
               href={getSchedulingUrl('contact-success')}
@@ -222,7 +224,7 @@ export default function ConversationalForm() {
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-orange-500 text-white text-sm font-semibold hover:bg-orange-600 transition-all"
             >
               <Calendar size={16} />
-              Prefer to pick a time now?
+              {copy.successSchedulingLabel}
             </a>
           </motion.div>
         )}

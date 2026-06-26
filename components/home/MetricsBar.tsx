@@ -4,10 +4,12 @@ import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useProjects } from '@/lib/use-projects';
 import { useCaseStudies } from '@/lib/use-case-studies';
+import { useSiteSection } from '@/lib/use-site-content';
 
 export default function MetricsBar() {
   const { projects } = useProjects();
   const { studies } = useCaseStudies();
+  const { section: labels } = useSiteSection('home.metrics-labels');
 
   const stats = useMemo(() => {
     const projectCount = projects.length || studies.length;
@@ -20,13 +22,13 @@ export default function MetricsBar() {
       .slice(0, 2);
 
     const rows = [
-      { value: String(projectCount), label: 'Completed Projects' },
-      { value: String(industries.size), label: 'Industries Served' },
+      { value: String(projectCount), label: labels.projectsLabel },
+      { value: String(industries.size), label: labels.industriesLabel },
       ...highlightMetrics.map((m) => ({ value: m.value, label: m.label })),
     ];
 
     return rows.length > 0 ? rows : [];
-  }, [projects, studies]);
+  }, [projects, studies, labels.projectsLabel, labels.industriesLabel]);
 
   if (stats.length === 0) return null;
 

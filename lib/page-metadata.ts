@@ -16,6 +16,7 @@ export function pageMetadata(options: {
   const baseUrl = siteBaseUrl();
   const canonicalPath = options.path.startsWith('/') ? options.path : `/${options.path}`;
   const url = `${baseUrl}${canonicalPath === '/' ? '' : canonicalPath}`;
+  const ogImage = `${baseUrl}/opengraph-image`;
 
   return {
     title: options.title,
@@ -27,11 +28,13 @@ export function pageMetadata(options: {
       type: options.ogType ?? 'website',
       url,
       siteName: 'Arrowhead DigiTech',
+      images: [{ url: ogImage, width: 1200, height: 630, alt: 'Arrowhead DigiTech' }],
     },
     twitter: {
       card: 'summary_large_image',
       title: options.title,
       description: options.description,
+      images: [ogImage],
     },
     ...(options.noIndex
       ? { robots: { index: false, follow: false } }

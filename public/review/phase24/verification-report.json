@@ -1,0 +1,270 @@
+{
+  "marker": "P24-1782434670933",
+  "timestamp": "2026-06-26T00:44:36.604Z",
+  "baseUrl": "http://localhost:3002",
+  "totals": {
+    "pass": 40,
+    "fail": 3,
+    "warn": 0
+  },
+  "checks": [
+    {
+      "category": "smtp",
+      "name": "SMTP env vars present",
+      "status": "PASS",
+      "evidence": "all set"
+    },
+    {
+      "category": "smtp",
+      "name": "SMTP credentials not placeholder",
+      "status": "FAIL",
+      "evidence": "placeholder Gmail creds in .env"
+    },
+    {
+      "category": "smtp",
+      "name": "SMTP transporter verify()",
+      "status": "FAIL",
+      "evidence": "skipped — placeholder or missing creds"
+    },
+    {
+      "category": "smtp",
+      "name": "Contact API accepts submission",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "smtp",
+      "name": "Real email delivery",
+      "status": "FAIL",
+      "evidence": "cannot verify delivery with placeholder SMTP creds"
+    },
+    {
+      "category": "seo",
+      "name": "opengraph-image route",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "seo",
+      "name": "twitter-image route",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "seo",
+      "name": "opengraph-image.tsx exists",
+      "status": "PASS",
+      "evidence": "app/opengraph-image.tsx"
+    },
+    {
+      "category": "seo",
+      "name": "page-metadata OG URLs",
+      "status": "PASS",
+      "evidence": "lib/page-metadata.ts"
+    },
+    {
+      "category": "seo",
+      "name": "FAQPage schema on /faq",
+      "status": "PASS",
+      "evidence": "found"
+    },
+    {
+      "category": "seo",
+      "name": "BlogPosting schema",
+      "status": "PASS",
+      "evidence": "/future-of-web-development"
+    },
+    {
+      "category": "seo",
+      "name": "Service schema",
+      "status": "PASS",
+      "evidence": "/web-development"
+    },
+    {
+      "category": "seo",
+      "name": "BreadcrumbList on service",
+      "status": "PASS",
+      "evidence": "found"
+    },
+    {
+      "category": "performance",
+      "name": "removed components/home/HeroSection.tsx",
+      "status": "PASS",
+      "evidence": "deleted"
+    },
+    {
+      "category": "performance",
+      "name": "removed components/portfolio/FeaturedProjects.tsx",
+      "status": "PASS",
+      "evidence": "deleted"
+    },
+    {
+      "category": "performance",
+      "name": "removed components/3d/Hero3D.tsx",
+      "status": "PASS",
+      "evidence": "deleted"
+    },
+    {
+      "category": "performance",
+      "name": "removed components/ui/textarea.tsx",
+      "status": "PASS",
+      "evidence": "deleted"
+    },
+    {
+      "category": "performance",
+      "name": "lib/media.ts types-only",
+      "status": "PASS",
+      "evidence": "types only"
+    },
+    {
+      "category": "security",
+      "name": "CSP header in next.config",
+      "status": "PASS",
+      "evidence": "next.config.js"
+    },
+    {
+      "category": "security",
+      "name": "POST /api/services deprecated",
+      "status": "PASS",
+      "evidence": "HTTP 410"
+    },
+    {
+      "category": "security",
+      "name": "POST /api/projects deprecated",
+      "status": "PASS",
+      "evidence": "HTTP 410"
+    },
+    {
+      "category": "security",
+      "name": "POST /api/testimonials deprecated",
+      "status": "PASS",
+      "evidence": "HTTP 410"
+    },
+    {
+      "category": "security",
+      "name": "admin API without cookie",
+      "status": "PASS",
+      "evidence": "HTTP 401"
+    },
+    {
+      "category": "cms",
+      "name": "CMS key home.featured-work",
+      "status": "PASS",
+      "evidence": "home.featured-work"
+    },
+    {
+      "category": "cms",
+      "name": "CMS key home.metrics-labels",
+      "status": "PASS",
+      "evidence": "home.metrics-labels"
+    },
+    {
+      "category": "cms",
+      "name": "CMS key portfolio.showcase",
+      "status": "PASS",
+      "evidence": "portfolio.showcase"
+    },
+    {
+      "category": "cms",
+      "name": "CMS key services.list-intro",
+      "status": "PASS",
+      "evidence": "services.list-intro"
+    },
+    {
+      "category": "cms",
+      "name": "CMS key services.detail-labels",
+      "status": "PASS",
+      "evidence": "services.detail-labels"
+    },
+    {
+      "category": "cms",
+      "name": "CMS key about.section-labels",
+      "status": "PASS",
+      "evidence": "about.section-labels"
+    },
+    {
+      "category": "cms",
+      "name": "CMS key contact.form",
+      "status": "PASS",
+      "evidence": "contact.form"
+    },
+    {
+      "category": "deployment",
+      "name": "R2_ACCOUNT_ID",
+      "status": "PASS",
+      "evidence": "SET"
+    },
+    {
+      "category": "deployment",
+      "name": "R2_ACCESS_KEY_ID",
+      "status": "PASS",
+      "evidence": "SET"
+    },
+    {
+      "category": "deployment",
+      "name": "R2_SECRET_ACCESS_KEY",
+      "status": "PASS",
+      "evidence": "SET"
+    },
+    {
+      "category": "deployment",
+      "name": "R2_BUCKET",
+      "status": "PASS",
+      "evidence": "SET"
+    },
+    {
+      "category": "deployment",
+      "name": "R2_PUBLIC_URL",
+      "status": "PASS",
+      "evidence": "SET"
+    },
+    {
+      "category": "deployment",
+      "name": "DATABASE_URL",
+      "status": "PASS",
+      "evidence": "SET"
+    },
+    {
+      "category": "deployment",
+      "name": "R2_ACCESS_KEY_ID length",
+      "status": "PASS",
+      "evidence": "32 chars"
+    },
+    {
+      "category": "frontend",
+      "name": "/",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/about",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/services",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/portfolio",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/contact",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    },
+    {
+      "category": "frontend",
+      "name": "/faq",
+      "status": "PASS",
+      "evidence": "HTTP 200"
+    }
+  ]
+}

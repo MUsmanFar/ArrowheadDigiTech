@@ -26,6 +26,7 @@ export default function ServicesPage() {
   const [loading, setLoading] = useState(true);
   const { studies } = useCaseStudies();
   const { section: trustedBy } = useSiteSection('services.trusted-by');
+  const { section: listIntro } = useSiteSection('services.list-intro');
   const mediaMap = useProjectMediaMap();
 
   useEffect(() => {
@@ -71,10 +72,10 @@ export default function ServicesPage() {
                 className="max-w-xl mb-14"
               >
                 <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide text-orange-600 bg-orange-50 border border-orange-100/60">
-                  What We Offer
+                  {listIntro.headline}
                 </span>
                 <h2 className="mt-4 text-3xl md:text-4xl font-bold text-slate-900 font-poppins tracking-tight">
-                  Explore our capabilities
+                  {listIntro.subheadline}
                 </h2>
               </motion.div>
 

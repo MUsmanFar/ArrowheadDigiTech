@@ -102,6 +102,20 @@ export class ContactService {
         `,
       });
       logger.info('Contact email notification sent', { leadId: lead.id });
+
+      await transporter.sendMail({
+        from: process.env.EMAIL_FROM || 'info@arrowheaddigitech.com',
+        to: email,
+        subject: 'We received your message — Arrowhead DigiTech',
+        html: `
+          <h2>Thank you, ${safeName}!</h2>
+          <p>We received your inquiry and will respond within one business day.</p>
+          <p><strong>Your message:</strong></p>
+          <p>${safeMessage}</p>
+          <p>— Arrowhead DigiTech Team</p>
+        `,
+      });
+      logger.info('Contact confirmation email sent to customer', { leadId: lead.id, email });
     } catch (emailError) {
       logger.warn('Contact email notification failed; lead persisted', {
         leadId: lead.id,

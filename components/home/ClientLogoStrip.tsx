@@ -15,7 +15,7 @@ export default function ClientLogoStrip({ initialLogos }: { initialLogos: Client
   return (
     <section className="w-full bg-white border-t border-b border-slate-100 overflow-hidden" aria-label="Client logos">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
-        <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 text-center mb-5 font-poppins">
+        <p className="text-xs font-semibold uppercase tracking-widest text-slate-600 text-center mb-5 font-poppins">
           {strip.label}
         </p>
         <div className="relative overflow-hidden">
@@ -37,7 +37,7 @@ export default function ClientLogoStrip({ initialLogos }: { initialLogos: Client
                   className="h-10 w-auto max-w-[120px] object-contain transition-all duration-300 grayscale hover:grayscale-0 opacity-60 hover:opacity-100"
                   loading="lazy"
                 />
-                <span className="text-sm font-semibold text-slate-400 group-hover:text-slate-700 transition-colors duration-300 font-poppins whitespace-nowrap">
+                <span className="text-sm font-semibold text-slate-600 group-hover:text-slate-800 transition-colors duration-300 font-poppins whitespace-nowrap">
                   {logo.companyName}
                 </span>
               </a>
