@@ -1,51 +1,47 @@
 'use client';
 
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { ArrowUpRight, TrendingUp } from 'lucide-react';
 import type { HeroContent } from '@/lib/site-content';
 import { getSchedulingUrl } from '@/lib/scheduling';
-import MagneticButton from './MagneticButton';
-import SectionBackdrop from './shared/SectionBackdrop';
-import NeuralBackground from './shared/NeuralBackground';
+import {
+  Chapter,
+  ChapterBridge,
+  DepthLayer,
+  LightingPools,
+  ParticleField,
+  SignalButton,
+  SignalCanvas,
+  SignalCore,
+} from '@/components/visual-engine';
+import { bridgeHeights, motion as motionTokens, signalCoreScale } from '@/lib/visual-engine/tokens';
+import HeroCommandCenter from './hero/HeroCommandCenter';
+import HeroTrustStrip from './hero/HeroTrustStrip';
 
-function FloatingWidgets() {
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+function HeroReveal({
+  children,
+  delay = 0,
+  className,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
   return (
-    <>
-      <motion.div
-        animate={{ y: [0, -14, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-        className="figma-glass absolute right-[8%] top-[28%] hidden w-52 rounded-2xl p-4 lg:block"
-      >
-        <p className="text-[10px] font-montserrat uppercase tracking-widest text-slate-400">Analytics</p>
-        <div className="mt-2 flex items-end gap-1 h-16">
-          {[40, 65, 45, 80, 55, 92].map((h, i) => (
-            <div
-              key={i}
-              className="flex-1 rounded-t bg-gradient-to-t from-[#2B6EF2] to-[#60a5fa]/60"
-              style={{ height: `${h}%` }}
-            />
-          ))}
-        </div>
-      </motion.div>
-      <motion.div
-        animate={{ y: [0, 12, 0] }}
-        transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-        className="figma-glass absolute left-[6%] top-[38%] hidden rounded-2xl px-4 py-3 lg:block"
-      >
-        <TrendingUp className="h-4 w-4 text-[#E46F1E]" />
-        <p className="mt-1 text-lg font-bold font-poppins text-white">+214%</p>
-        <p className="text-[10px] font-montserrat text-slate-400">Growth</p>
-      </motion.div>
-      <motion.div
-        animate={{ y: [0, -10, 0] }}
-        transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-        className="figma-glass absolute bottom-[22%] right-[18%] hidden rounded-2xl px-4 py-3 lg:block"
-      >
-        <p className="text-[10px] font-montserrat text-slate-400">AI Nodes</p>
-        <p className="text-sm font-bold font-poppins text-white">Active</p>
-      </motion.div>
-    </>
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: motionTokens.reveal / 1000,
+        delay: delay / 1000,
+        ease: EASE,
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
   );
 }
 
@@ -53,10 +49,12 @@ export default function HeroRedesign({ hero }: { hero: HeroContent }) {
   const ref = useRef<HTMLElement>(null);
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const springX = useSpring(mx, { stiffness: 80, damping: 20 });
-  const springY = useSpring(my, { stiffness: 80, damping: 20 });
-  const parallaxX = useTransform(springX, [-120, 120], [-12, 12]);
-  const parallaxY = useTransform(springY, [-120, 120], [-8, 8]);
+  const springX = useSpring(mx, motionTokens.springNav);
+  const springY = useSpring(my, motionTokens.springNav);
+  const parallaxX = useTransform(springX, [-160, 160], [-18, 18]);
+  const parallaxY = useTransform(springY, [-160, 160], [-12, 12]);
+  const contentX = useTransform(springX, [-160, 160], [-6, 6]);
+  const contentY = useTransform(springY, [-160, 160], [-4, 4]);
 
   const primaryHref = hero.primaryCta?.external
     ? getSchedulingUrl('hero')
@@ -69,70 +67,104 @@ export default function HeroRedesign({ hero }: { hero: HeroContent }) {
     my.set(e.clientY - rect.top - rect.height / 2);
   };
 
+  const onLeave = () => {
+    mx.set(0);
+    my.set(0);
+  };
+
   return (
-    <SectionBackdrop theme="hero-dark" className="border-b border-white/5" bottomFade>
+    <Chapter
+      token="void-deep"
+      texture="grain"
+      poolBlueOpacity={0.4}
+      poolOrangeOpacity={0.22}
+      fog
+      className="relative border-b border-white/[0.06]"
+    >
       <section
         ref={ref}
         onMouseMove={onMove}
-        className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden pt-24 pb-20"
+        onMouseLeave={onLeave}
+        className="relative min-h-[100svh] overflow-hidden"
         aria-label="Hero"
       >
-        <NeuralBackground />
-        <FloatingWidgets />
+        <DepthLayer layer="background" className="pointer-events-none absolute inset-0">
+          <SignalCanvas className="absolute inset-0 h-full w-full" opacityScale="hero" />
+          <ParticleField density="hero" className="absolute inset-0 h-full w-full" />
+        </DepthLayer>
 
-        <motion.div
-          style={{ x: parallaxX, y: parallaxY }}
-          className="container-premium relative z-10 max-w-4xl text-center"
-        >
-          <motion.h1
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="text-4xl font-bold font-poppins leading-[1.05] tracking-[-0.03em] text-white sm:text-5xl md:text-6xl lg:text-7xl"
-          >
-            {hero.headline}{' '}
-            {hero.headlineAccent && (
-              <span className="text-gradient-brand">{hero.headlineAccent}</span>
-            )}{' '}
-            {hero.headlineSuffix}
-          </motion.h1>
+        <LightingPools />
 
-          {hero.subheadline && (
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.12, duration: 0.8 }}
-              className="mx-auto mt-7 max-w-2xl text-base font-montserrat leading-relaxed text-slate-400 md:text-lg"
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_70%_45%,rgba(43,110,242,0.08),transparent_65%)]" aria-hidden="true" />
+
+        <div className="container-premium relative z-[8] flex min-h-[100svh] flex-col justify-center pt-28 pb-24 md:pt-32 md:pb-28">
+          <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-10 xl:gap-14">
+            <motion.div
+              style={{ x: contentX, y: contentY }}
+              className="relative z-[8] lg:col-span-6 xl:col-span-5"
             >
-              {hero.subheadline}
-            </motion.p>
-          )}
+              {hero.badge && (
+                <HeroReveal delay={0}>
+                  <p className="font-montserrat text-[11px] font-semibold uppercase tracking-[0.28em] text-[#E46F1E]">
+                    {hero.badge}
+                  </p>
+                </HeroReveal>
+              )}
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.22, duration: 0.8 }}
-            className="mt-10 flex flex-wrap items-center justify-center gap-4"
-          >
-            {hero.primaryCta && (
-              <MagneticButton href={primaryHref} external={hero.primaryCta.external}>
-                {hero.primaryCta.label}
-                <ArrowUpRight size={18} />
-              </MagneticButton>
-            )}
-            {hero.secondaryCta && (
-              <MagneticButton
-                href={hero.secondaryCta.href}
-                variant="secondary"
-                className="!border-white/20 !bg-white/5 !text-white hover:!bg-white/10"
-              >
-                {hero.secondaryCta.label}
-                <ArrowUpRight size={18} />
-              </MagneticButton>
-            )}
-          </motion.div>
-        </motion.div>
+              <HeroReveal delay={80}>
+                <h1 className="mt-5 font-poppins text-[2.35rem] font-bold leading-[1.04] tracking-[-0.03em] text-white sm:text-5xl md:text-[3.25rem] lg:text-6xl xl:text-[4.25rem]">
+                  {hero.headline}{' '}
+                  {hero.headlineAccent && (
+                    <span className="ve-text-signal-gradient">{hero.headlineAccent}</span>
+                  )}{' '}
+                  {hero.headlineSuffix}
+                </h1>
+              </HeroReveal>
+
+              {hero.subheadline && (
+                <HeroReveal delay={160}>
+                  <p className="mt-7 max-w-xl font-montserrat text-base leading-relaxed text-slate-400 md:text-lg">
+                    {hero.subheadline}
+                  </p>
+                </HeroReveal>
+              )}
+
+              <HeroReveal delay={240}>
+                <div className="mt-10 flex flex-wrap items-center gap-4">
+                  {hero.primaryCta && (
+                    <SignalButton href={primaryHref} variant="primary" external={hero.primaryCta.external} magnetic>
+                      {hero.primaryCta.label}
+                    </SignalButton>
+                  )}
+                  {hero.secondaryCta && (
+                    <SignalButton href={hero.secondaryCta.href} variant="secondary-dark">
+                      {hero.secondaryCta.label}
+                    </SignalButton>
+                  )}
+                </div>
+              </HeroReveal>
+
+              <HeroReveal delay={320}>
+                <HeroTrustStrip />
+              </HeroReveal>
+            </motion.div>
+
+            <DepthLayer layer="glass" className="relative hidden md:block lg:col-span-6 xl:col-span-7">
+              <HeroCommandCenter parallaxX={parallaxX} parallaxY={parallaxY} />
+            </DepthLayer>
+          </div>
+
+          <div className="pointer-events-none relative mt-10 flex justify-center md:hidden" aria-hidden="true">
+            <div className="opacity-40">
+              <SignalCore size={signalCoreScale.services} spokes={6} animated />
+            </div>
+          </div>
+        </div>
+
+        <div className="absolute inset-x-0 bottom-0 z-[6]">
+          <ChapterBridge from="void-deep" to="paper" heightPx={bridgeHeights.heroToLogos} />
+        </div>
       </section>
-    </SectionBackdrop>
+    </Chapter>
   );
 }
