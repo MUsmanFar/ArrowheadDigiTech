@@ -28,7 +28,7 @@ export default function IndustriesShowcase() {
   if (industries.length === 0) return null;
 
   return (
-    <SectionBackdrop variant="silver" className="py-28 md:py-36">
+    <SectionBackdrop theme="light-mesh" className="py-28 md:py-36">
       <section aria-label="Industries">
         <div className="container-premium">
           <motion.div

@@ -1,44 +1,97 @@
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
 
-type Variant = 'hero' | 'warm' | 'cool' | 'silver' | 'dark' | 'cta';
+export type SectionTheme =
+  | 'hero-dark'
+  | 'light'
+  | 'light-mesh'
+  | 'dark'
+  | 'dark-glow'
+  | 'aurora'
+  | 'footer-dark';
 
-const variants: Record<Variant, string> = {
-  hero: 'from-[#E46F1E]/12 via-[#FAFAFA] to-[#2B6EF2]/10',
-  warm: 'from-[#E46F1E]/8 via-[#FAFAFA] to-white',
-  cool: 'from-[#2B6EF2]/10 via-[#FAFAFA] to-[#E46F1E]/5',
-  silver: 'from-white via-[#FAFAFA] to-[#E5E7EB]/40',
-  dark: 'from-[#111827] via-[#1f2937] to-[#111827]',
-  cta: 'from-[#E46F1E]/15 via-[#FAFAFA] to-[#2B6EF2]/8',
+const themes: Record<SectionTheme, { bg: string; text: string; fade?: string }> = {
+  'hero-dark': {
+    bg: 'bg-[#070b14]',
+    text: 'text-white',
+    fade: 'from-[#070b14] via-[#0d1424] to-[#111827]',
+  },
+  light: {
+    bg: 'bg-white',
+    text: 'text-[#111827]',
+    fade: 'from-white via-[#FAFAFA] to-white',
+  },
+  'light-mesh': {
+    bg: 'bg-[#FAFAFA]',
+    text: 'text-[#111827]',
+    fade: 'from-[#FAFAFA] via-white to-[#FAFAFA]',
+  },
+  dark: {
+    bg: 'bg-[#0a0f1a]',
+    text: 'text-white',
+    fade: 'from-[#0a0f1a] via-[#111827] to-[#0a0f1a]',
+  },
+  'dark-glow': {
+    bg: 'bg-[#080d18]',
+    text: 'text-white',
+    fade: 'from-[#080d18] via-[#0f172a] to-[#080d18]',
+  },
+  aurora: {
+    bg: 'bg-[#070b14]',
+    text: 'text-white',
+    fade: 'from-[#070b14] via-[#1a1030] to-[#070b14]',
+  },
+  'footer-dark': {
+    bg: 'bg-[#050810]',
+    text: 'text-white',
+    fade: 'from-[#050810] to-[#070b14]',
+  },
 };
 
 export default function SectionBackdrop({
-  variant = 'warm',
+  theme = 'light-mesh',
   className,
   children,
+  topFade,
+  bottomFade,
 }: {
-  variant?: Variant;
+  theme?: SectionTheme;
   className?: string;
   children: ReactNode;
+  topFade?: boolean;
+  bottomFade?: boolean;
 }) {
+  const t = themes[theme];
+
   return (
-    <div className={cn('relative overflow-hidden', className)}>
+    <div className={cn('relative overflow-hidden', t.bg, t.text, className)}>
       <div
-        className={cn(
-          'pointer-events-none absolute inset-0 bg-gradient-to-br',
-          variants[variant],
-        )}
+        className={cn('pointer-events-none absolute inset-0 bg-gradient-to-b opacity-90', t.fade)}
         aria-hidden="true"
       />
-      <div className="home-noise pointer-events-none absolute inset-0 opacity-[0.35]" aria-hidden="true" />
-      <div
-        className="pointer-events-none absolute -top-32 right-0 h-96 w-96 rounded-full bg-[#E46F1E]/10 blur-[100px]"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute bottom-0 left-0 h-80 w-80 rounded-full bg-[#2B6EF2]/10 blur-[90px]"
-        aria-hidden="true"
-      />
+      {theme === 'hero-dark' && (
+        <>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(43,110,242,0.35),transparent_55%)]" />
+          <div className="pointer-events-none absolute bottom-0 left-1/2 h-[420px] w-[900px] -translate-x-1/2 rounded-full bg-[#2B6EF2]/20 blur-[120px]" />
+          <div className="pointer-events-none absolute top-1/4 right-0 h-[300px] w-[400px] rounded-full bg-[#E46F1E]/15 blur-[100px]" />
+        </>
+      )}
+      {theme === 'aurora' && (
+        <>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgba(228,111,30,0.45),transparent_55%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_30%_80%,rgba(43,110,242,0.25),transparent_50%)]" />
+        </>
+      )}
+      {theme === 'dark-glow' && (
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(43,110,242,0.12),transparent_60%)]" />
+      )}
+      <div className="home-noise pointer-events-none absolute inset-0 opacity-[0.25]" aria-hidden="true" />
+      {topFade && (
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#070b14] to-transparent" />
+      )}
+      {bottomFade && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent" />
+      )}
       <div className="relative z-[1]">{children}</div>
     </div>
   );

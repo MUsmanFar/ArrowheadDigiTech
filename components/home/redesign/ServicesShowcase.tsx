@@ -35,7 +35,7 @@ export default function ServicesShowcase() {
   if (services.length === 0) return null;
 
   return (
-    <SectionBackdrop variant="cool" className="py-28 md:py-40">
+    <SectionBackdrop theme="light-mesh" topFade className="py-28 md:py-40">
       <section aria-label="Services">
         <div className="container-premium">
           <div className="mb-16 flex flex-col gap-8 lg:mb-20 lg:flex-row lg:items-end lg:justify-between">
@@ -77,7 +77,7 @@ export default function ServicesShowcase() {
                 >
                   <Link href={`/services/${service.slug}`} className="group block">
                     <div
-                      className={`home-glass grid overflow-hidden rounded-[2rem] md:grid-cols-12 md:gap-0 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_40px_90px_-36px_rgba(17,24,39,0.18)] ${
+                      className={`figma-glass-light grid overflow-hidden rounded-[2rem] md:grid-cols-12 md:gap-0 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_40px_90px_-36px_rgba(17,24,39,0.2)] ${
                         reversed ? 'md:[direction:rtl]' : ''
                       }`}
                     >

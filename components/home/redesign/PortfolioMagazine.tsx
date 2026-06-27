@@ -12,8 +12,10 @@ import SectionBackdrop from './shared/SectionBackdrop';
 
 function DeviceFrame({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`relative rounded-[1rem] border border-[#111827] bg-[#111827] p-1.5 shadow-[0_30px_80px_-30px_rgba(17,24,39,0.4)] ${className ?? ''}`}>
-      <div className="overflow-hidden rounded-[0.65rem] bg-[#FAFAFA]">{children}</div>
+    <div
+      className={`relative rounded-[1rem] border border-white/10 bg-[#111827] p-1.5 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)] ${className ?? ''}`}
+    >
+      <div className="overflow-hidden rounded-[0.65rem] bg-[#0a0f1a]">{children}</div>
       <div className="mx-auto mt-1 h-1.5 w-[30%] rounded-b-md bg-[#374151]" />
     </div>
   );
@@ -35,7 +37,7 @@ export default function PortfolioMagazine() {
   const featuredImg = heroImageFor(featuredMedia) || featured.thumbnail;
 
   return (
-    <SectionBackdrop variant="warm" className="py-28 md:py-40">
+    <SectionBackdrop theme="dark" bottomFade className="py-28 md:py-40">
       <section ref={ref} aria-label="Featured work">
         <div className="container-premium">
           <motion.div
@@ -47,10 +49,10 @@ export default function PortfolioMagazine() {
             <p className="mb-4 text-xs font-montserrat font-semibold uppercase tracking-[0.2em] text-[#E46F1E]">
               {caseIntro.badge}
             </p>
-            <h2 className="text-4xl font-bold font-poppins leading-[1.04] tracking-tight text-[#111827] md:text-5xl lg:text-6xl">
+            <h2 className="text-4xl font-bold font-poppins leading-[1.04] tracking-tight text-white md:text-5xl lg:text-6xl">
               {copy.headline}
             </h2>
-            <p className="mt-5 text-lg font-montserrat leading-relaxed text-slate-500">{copy.description}</p>
+            <p className="mt-5 text-lg font-montserrat leading-relaxed text-slate-400">{copy.description}</p>
           </motion.div>
 
           <Link href={`/case-studies/${featured.slug}`} className="group mb-10 block">
@@ -58,7 +60,7 @@ export default function PortfolioMagazine() {
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="home-glass overflow-hidden rounded-[2.5rem] p-4 md:p-6"
+              className="figma-glass overflow-hidden rounded-[2.5rem] p-4 md:p-6"
             >
               <div className="grid gap-6 lg:grid-cols-12 lg:items-center">
                 <div className="lg:col-span-7">
@@ -85,18 +87,15 @@ export default function PortfolioMagazine() {
                   <span className="text-xs font-montserrat font-semibold uppercase tracking-widest text-[#2B6EF2]">
                     {featured.industry}
                   </span>
-                  <h3 className="mt-3 text-3xl font-bold font-poppins leading-tight text-[#111827] md:text-4xl">
+                  <h3 className="mt-3 text-3xl font-bold font-poppins leading-tight text-white md:text-4xl">
                     {featured.title}
                   </h3>
-                  <p className="mt-4 font-montserrat leading-relaxed text-slate-500">{featured.summary}</p>
+                  <p className="mt-4 font-montserrat leading-relaxed text-slate-400">{featured.summary}</p>
                   <div className="mt-6 flex flex-wrap gap-3">
                     {featured.metrics.slice(0, 3).map((m, i) => (
-                      <span
-                        key={i}
-                        className="home-glass rounded-xl px-4 py-2 text-sm font-montserrat"
-                      >
+                      <span key={i} className="figma-glass rounded-xl px-4 py-2 text-sm font-montserrat">
                         <span className="font-bold text-[#E46F1E]">{m.value}</span>{' '}
-                        <span className="text-slate-500">{m.label}</span>
+                        <span className="text-slate-400">{m.label}</span>
                       </span>
                     ))}
                   </div>
@@ -109,8 +108,8 @@ export default function PortfolioMagazine() {
             </motion.div>
           </Link>
 
-          <div className="grid gap-6 md:grid-cols-3">
-            {rest.slice(0, 3).map((study, i) => {
+          <div className="grid gap-6 md:grid-cols-2">
+            {rest.slice(0, 2).map((study, i) => {
               const media = mediaMap.get(study.slug);
               const img = thumbnailFor(media) || study.thumbnail;
               const metric = study.metrics[0];
@@ -123,34 +122,35 @@ export default function PortfolioMagazine() {
                   transition={{ delay: i * 0.1 }}
                 >
                   <Link href={`/case-studies/${study.slug}`} className="group block h-full">
-                    <div className="home-glass h-full overflow-hidden rounded-[1.75rem] transition-all duration-500 hover:-translate-y-1">
-                      <div className="relative aspect-[4/3] overflow-hidden">
+                    <div className="figma-glass h-full overflow-hidden rounded-[1.75rem] transition-all duration-500 hover:-translate-y-1">
+                      <div className="relative aspect-[16/10] overflow-hidden">
                         {img ? (
                           <SafeImage
                             src={img}
                             alt={study.title}
                             fill
-                            sizes="(max-width: 768px) 100vw, 33vw"
+                            sizes="(max-width: 768px) 100vw, 50vw"
                             className="object-cover transition-transform duration-700 group-hover:scale-105"
                           />
                         ) : (
-                          <div className="absolute inset-0 bg-gradient-to-br from-slate-100 to-[#E5E7EB]" />
+                          <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-[#111827]" />
                         )}
-                        <div className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-xl home-glass-dark text-white">
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#070b14]/90 via-transparent to-transparent" />
+                        <div className="absolute bottom-0 left-0 right-0 p-6">
+                          <p className="text-[10px] font-montserrat font-semibold uppercase tracking-widest text-slate-400">
+                            {study.industry}
+                          </p>
+                          <h4 className="mt-1 text-xl font-bold font-poppins text-white">{study.title}</h4>
+                          {metric && (
+                            <p className="mt-2 text-sm font-montserrat">
+                              <span className="font-semibold text-[#E46F1E]">{metric.value}</span>{' '}
+                              <span className="text-slate-400">{metric.label}</span>
+                            </p>
+                          )}
+                        </div>
+                        <div className="absolute bottom-4 right-4 flex h-9 w-9 items-center justify-center rounded-xl figma-glass text-white">
                           <Smartphone className="h-4 w-4" aria-hidden="true" />
                         </div>
-                      </div>
-                      <div className="p-6">
-                        <p className="text-[10px] font-montserrat font-semibold uppercase tracking-widest text-slate-400">
-                          {study.industry}
-                        </p>
-                        <h4 className="mt-1 text-lg font-bold font-poppins text-[#111827]">{study.title}</h4>
-                        {metric && (
-                          <p className="mt-2 text-sm font-montserrat">
-                            <span className="font-semibold text-[#E46F1E]">{metric.value}</span>{' '}
-                            <span className="text-slate-400">{metric.label}</span>
-                          </p>
-                        )}
                       </div>
                     </div>
                   </Link>
@@ -167,7 +167,7 @@ export default function PortfolioMagazine() {
           >
             <Link
               href="/case-studies"
-              className="inline-flex items-center gap-2 text-sm font-semibold font-montserrat text-slate-600 transition-colors hover:text-[#E46F1E]"
+              className="inline-flex items-center gap-2 text-sm font-semibold font-montserrat text-slate-400 transition-colors hover:text-[#E46F1E]"
             >
               {copy.viewAllLabel}
               <ArrowUpRight size={16} />

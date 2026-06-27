@@ -32,14 +32,19 @@ export default function Navbar() {
     return pathname === href || pathname.startsWith(`${href}/`);
   };
 
+  const isHome = pathname === '/';
+  const isHomeDark = isHome && !scrolled;
+
   return (
     <>
       <nav
         className={cn(
           'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
-          scrolled
-            ? 'glass-premium shadow-[0_8px_30px_-20px_rgba(15,23,42,0.18)]'
-            : 'bg-white/40 backdrop-blur-md border-b border-transparent',
+          isHomeDark
+            ? 'bg-transparent border-b border-white/5'
+            : scrolled
+              ? 'glass-premium shadow-[0_8px_30px_-20px_rgba(15,23,42,0.18)]'
+              : 'bg-white/40 backdrop-blur-md border-b border-transparent',
         )}
         aria-label="Main navigation"
       >
@@ -60,7 +65,10 @@ export default function Navbar() {
               >
                 ▲
               </span>
-              <span className="text-base md:text-lg font-semibold text-slate-900 font-poppins tracking-tight">
+              <span className={cn(
+                'text-base md:text-lg font-semibold font-poppins tracking-tight transition-colors',
+                isHomeDark ? 'text-white' : 'text-slate-900',
+              )}>
                 {nav.brandName}
               </span>
             </Link>
@@ -72,16 +80,20 @@ export default function Navbar() {
                   href={item.href}
                   className={cn(
                     'relative px-4 py-2.5 text-sm font-medium font-montserrat rounded-full transition-all duration-300',
-                    isActive(item.href)
-                      ? 'nav-link-active text-slate-900 shadow-sm'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-white/70',
+                    isHomeDark
+                      ? isActive(item.href)
+                        ? 'bg-white/10 text-white'
+                        : 'text-slate-300 hover:text-white hover:bg-white/5'
+                      : isActive(item.href)
+                        ? 'nav-link-active text-slate-900 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-white/70',
                   )}
                   aria-current={isActive(item.href) ? 'page' : undefined}
                 >
                   {item.name}
                 </Link>
               ))}
-              <div className="ml-4 pl-4 border-l border-slate-200/80">
+              <div className={cn('ml-4 pl-4 border-l', isHomeDark ? 'border-white/10' : 'border-slate-200/80')}>
                 <Link
                   href={nav.ctaHref}
                   className="btn-primary text-sm py-2.5 px-5 shadow-[0_10px_30px_-12px_rgba(249,115,22,0.55)]"
@@ -94,7 +106,12 @@ export default function Navbar() {
 
             <button
               type="button"
-              className="lg:hidden flex items-center justify-center w-12 h-12 min-w-12 min-h-12 rounded-2xl border border-slate-200/80 bg-white/70 backdrop-blur-sm hover:bg-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500"
+              className={cn(
+                'lg:hidden flex items-center justify-center w-12 h-12 min-w-12 min-h-12 rounded-2xl border backdrop-blur-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500',
+                isHomeDark
+                  ? 'border-white/10 bg-white/5 hover:bg-white/10'
+                  : 'border-slate-200/80 bg-white/70 hover:bg-white',
+              )}
               onClick={() => setIsOpen(!isOpen)}
               aria-expanded={isOpen}
               aria-controls="mobile-nav-menu"
@@ -103,19 +120,22 @@ export default function Navbar() {
               <div className="flex flex-col items-center justify-center gap-1.5">
                 <span
                   className={cn(
-                    'block w-5 h-px bg-slate-700 transition-transform duration-300',
+                    'block w-5 h-px transition-transform duration-300',
+                    isHomeDark ? 'bg-white' : 'bg-slate-700',
                     isOpen && 'translate-y-[7px] rotate-45',
                   )}
                 />
                 <span
                   className={cn(
-                    'block w-5 h-px bg-slate-700 transition-opacity duration-300',
+                    'block w-5 h-px transition-opacity duration-300',
+                    isHomeDark ? 'bg-white' : 'bg-slate-700',
                     isOpen ? 'opacity-0' : 'opacity-100',
                   )}
                 />
                 <span
                   className={cn(
-                    'block w-5 h-px bg-slate-700 transition-transform duration-300',
+                    'block w-5 h-px transition-transform duration-300',
+                    isHomeDark ? 'bg-white' : 'bg-slate-700',
                     isOpen && '-translate-y-[7px] -rotate-45',
                   )}
                 />

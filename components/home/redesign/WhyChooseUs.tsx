@@ -11,7 +11,7 @@ export default function WhyChooseUs() {
   const items = manifesto.items.slice(0, 3);
 
   return (
-    <SectionBackdrop variant="silver" className="py-28 md:py-40">
+    <SectionBackdrop theme="light-mesh" className="py-28 md:py-40">
       <section aria-label="Why choose us">
         <div className="container-premium">
           <div className="grid gap-14 lg:grid-cols-12 lg:gap-16">

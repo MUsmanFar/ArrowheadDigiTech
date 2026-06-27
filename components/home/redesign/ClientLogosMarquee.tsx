@@ -15,7 +15,7 @@ export default function ClientLogosMarquee({ initialLogos }: { initialLogos: Cli
   const track = [...sorted, ...sorted, ...sorted];
 
   return (
-    <SectionBackdrop variant="silver" className="border-y border-[#E5E7EB]/80 py-14 md:py-18">
+    <SectionBackdrop theme="light" className="border-y border-[#E5E7EB]/60 py-12 md:py-16">
       <section className="overflow-hidden" aria-label="Client logos">
         <div className="container-premium mb-8">
           <motion.p
@@ -29,8 +29,8 @@ export default function ClientLogosMarquee({ initialLogos }: { initialLogos: Cli
         </div>
 
         <div className="relative">
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-28 bg-gradient-to-r from-[#FAFAFA] to-transparent" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-28 bg-gradient-to-l from-[#FAFAFA] to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-28 bg-gradient-to-r from-white to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-28 bg-gradient-to-l from-white to-transparent" />
 
           <div className="flex w-max animate-scroll items-center gap-14 md:gap-20">
             {track.map((logo, idx) => (
