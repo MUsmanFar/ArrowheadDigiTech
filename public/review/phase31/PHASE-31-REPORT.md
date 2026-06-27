@@ -111,7 +111,13 @@ Preview at `/internal/design-system` after `npm run build && npm run start`.
 
 ## 10–11. Commit & Remote Hashes
 
-*(Filled after commit)*
+| Remote | Hash |
+|--------|------|
+| **Commit** | `fb81bf854a5ea5ab201ff776b85003f90508834d` |
+| **origin/main** | `fb81bf854a5ea5ab201ff776b85003f90508834d` |
+| **agency/main** | `fb81bf854a5ea5ab201ff776b85003f90508834d` |
+
+**Message:** `feat: Phase 31 global visual engine foundation`
 
 ---
 
