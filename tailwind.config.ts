@@ -60,6 +60,14 @@ const config: Config = {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
         },
+        "ve-hub-breathe": {
+          "0%, 100%": { opacity: "0.18" },
+          "50%": { opacity: "0.24" },
+        },
+        "ve-float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-8px)" },
+        },
       },
       animation: {
         "fade-in": "fade-in 0.7s ease-out forwards",
@@ -68,6 +76,8 @@ const config: Config = {
         scroll: "scroll 40s linear infinite",
         shimmer: "shimmer 8s linear infinite",
         "pulse-soft": "pulse-soft 4s ease-in-out infinite",
+        "ve-hub-breathe": "ve-hub-breathe 6s ease-in-out infinite",
+        "ve-float": "ve-float 6s ease-in-out infinite",
       },
     },
   },
