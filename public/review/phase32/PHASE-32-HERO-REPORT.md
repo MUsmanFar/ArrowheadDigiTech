@@ -82,7 +82,11 @@ No API, schema, hook, or key renames.
 
 ## Git
 
-*(Filled after commit)*
+| Item | Value |
+|------|-------|
+| **Commit** | `f1d24be2d69b3d5b4431fdf9c65feb4d55228b59` |
+| **origin/main** | `f1d24be2d69b3d5b4431fdf9c65feb4d55228b59` |
+| **agency/main** | `f1d24be2d69b3d5b4431fdf9c65feb4d55228b59` |
 
 ---
 
