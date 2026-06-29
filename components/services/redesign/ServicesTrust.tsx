@@ -15,7 +15,7 @@ export default function ServicesTrust() {
   const mediaMap = useProjectMediaMap();
 
   return (
-    <section className="py-20 md:py-28 bg-page-surface border-y border-slate-100" aria-label="Trusted by">
+    <section className="hercules-section-warm py-20 md:py-28 border-y border-slate-100" aria-label="Trusted by">
       <div className="container-premium">
         <SectionHeading
           badge={trustedBy.badge}

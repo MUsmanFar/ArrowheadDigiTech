@@ -13,15 +13,18 @@
     --accent-blue: #2b6ef2;
     --silver: #e5e7eb;
     --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-2xl: 32px;
     --radius-md: 12px;
     --radius-sm: 8px;
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    --shadow-premium: 0 32px 100px -40px rgba(15, 23, 42, 0.16);
     --page-surface: #fafafa;
-    --section-gap: 7rem;
-    --transition-premium: 0.35s cubic-bezier(0.25, 0.1, 0, 1);
+    --section-gap: 8rem;
+    --transition-premium: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   * {
@@ -243,7 +246,7 @@
 
   @media (min-width: 768px) {
     :root {
-      --section-gap: 9rem;
+      --section-gap: 10rem;
     }
   }
 
@@ -429,5 +432,107 @@
   @keyframes ve-hub-breathe {
     0%, 100% { opacity: 0.18; }
     50% { opacity: 0.24; }
+  }
+
+  /* ─── Hercules Reference Design ─── */
+  .hercules-page {
+    --hercules-bg: #fafafa;
+    --hercules-ink: #111827;
+    --hercules-muted: #64748b;
+    --hercules-orange: #e46f1e;
+    --hercules-orange-light: #f59e42;
+    background-color: var(--hercules-bg);
+    color: var(--hercules-ink);
+  }
+
+  .hercules-glass {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.68) 100%);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow:
+      0 24px 64px -28px rgba(15, 23, 42, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 1);
+  }
+
+  .hercules-glass-soft {
+    background: rgba(255, 255, 255, 0.62);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(226, 232, 240, 0.75);
+    box-shadow: 0 16px 48px -24px rgba(15, 23, 42, 0.1);
+  }
+
+  .hercules-gradient-text {
+    background: linear-gradient(135deg, #e46f1e 0%, #f59e42 55%, #fb923c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hercules-hero-bg {
+    background:
+      radial-gradient(ellipse 80% 60% at 15% 20%, rgba(228, 111, 30, 0.14), transparent 55%),
+      radial-gradient(ellipse 70% 55% at 85% 15%, rgba(43, 110, 242, 0.1), transparent 50%),
+      radial-gradient(ellipse 60% 50% at 70% 80%, rgba(168, 85, 247, 0.08), transparent 55%),
+      #fafafa;
+  }
+
+  .hercules-section-muted {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 50%, #fafafa 100%);
+  }
+
+  .hercules-section-alt {
+    background: #ffffff;
+  }
+
+  .hercules-section-warm {
+    background: linear-gradient(180deg, #fffbf7 0%, #ffffff 100%);
+  }
+
+  .hercules-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(15, 23, 42, 0.08), transparent);
+  }
+
+  .hercules-premium-shadow {
+    box-shadow: 0 32px 100px -40px rgba(15, 23, 42, 0.18);
+  }
+
+  .hercules-section {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+
+  @media (min-width: 768px) {
+    .hercules-section {
+      padding-top: 9rem;
+      padding-bottom: 9rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hercules-section {
+      padding-top: 10rem;
+      padding-bottom: 10rem;
+    }
+  }
+
+  .hercules-ambient-noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  }
+
+  @keyframes hercules-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes hercules-glow-pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 0.8; }
+  }
+
+  .animate-hercules-float {
+    animation: hercules-float 5s ease-in-out infinite;
   }
 }

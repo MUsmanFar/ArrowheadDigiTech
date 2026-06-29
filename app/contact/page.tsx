@@ -2,61 +2,73 @@
 
 import React from 'react';
 import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
 import ConversationalForm from '@/components/contact/ConversationalForm';
+import { PageShell, PageHero } from '@/components/hercules';
 import { useSiteSection } from '@/lib/use-site-content';
+import { Mail, MapPin } from 'lucide-react';
+import GlassCard from '@/components/hercules/ui/GlassCard';
 
 export default function ContactPage() {
   const { section: page } = useSiteSection('contact.page');
 
   return (
-    <div className="min-h-screen relative bg-white selection:bg-blue-200 selection:text-blue-900 overflow-hidden flex flex-col">
+    <PageShell>
       <Navbar />
 
-      <main id="main-content" className="flex-1 flex flex-col lg:flex-row pt-20">
-        <div className="w-full lg:w-[45%] bg-slate-950 text-white relative flex flex-col justify-between p-8 lg:p-16">
-          <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-            <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px]" />
-            <div className="absolute bottom-[10%] right-[-10%] w-[400px] h-[400px] bg-indigo-500/20 rounded-full blur-[100px]" />
-          </div>
+      <main id="main-content" className="pt-20">
+        <PageHero
+          badge={page.badge}
+          title={page.headline}
+          titleAccent={page.headlineAccent}
+          description={page.subheadline}
+          align="center"
+        />
 
-          <div className="relative z-10 pt-12">
-            <span className="text-blue-400 font-bold uppercase tracking-widest text-xs font-poppins mb-6 block">
-              {page.badge}
-            </span>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold font-montserrat tracking-tighter leading-[1.05] mb-8">
-              {page.headline}
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
-                {page.headlineAccent}
-              </span>
-            </h1>
-            <p className="text-lg text-slate-400 font-poppins max-w-md leading-relaxed font-light">
-              {page.subheadline}
-            </p>
-          </div>
+        <section className="pb-24 md:pb-32">
+          <div className="container-premium">
+            <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14">
+              <div className="space-y-6">
+                <GlassCard padding="lg" className="h-full">
+                  <h2 className="font-poppins text-2xl font-bold text-slate-900">Get in touch</h2>
+                  <p className="mt-3 font-montserrat text-sm leading-relaxed text-slate-500">
+                    Tell us about your project. We typically respond within one business day.
+                  </p>
+                  <div className="mt-8 space-y-5">
+                    <div className="flex items-start gap-3">
+                      <MapPin className="mt-0.5 h-5 w-5 text-[#e46f1e]" aria-hidden="true" />
+                      <div>
+                        <p className="font-montserrat text-xs font-semibold uppercase tracking-wider text-slate-400">
+                          {page.headquartersLabel}
+                        </p>
+                        <p className="mt-1 font-montserrat text-sm text-slate-700">{page.headquarters}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <Mail className="mt-0.5 h-5 w-5 text-[#e46f1e]" aria-hidden="true" />
+                      <div>
+                        <p className="font-montserrat text-xs font-semibold uppercase tracking-wider text-slate-400">
+                          {page.inquiriesLabel}
+                        </p>
+                        <a
+                          href={`mailto:${page.inquiriesEmail}`}
+                          className="mt-1 block font-montserrat text-sm text-slate-700 hover:text-[#e46f1e]"
+                        >
+                          {page.inquiriesEmail}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </GlassCard>
+              </div>
 
-          <div className="relative z-10 mt-20 lg:mt-0">
-            <div className="space-y-6 text-sm font-poppins text-slate-400">
-              <div>
-                <div className="font-bold text-white mb-1 uppercase tracking-widest text-[10px]">
-                  {page.headquartersLabel}
-                </div>
-                {page.headquarters}
-              </div>
-              <div>
-                <div className="font-bold text-white mb-1 uppercase tracking-widest text-[10px]">
-                  {page.inquiriesLabel}
-                </div>
-                {page.inquiriesEmail}
-              </div>
+              <GlassCard padding="lg" className="hercules-premium-shadow">
+                <ConversationalForm />
+              </GlassCard>
             </div>
           </div>
-        </div>
-
-        <div className="w-full lg:w-[55%] bg-white flex items-center justify-center p-6 md:p-12 lg:p-24 relative">
-          <ConversationalForm />
-        </div>
+        </section>
       </main>
-    </div>
+    </PageShell>
   );
 }

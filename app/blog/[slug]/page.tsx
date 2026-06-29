@@ -3,6 +3,9 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { PageShell } from '@/components/hercules';
+import GlassCard from '@/components/hercules/ui/GlassCard';
+import SafeImage from '@/components/ui/SafeImage';
 import { getPublishedBlogPost } from '@/lib/cms-server';
 import { sanitizeRichHtml } from '@/lib/sanitize';
 import { Calendar, User, ArrowLeft } from 'lucide-react';
@@ -60,7 +63,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   };
 
   return (
-    <div className="min-h-screen">
+    <PageShell>
       <JsonLd data={articleSchema} />
       <JsonLd
         data={breadcrumbJsonLd([
@@ -70,43 +73,54 @@ export default async function BlogPostPage({ params }: PageProps) {
         ])}
       />
       <Navbar />
-      <main id="main-content" className="pt-32 pb-24 px-6 lg:px-8">
-        <article className="max-w-3xl mx-auto">
+      <main id="main-content" className="pt-28 pb-24">
+        <article className="container-premium max-w-3xl">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-blue-600 mb-8"
+            className="mb-8 inline-flex items-center gap-2 font-montserrat text-sm text-slate-500 transition-colors hover:text-[#e46f1e]"
           >
             <ArrowLeft size={16} /> Back to blog
           </Link>
-          <div className="flex items-center gap-4 text-sm text-slate-500 mb-4">
-            <span className="flex items-center">
-              <Calendar size={16} className="mr-1" />
-              {new Date(post.publishedAt || post.createdAt).toLocaleDateString()}
-            </span>
-            {post.author && (
-              <span className="flex items-center">
-                <User size={16} className="mr-1" />
-                {post.author}
-              </span>
+
+          <GlassCard padding="lg" className="overflow-hidden md:p-12">
+            {post.coverImage && (
+              <div className="relative -mx-8 -mt-8 mb-8 aspect-video overflow-hidden md:-mx-12 md:-mt-12">
+                <SafeImage
+                  src={post.coverImage}
+                  alt={post.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
             )}
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 font-montserrat">
-            {post.title}
-          </h1>
-          <p className="text-xl text-slate-600 mb-10">{post.excerpt}</p>
-          {post.coverImage && (
+
+            <div className="flex flex-wrap items-center gap-4 font-montserrat text-sm text-slate-400">
+              <span className="inline-flex items-center gap-1">
+                <Calendar size={16} />
+                {new Date(post.publishedAt || post.createdAt).toLocaleDateString()}
+              </span>
+              {post.author && (
+                <span className="inline-flex items-center gap-1">
+                  <User size={16} />
+                  {post.author}
+                </span>
+              )}
+            </div>
+
+            <h1 className="mt-6 font-poppins text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+              {post.title}
+            </h1>
+            <p className="mt-4 font-montserrat text-lg leading-relaxed text-slate-500">{post.excerpt}</p>
+
             <div
-              className="aspect-video rounded-xl bg-cover bg-center mb-10"
-              style={{ backgroundImage: `url(${post.coverImage})` }}
+              className="prose prose-slate mt-10 max-w-none font-montserrat"
+              dangerouslySetInnerHTML={{ __html: sanitizeRichHtml(post.content) }}
             />
-          )}
-          <div
-            className="prose prose-slate max-w-none"
-            dangerouslySetInnerHTML={{ __html: sanitizeRichHtml(post.content) }}
-          />
+          </GlassCard>
         </article>
       </main>
       <Footer />
-    </div>
+    </PageShell>
   );
 }

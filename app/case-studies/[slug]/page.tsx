@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { PageShell } from '@/components/hercules';
 import CaseStudyDetail from '@/components/case-studies/CaseStudyDetail';
-import CtaSection from '@/components/portfolio/CtaSection';
+import CtaBlock from '@/components/design-system/CtaBlock';
 import { getCaseStudies, getCaseStudyBySlug } from '@/lib/cms-server';
 import { pageMetadata } from '@/lib/page-metadata';
 
@@ -39,11 +40,11 @@ export default async function CaseStudyPage({ params }: PageProps) {
   if (!study) notFound();
 
   return (
-    <div className="min-h-screen bg-white selection:bg-orange-200 selection:text-orange-900">
+    <PageShell>
       <Navbar />
       <CaseStudyDetail study={study} allStudies={allStudies} />
-      <CtaSection />
+      <CtaBlock />
       <Footer />
-    </div>
+    </PageShell>
   );
 }

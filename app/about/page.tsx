@@ -4,6 +4,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { PageShell } from '@/components/hercules';
 import AboutHero from '@/components/about/redesign/AboutHero';
 import AboutStory from '@/components/about/redesign/AboutStory';
 import AboutMissionVision from '@/components/about/redesign/AboutMissionVision';
@@ -17,12 +18,12 @@ const ProcessTimeline = dynamic(() => import('@/components/home/redesign/Process
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-page-surface selection:bg-orange-100 selection:text-orange-900">
+    <PageShell>
       <Navbar />
-
       <main id="main-content">
         <AboutHero />
         <AboutAchievements />
+        <div className="hercules-divider mx-auto max-w-6xl" />
         <AboutStory />
         <AboutMissionVision />
         <LazySection>
@@ -41,8 +42,7 @@ export default function AboutPage() {
           <CtaBlock />
         </LazySection>
       </main>
-
       <Footer />
-    </div>
+    </PageShell>
   );
 }

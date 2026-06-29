@@ -28,7 +28,7 @@ export default function AboutAchievements() {
   ];
 
   return (
-    <section className="py-20 md:py-24 bg-white border-y border-slate-100" aria-label="Achievements">
+    <section className="hercules-section-warm border-y border-slate-100 py-20 md:py-24" aria-label="Achievements">
       <div className="container-premium">
         <SectionHeading
           badge="Impact"

@@ -13,7 +13,7 @@ export default function ServicesIndustries() {
   if (industries.length === 0) return null;
 
   return (
-    <section className="py-20 md:py-28 bg-page-surface" aria-label="Industries served">
+    <section className="hercules-section-muted py-20 md:py-28" aria-label="Industries served">
       <div className="container-premium">
         <SectionHeading
           badge={caseHero.badge}

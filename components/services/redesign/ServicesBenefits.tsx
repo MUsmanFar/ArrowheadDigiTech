@@ -18,7 +18,7 @@ export default function ServicesBenefits() {
   const title = [intro.headline, intro.headlineAccent].filter(Boolean).join(' ');
 
   return (
-    <section className="section-shell bg-page-surface" aria-label="Service benefits">
+    <section className="hercules-section-alt py-20 md:py-28" aria-label="Service benefits">
       <div className="container-premium">
         <SectionHeading
           badge="Benefits"

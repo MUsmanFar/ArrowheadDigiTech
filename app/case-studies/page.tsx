@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { PageShell } from '@/components/hercules';
 import CaseStudiesHero from '@/components/case-studies/CaseStudiesHero';
 import CaseStudyCard from '@/components/case-studies/CaseStudyCard';
 import { getCaseStudies } from '@/lib/cms-server';
@@ -16,17 +17,17 @@ export default async function CaseStudiesPage() {
   const caseStudies = await getCaseStudies();
 
   return (
-    <div className="min-h-screen bg-white selection:bg-orange-200 selection:text-orange-900">
+    <PageShell>
       <Navbar />
       <main id="main-content">
         <CaseStudiesHero />
-        <section>
+        <section className="hercules-section-muted pb-24">
           {caseStudies.map((study, index) => (
             <CaseStudyCard key={study.slug} study={study} index={index} />
           ))}
         </section>
       </main>
       <Footer />
-    </div>
+    </PageShell>
   );
 }

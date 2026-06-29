@@ -1,158 +1,78 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
 import { MapPin, Clock, DollarSign, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { PageShell, PageHero, PremiumCta } from '@/components/hercules';
+import GlassCard from '@/components/hercules/ui/GlassCard';
+import Reveal from '@/components/hercules/ui/Reveal';
 import { useSiteSection } from '@/lib/use-site-content';
 
 export default function CareersPage() {
   const { section: page } = useSiteSection('careers.page');
 
   return (
-    <div className="min-h-screen">
+    <PageShell>
       <Navbar />
       <main id="main-content">
-        <section className="pt-32 pb-24 px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center max-w-4xl mx-auto"
-            >
-              <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6 font-montserrat">
-                {page.heroTitle} <span className="text-gradient-blue">{page.heroTitleAccent}</span>
-              </h1>
-              <p className="text-xl text-slate-600 mb-8">{page.heroDescription}</p>
-            </motion.div>
-          </div>
-        </section>
+        <PageHero
+          title={page.heroTitle}
+          titleAccent={page.heroTitleAccent}
+          description={page.heroDescription}
+          align="center"
+          size="large"
+        />
 
-        <section className="py-24 bg-white/50 px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-12"
-            >
-              <h2 className="text-4xl font-bold text-slate-900 mb-4 font-montserrat">{page.benefitsTitle}</h2>
-            </motion.div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {page.benefits.map((benefit, index) => (
-                <motion.div
-                  key={benefit}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Card>
-                    <CardContent className="pt-6 text-center">
-                      <div className="text-3xl mb-3">✓</div>
-                      <span className="text-slate-700 font-medium">{benefit}</span>
-                    </CardContent>
-                  </Card>
-                </motion.div>
+        <section className="hercules-section-muted py-20">
+          <div className="container-premium">
+            <Reveal className="mx-auto mb-12 max-w-2xl text-center">
+              <h2 className="font-poppins text-3xl font-bold text-slate-900">{page.benefitsTitle}</h2>
+            </Reveal>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {page.benefits.map((benefit, i) => (
+                <Reveal key={benefit} delay={i * 60}>
+                  <GlassCard soft hover padding="md">
+                    <p className="font-montserrat text-sm text-slate-700">{benefit}</p>
+                  </GlassCard>
+                </Reveal>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="py-24 px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-12"
-            >
-              <h2 className="text-4xl font-bold text-slate-900 mb-4 font-montserrat">{page.openingsTitle}</h2>
-              <p className="text-xl text-slate-600">{page.openingsDescription}</p>
-            </motion.div>
-
-            <div className="space-y-6 max-w-4xl mx-auto">
-              {page.openings.map((opening, index) => (
-                <motion.div
-                  key={opening.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Card>
-                    <CardHeader>
-                      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                        <div>
-                          <CardTitle className="text-2xl mb-2">{opening.title}</CardTitle>
-                          <CardDescription>{opening.description}</CardDescription>
-                        </div>
-                        <a href={`mailto:${page.ctaEmail}?subject=Application: ${encodeURIComponent(opening.title)}`}>
-                          <Button>Apply Now</Button>
-                        </a>
+        <section className="py-20">
+          <div className="container-premium">
+            <Reveal className="mb-12 text-center">
+              <h2 className="font-poppins text-3xl font-bold text-slate-900">{page.openingsTitle}</h2>
+              <p className="mt-3 font-montserrat text-slate-500">{page.openingsDescription}</p>
+            </Reveal>
+            <div className="space-y-4">
+              {page.openings.map((job, i) => (
+                <Reveal key={job.title} delay={i * 80}>
+                  <GlassCard hover padding="lg" className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                      <h3 className="font-poppins text-xl font-bold text-slate-900">{job.title}</h3>
+                      <p className="mt-2 font-montserrat text-sm text-slate-500">{job.description}</p>
+                      <div className="mt-4 flex flex-wrap gap-4 font-montserrat text-xs text-slate-400">
+                        <span className="inline-flex items-center gap-1"><MapPin size={12} />{job.location}</span>
+                        <span className="inline-flex items-center gap-1"><Clock size={12} />{job.type}</span>
+                        <span className="inline-flex items-center gap-1"><DollarSign size={12} />{job.salary}</span>
                       </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex flex-wrap gap-6 text-sm text-slate-600">
-                        <span className="flex items-center">
-                          <MapPin size={16} className="mr-2" />
-                          {opening.location}
-                        </span>
-                        <span className="flex items-center">
-                          <Clock size={16} className="mr-2" />
-                          {opening.type}
-                        </span>
-                        <span className="flex items-center">
-                          <DollarSign size={16} className="mr-2" />
-                          {opening.salary}
-                        </span>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
+                    </div>
+                    <span className="inline-flex items-center gap-1 font-montserrat text-sm font-semibold text-[#e46f1e]">
+                      Apply <ArrowRight size={14} />
+                    </span>
+                  </GlassCard>
+                </Reveal>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="py-24 bg-gradient-to-r from-blue-600 to-cyan-500 text-white">
-          <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <motion.h2
-              className="text-4xl md:text-5xl font-bold mb-6 font-montserrat"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              {page.ctaTitle}
-            </motion.h2>
-            <motion.p
-              className="text-xl mb-8 text-blue-100"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-            >
-              {page.ctaDescription}
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-            >
-              <a href={`mailto:${page.ctaEmail}`}>
-                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50">
-                  {page.ctaButtonLabel} <ArrowRight className="ml-2" size={20} />
-                </Button>
-              </a>
-            </motion.div>
-          </div>
-        </section>
+        <PremiumCta />
       </main>
       <Footer />
-    </div>
+    </PageShell>
   );
 }

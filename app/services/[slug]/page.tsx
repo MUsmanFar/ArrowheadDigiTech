@@ -4,9 +4,10 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, CheckCircle, ArrowUpRight } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { PageShell } from '@/components/hercules';
+import CtaBlock from '@/components/design-system/CtaBlock';
 import { dbService } from '@/lib/db';
 import FAQSection from '@/components/ui/FAQSection';
-import CtaSection from '@/components/portfolio/CtaSection';
 import { pageMetadata, siteBaseUrl } from '@/lib/page-metadata';
 import { getSiteSection } from '@/lib/site-content-server';
 import JsonLd, { breadcrumbJsonLd } from '@/components/seo/JsonLd';
@@ -71,7 +72,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-white selection:bg-orange-200 selection:text-orange-900">
+    <PageShell>
       <JsonLd data={serviceSchema} />
       <JsonLd
         data={breadcrumbJsonLd([
@@ -83,10 +84,8 @@ export default async function ServiceDetailPage({ params }: PageProps) {
       <Navbar />
 
       {/* Hero */}
-      <section className="relative pt-36 pb-20 px-6 lg:px-8 overflow-hidden">
-        <div className="absolute inset-0 subtle-grid opacity-30 pointer-events-none" />
-        <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-orange-50/40 to-transparent pointer-events-none" />
-        <div className="max-w-7xl mx-auto relative z-10">
+      <section className="relative overflow-hidden pt-32 pb-20 hercules-hero-bg">
+        <div className="container-premium relative z-10">
           <div className="max-w-4xl">
             <Link
               href="/services"
@@ -331,9 +330,9 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         </section>
       )}
 
-      <CtaSection />
+      <CtaBlock />
 
       <Footer />
-    </div>
+    </PageShell>
   );
 }

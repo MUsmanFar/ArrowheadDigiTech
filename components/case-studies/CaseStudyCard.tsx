@@ -28,7 +28,7 @@ export default function CaseStudyCard({ study, index }: { study: CaseStudy; inde
   return (
     <Link
       href={`/case-studies/${study.slug}`}
-      className="group block border-b border-slate-100 px-6 py-16 transition-colors hover:bg-slate-50/50 lg:px-8 lg:py-24"
+      className="group block rounded-2xl border border-slate-100 bg-white px-6 py-12 transition-all duration-500 hover:-translate-y-1 hover:border-orange-100 hover:shadow-[0_28px_80px_-32px_rgba(15,23,42,0.12)] lg:px-8 lg:py-16"
     >
       <article className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-12 lg:gap-14">
         <div className="lg:col-span-2">

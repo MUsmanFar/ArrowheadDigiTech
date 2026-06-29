@@ -23,7 +23,7 @@ export default function ServicesGrid({ services }: Props) {
   const { section: listIntro } = useSiteSection('services.list-intro');
 
   return (
-    <section className="section-shell bg-white" aria-label="Services overview">
+    <section className="hercules-section-muted py-20 md:py-28" aria-label="Services overview">
       <div className="container-premium">
         <SectionHeading
           badge={listIntro.headline}

@@ -14,7 +14,7 @@ export default function AboutMissionVision() {
   const items = manifesto.items.slice(0, 3);
 
   return (
-    <section className="section-shell bg-page-surface" aria-label="Mission, vision, and values">
+    <section className="hercules-section-muted py-20 md:py-28" aria-label="Mission, vision, and values">
       <div className="container-premium">
         <SectionHeading
           badge="Principles"

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { PageShell } from '@/components/hercules';
 import LazySection from '@/components/ui/LazySection';
 import EmptyState from '@/components/design-system/EmptyState';
 import CtaBlock from '@/components/design-system/CtaBlock';
@@ -43,15 +44,14 @@ export default function ServicesPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-page-surface selection:bg-orange-100 selection:text-orange-900">
+    <PageShell>
       <Navbar />
-
       <main id="main-content">
         <ServicesHeroRedesign />
 
         {loading ? (
-          <div className="py-32 flex justify-center" role="status" aria-label="Loading services">
-            <div className="h-10 w-10 animate-spin rounded-full border-2 border-orange-200 border-t-orange-500" />
+          <div className="flex justify-center py-32" role="status" aria-label="Loading services">
+            <div className="h-10 w-10 animate-spin rounded-full border-2 border-orange-200 border-t-[#e46f1e]" />
           </div>
         ) : services.length === 0 ? (
           <div className="container-premium py-20">
@@ -83,8 +83,7 @@ export default function ServicesPage() {
           <CtaBlock />
         </LazySection>
       </main>
-
       <Footer />
-    </div>
+    </PageShell>
   );
 }

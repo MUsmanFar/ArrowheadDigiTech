@@ -1,20 +1,66 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import { useSiteSection } from '@/lib/use-site-content';
 import { cn } from '@/lib/utils';
 
+function NavDropdown({
+  label,
+  children,
+  align = 'left',
+}: {
+  label: string;
+  children: React.ReactNode;
+  align?: 'left' | 'right';
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', onClick);
+    return () => document.removeEventListener('mousedown', onClick);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+      <button
+        type="button"
+        className="inline-flex items-center gap-1 px-3 py-2 font-montserrat text-sm font-medium text-slate-600 transition-colors hover:text-slate-900"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+      >
+        {label}
+        <ChevronDown size={14} className={cn('transition-transform', open && 'rotate-180')} />
+      </button>
+      {open && (
+        <div
+          className={cn(
+            'absolute top-full z-50 mt-2 min-w-[200px] rounded-2xl border border-slate-200/80 bg-white/95 p-2 shadow-xl backdrop-blur-xl',
+            align === 'right' ? 'right-0' : 'left-0',
+          )}
+        >
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Navbar() {
   const { section: nav } = useSiteSection('site.nav');
+  const { section: footer } = useSiteSection('site.footer');
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 24);
+    const handleScroll = () => setScrolled(window.scrollY > 12);
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -32,113 +78,123 @@ export default function Navbar() {
     return pathname === href || pathname.startsWith(`${href}/`);
   };
 
-  const isHome = pathname === '/';
-  const isHomeDark = isHome && !scrolled;
+  const servicesCol = footer.columns.find((c) => c.title === 'Services');
+  const companyCol = footer.columns.find((c) => c.title === 'Company');
 
   return (
     <>
       <nav
         className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
-          isHomeDark
-            ? 'bg-transparent border-b border-white/5'
-            : scrolled
-              ? 'glass-premium shadow-[0_8px_30px_-20px_rgba(15,23,42,0.18)]'
-              : 'bg-white/40 backdrop-blur-md border-b border-transparent',
+          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+          scrolled
+            ? 'border-b border-slate-200/70 bg-white/80 backdrop-blur-xl shadow-[0_8px_30px_-20px_rgba(15,23,42,0.12)]'
+            : 'bg-transparent',
         )}
         aria-label="Main navigation"
       >
         <div className="container-premium">
-          <div
-            className={cn(
-              'flex items-center justify-between transition-all duration-500',
-              scrolled ? 'h-16' : 'h-20',
-            )}
-          >
-            <Link
-              href="/"
-              className="group flex items-center gap-3 min-h-11 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500 rounded-xl"
-            >
-              <span
-                className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white text-xs font-bold shadow-[0_8px_24px_-8px_rgba(249,115,22,0.65)] transition-transform duration-300 group-hover:scale-105"
-                aria-hidden="true"
-              >
+          <div className="flex h-20 items-center justify-between gap-6">
+            <Link href="/" className="group flex min-h-11 items-center gap-3 py-2">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#e46f1e] to-[#f59e42] text-sm font-bold text-white shadow-[0_8px_24px_-8px_rgba(228,111,30,0.55)]">
                 ▲
               </span>
-              <span className={cn(
-                'text-base md:text-lg font-semibold font-poppins tracking-tight transition-colors',
-                isHomeDark ? 'text-white' : 'text-slate-900',
-              )}>
-                {nav.brandName}
+              <span className="leading-tight">
+                <span className="block font-poppins text-lg font-bold tracking-tight text-slate-900">
+                  {nav.brandName}
+                </span>
+                <span className="block font-montserrat text-[9px] font-semibold uppercase tracking-[0.28em] text-[#e46f1e]">
+                  DigiTech
+                </span>
               </span>
             </Link>
 
-            <div className="hidden lg:flex items-center gap-1">
-              {nav.items.map((item) => (
+            <div className="hidden items-center gap-1 lg:flex">
+              <NavDropdown label="Services">
+                {(servicesCol?.links ?? []).map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="block rounded-xl px-3 py-2.5 font-montserrat text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  >
+                    {link.name}
+                  </Link>
+                ))}
                 <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    'relative px-4 py-2.5 text-sm font-medium font-montserrat rounded-full transition-all duration-300',
-                    isHomeDark
-                      ? isActive(item.href)
-                        ? 'bg-white/10 text-white'
-                        : 'text-slate-300 hover:text-white hover:bg-white/5'
-                      : isActive(item.href)
-                        ? 'nav-link-active text-slate-900 shadow-sm'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-white/70',
-                  )}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
+                  href="/services"
+                  className="mt-1 block rounded-xl px-3 py-2.5 font-montserrat text-sm font-semibold text-[#e46f1e] hover:bg-orange-50"
                 >
-                  {item.name}
+                  All Services
                 </Link>
-              ))}
-              <div className={cn('ml-4 pl-4 border-l', isHomeDark ? 'border-white/10' : 'border-slate-200/80')}>
-                <Link
-                  href={nav.ctaHref}
-                  className="btn-primary text-sm py-2.5 px-5 shadow-[0_10px_30px_-12px_rgba(249,115,22,0.55)]"
-                >
-                  {nav.ctaLabel}
-                  <ArrowUpRight size={15} aria-hidden="true" />
-                </Link>
-              </div>
+              </NavDropdown>
+
+              {nav.items
+                .filter((item) => item.href !== '/services')
+                .slice(0, 3)
+                .map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      'px-3 py-2 font-montserrat text-sm font-medium transition-colors',
+                      isActive(item.href) ? 'text-slate-900' : 'text-slate-600 hover:text-slate-900',
+                    )}
+                    aria-current={isActive(item.href) ? 'page' : undefined}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+
+              <Link
+                href="/pricing"
+                className={cn(
+                  'px-3 py-2 font-montserrat text-sm font-medium transition-colors',
+                  isActive('/pricing') ? 'text-slate-900' : 'text-slate-600 hover:text-slate-900',
+                )}
+              >
+                Pricing
+              </Link>
+
+              <NavDropdown label="Company" align="right">
+                {(companyCol?.links ?? []).map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="block rounded-xl px-3 py-2.5 font-montserrat text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+              </NavDropdown>
+            </div>
+
+            <div className="hidden items-center gap-3 lg:flex">
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-2.5 font-montserrat text-sm font-semibold text-white transition-colors hover:bg-slate-800"
+              >
+                Talk to Us
+              </Link>
+              <Link
+                href={nav.ctaHref}
+                className="inline-flex items-center gap-2 rounded-full bg-[#e46f1e] px-5 py-2.5 font-montserrat text-sm font-semibold text-white shadow-[0_10px_30px_-10px_rgba(228,111,30,0.55)] transition-colors hover:bg-[#c45a12]"
+              >
+                {nav.ctaLabel}
+                <ArrowRight size={15} />
+              </Link>
             </div>
 
             <button
               type="button"
-              className={cn(
-                'lg:hidden flex items-center justify-center w-12 h-12 min-w-12 min-h-12 rounded-2xl border backdrop-blur-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500',
-                isHomeDark
-                  ? 'border-white/10 bg-white/5 hover:bg-white/10'
-                  : 'border-slate-200/80 bg-white/70 hover:bg-white',
-              )}
+              className="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white/80 lg:hidden"
               onClick={() => setIsOpen(!isOpen)}
               aria-expanded={isOpen}
-              aria-controls="mobile-nav-menu"
               aria-label={isOpen ? 'Close menu' : 'Open menu'}
             >
-              <div className="flex flex-col items-center justify-center gap-1.5">
-                <span
-                  className={cn(
-                    'block w-5 h-px transition-transform duration-300',
-                    isHomeDark ? 'bg-white' : 'bg-slate-700',
-                    isOpen && 'translate-y-[7px] rotate-45',
-                  )}
-                />
-                <span
-                  className={cn(
-                    'block w-5 h-px transition-opacity duration-300',
-                    isHomeDark ? 'bg-white' : 'bg-slate-700',
-                    isOpen ? 'opacity-0' : 'opacity-100',
-                  )}
-                />
-                <span
-                  className={cn(
-                    'block w-5 h-px transition-transform duration-300',
-                    isHomeDark ? 'bg-white' : 'bg-slate-700',
-                    isOpen && '-translate-y-[7px] -rotate-45',
-                  )}
-                />
+              <span className="sr-only">Menu</span>
+              <div className="flex flex-col gap-1.5">
+                <span className={cn('block h-px w-5 bg-slate-800 transition-transform', isOpen && 'translate-y-[7px] rotate-45')} />
+                <span className={cn('block h-px w-5 bg-slate-800', isOpen && 'opacity-0')} />
+                <span className={cn('block h-px w-5 bg-slate-800 transition-transform', isOpen && '-translate-y-[7px] -rotate-45')} />
               </div>
             </button>
           </div>
@@ -146,45 +202,34 @@ export default function Navbar() {
       </nav>
 
       {isOpen && (
-        <div
-          id="mobile-nav-menu"
-          className="fixed inset-0 z-40 lg:hidden"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Mobile navigation"
-        >
-          <button
-            type="button"
-            className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm"
-            onClick={() => setIsOpen(false)}
-            aria-label="Close menu overlay"
-          />
-          <div className="absolute right-0 top-0 h-full w-[min(100%,22rem)] bg-white/95 backdrop-blur-2xl border-l border-slate-200/80 shadow-2xl p-8 pt-24 animate-fade-in">
-            <div className="flex flex-col gap-2">
+        <div className="fixed inset-0 z-40 lg:hidden" role="dialog" aria-modal="true">
+          <button type="button" className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm" onClick={() => setIsOpen(false)} aria-label="Close" />
+          <div className="absolute right-0 top-0 h-full w-[min(100%,20rem)] bg-white p-8 pt-24 shadow-2xl">
+            <div className="flex flex-col gap-1">
               {nav.items.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={cn(
-                    'rounded-2xl px-4 py-4 text-lg font-medium font-poppins transition-colors',
-                    isActive(item.href)
-                      ? 'bg-orange-50 text-orange-700'
-                      : 'text-slate-800 hover:bg-slate-50',
-                  )}
                   onClick={() => setIsOpen(false)}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
+                  className="rounded-xl px-4 py-3 font-montserrat text-base text-slate-800 hover:bg-slate-50"
                 >
                   {item.name}
                 </Link>
               ))}
+              <Link href="/pricing" onClick={() => setIsOpen(false)} className="rounded-xl px-4 py-3 font-montserrat text-base text-slate-800 hover:bg-slate-50">
+                Pricing
+              </Link>
+              <Link href="/contact" onClick={() => setIsOpen(false)} className="rounded-xl px-4 py-3 font-montserrat text-base text-slate-800 hover:bg-slate-50">
+                Contact
+              </Link>
             </div>
             <Link
               href={nav.ctaHref}
-              className="btn-primary w-full justify-center text-base py-4 px-8 mt-8"
               onClick={() => setIsOpen(false)}
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-[#e46f1e] px-5 py-3.5 font-montserrat text-sm font-semibold text-white"
             >
               {nav.ctaLabel}
-              <ArrowUpRight size={18} aria-hidden="true" />
+              <ArrowRight size={16} />
             </Link>
           </div>
         </div>

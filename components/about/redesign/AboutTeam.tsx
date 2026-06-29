@@ -33,7 +33,7 @@ export default function AboutTeam() {
   if (members.length === 0) return null;
 
   return (
-    <section className="section-shell bg-white" aria-label="Team">
+    <section className="hercules-section-alt py-20 md:py-28" aria-label="Team">
       <div className="container-premium">
         <SectionHeading badge="People" title={labels.teamHeadline} className="mb-14" />
 

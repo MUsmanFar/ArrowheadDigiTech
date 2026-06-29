@@ -93,8 +93,8 @@ export default function ProjectShowcase() {
 
   if (loading) {
     return (
-      <section className="py-20 md:py-28 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <section className="hercules-section-muted py-20 md:py-28">
+        <div className="container-premium">
           <div className="flex justify-center py-20">
             <div className="w-10 h-10 border-2 border-orange-200 border-t-orange-500 rounded-full animate-spin" />
           </div>
@@ -107,8 +107,8 @@ export default function ProjectShowcase() {
   const secondary = projects.filter((p: any) => !p.featured);
 
   return (
-    <section className="py-20 md:py-28 bg-white relative z-10" aria-label="Project Showcase">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section className="hercules-section-muted py-20 md:py-28" aria-label="Project Showcase">
+      <div className="container-premium">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

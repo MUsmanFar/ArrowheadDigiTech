@@ -11,7 +11,7 @@ export default function AboutStory() {
   const storyItem = manifesto.items[0];
 
   return (
-    <section className="section-shell bg-white" aria-label="Company story">
+    <section className="hercules-section-alt py-20 md:py-28" aria-label="Company story">
       <div className="container-premium">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <SectionHeading

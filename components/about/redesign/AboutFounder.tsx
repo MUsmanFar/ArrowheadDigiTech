@@ -32,7 +32,7 @@ export default function AboutFounder() {
   }, []);
 
   return (
-    <section className="section-shell bg-white" aria-label="Founder">
+    <section className="hercules-section-alt py-20 md:py-28" aria-label="Founder">
       <div className="container-premium">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           <motion.div
@@ -120,7 +120,7 @@ export function AboutTrustQuotes() {
   if (display.length === 0) return null;
 
   return (
-    <section className="section-shell bg-page-surface" aria-label="Client trust">
+    <section className="hercules-section-muted py-20 md:py-28" aria-label="Client trust">
       <div className="container-premium">
         <SectionHeading
           badge={labels.testimonialsTitle}

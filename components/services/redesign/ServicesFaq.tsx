@@ -32,7 +32,7 @@ export default function ServicesFaq() {
   if (faqs.length === 0) return null;
 
   return (
-    <section className="section-shell bg-white" aria-label="Frequently asked questions">
+    <section className="hercules-section-alt py-20 md:py-28" aria-label="Frequently asked questions">
       <div className="container-premium max-w-4xl">
         <SectionHeading
           badge={faqPage.heroTitle}

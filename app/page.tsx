@@ -1,21 +1,22 @@
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
 import LazySection from '@/components/ui/LazySection';
-import HeroRedesign from '@/components/home/redesign/HeroRedesign';
-import ClientLogosMarquee from '@/components/home/redesign/ClientLogosMarquee';
+import { PageShell } from '@/components/hercules';
+import {
+  HerculesHero,
+  HerculesLogoStrip,
+  HerculesAbout,
+  HerculesServices,
+  HerculesProcess,
+  HerculesIndustries,
+  HerculesTestimonials,
+  HerculesFaq,
+  HerculesCta,
+} from '@/components/hercules/home';
 import { getSiteContent, getSiteSection } from '@/lib/site-content-server';
 import { getClientLogosServer } from '@/lib/media-server';
 import { cmsPageMetadata } from '@/lib/page-metadata';
-
-const ServicesShowcase = dynamic(() => import('@/components/home/redesign/ServicesShowcase'));
-const PortfolioMagazine = dynamic(() => import('@/components/home/redesign/PortfolioMagazine'));
-const ProcessTimeline = dynamic(() => import('@/components/home/redesign/ProcessTimeline'));
-const TechStackGrid = dynamic(() => import('@/components/home/redesign/TechStackGrid'));
-const CaseStudiesGrid = dynamic(() => import('@/components/home/redesign/CaseStudiesGrid'));
-const TestimonialsCarousel = dynamic(() => import('@/components/home/redesign/TestimonialsCarousel'));
-const MetricsShowcase = dynamic(() => import('@/components/home/redesign/MetricsShowcase'));
-const CtaPremium = dynamic(() => import('@/components/home/redesign/CtaPremium'));
-const FooterPreview = dynamic(() => import('@/components/home/redesign/FooterPreview'));
 
 export const revalidate = 60;
 
@@ -28,37 +29,34 @@ export default async function Home() {
   const [siteContent, logos] = await Promise.all([getSiteContent(), getClientLogosServer()]);
 
   return (
-    <div className="min-h-screen bg-[#070b14] selection:bg-orange-100 selection:text-orange-900">
+    <PageShell>
       <Navbar />
       <main id="main-content" className="overflow-x-hidden">
-        <HeroRedesign hero={siteContent['home.hero']} />
-        <ClientLogosMarquee initialLogos={logos} />
-        <LazySection minHeight={520}>
-          <ServicesShowcase />
+        <HerculesHero hero={siteContent['home.hero']} />
+        <HerculesLogoStrip initialLogos={logos} />
+        <LazySection minHeight={480}>
+          <HerculesAbout />
         </LazySection>
-        <LazySection minHeight={600}>
-          <PortfolioMagazine />
+        <LazySection minHeight={520}>
+          <HerculesServices />
         </LazySection>
         <LazySection minHeight={480}>
-          <ProcessTimeline />
+          <HerculesProcess />
+        </LazySection>
+        <LazySection minHeight={480}>
+          <HerculesIndustries />
         </LazySection>
         <LazySection minHeight={420}>
-          <TechStackGrid />
-        </LazySection>
-        <LazySection minHeight={520}>
-          <CaseStudiesGrid />
+          <HerculesTestimonials />
         </LazySection>
         <LazySection minHeight={420}>
-          <TestimonialsCarousel />
-        </LazySection>
-        <LazySection minHeight={360}>
-          <MetricsShowcase />
+          <HerculesFaq />
         </LazySection>
         <LazySection minHeight={320}>
-          <CtaPremium />
+          <HerculesCta />
         </LazySection>
-        <FooterPreview />
+        <Footer />
       </main>
-    </div>
+    </PageShell>
   );
 }

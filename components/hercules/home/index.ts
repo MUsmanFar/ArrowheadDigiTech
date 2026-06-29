@@ -1,0 +1,9 @@
+export { default as HerculesHero } from './HerculesHero';
+export { default as HerculesLogoStrip } from './HerculesLogoStrip';
+export { default as HerculesAbout } from './HerculesAbout';
+export { default as HerculesServices } from './HerculesServices';
+export { default as HerculesProcess } from './HerculesProcess';
+export { default as HerculesIndustries } from './HerculesIndustries';
+export { default as HerculesTestimonials } from './HerculesTestimonials';
+export { default as HerculesFaq } from './HerculesFaq';
+export { default as HerculesCta } from './HerculesCta';
