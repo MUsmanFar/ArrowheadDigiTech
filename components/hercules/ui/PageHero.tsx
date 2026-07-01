@@ -49,14 +49,14 @@ export default function PageHero({
         <div className={centered ? 'mx-auto max-w-4xl text-center' : 'max-w-5xl'}>
           <Reveal>
             {badge && (
-              <p className="inline-flex items-center gap-2 rounded-full border border-orange-200/80 bg-white/80 px-4 py-1.5 font-montserrat text-[11px] font-semibold uppercase tracking-[0.22em] text-[#e46f1e] shadow-sm backdrop-blur-sm">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#e46f1e]" aria-hidden="true" />
+              <p className="inline-flex items-center gap-2 rounded-full border border-orange-200/60 bg-white/70 px-4 py-1.5 font-inter text-[11px] font-semibold uppercase tracking-[0.2em] text-[#e46f1e] shadow-sm backdrop-blur-md">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#e46f1e] animate-pulse" aria-hidden="true" />
                 {badge}
               </p>
             )}
 
             <h1
-              className={`mt-6 font-poppins font-bold tracking-[-0.03em] text-slate-900 ${
+              className={`mt-6 font-inter font-bold tracking-tight text-slate-900 ${
                 size === 'large'
                   ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.02]'
                   : 'text-4xl sm:text-5xl md:text-[3.25rem] lg:text-6xl leading-[1.05]'
@@ -69,7 +69,7 @@ export default function PageHero({
 
             {description && (
               <p
-                className={`mt-6 font-montserrat text-base leading-relaxed text-slate-500 md:text-lg ${
+                className={`mt-6 font-inter text-base leading-relaxed text-slate-500 md:text-lg ${
                   centered ? 'mx-auto max-w-2xl' : 'max-w-2xl'
                 }`}
               >

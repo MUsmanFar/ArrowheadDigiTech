@@ -1,0 +1,10 @@
+export { default as ArchHero } from './ArchHero';
+export { default as ArchLogoStrip } from './ArchLogoStrip';
+export { default as ArchManifesto } from './ArchManifesto';
+export { default as ArchServices } from './ArchServices';
+export { default as ArchWork } from './ArchWork';
+export { default as ArchProcess } from './ArchProcess';
+export { default as ArchTestimonials } from './ArchTestimonials';
+export { default as ArchCta } from './ArchCta';
+export { default as ArchFaq } from './ArchFaq';
+export { default as SiteBackground } from './SiteBackground';

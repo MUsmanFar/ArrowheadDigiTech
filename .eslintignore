@@ -1,0 +1,7 @@
+# Prototype / design-exploration subfolders — not production source
+ArrowheadDigiTech/
+Arrowhead-New-Design/
+
+# Build output
+.next/
+node_modules/

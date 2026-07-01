@@ -9,9 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        poppins: ["var(--font-poppins)", "sans-serif"],
         inter: ["var(--font-inter)", "system-ui", "-apple-system", "sans-serif"],
-        montserrat: ["var(--font-montserrat)", "var(--font-poppins)", "sans-serif"],
       },
       colors: {
         background: "var(--background)",

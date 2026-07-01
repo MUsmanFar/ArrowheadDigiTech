@@ -38,7 +38,7 @@ export default function HeroVisual() {
           <div className="absolute inset-[3%] rounded-full border border-white/80" />
           <div className="absolute inset-[12%] rounded-full bg-gradient-to-br from-orange-50/80 via-white/30 to-blue-50/40 shadow-[inset_0_-8px_24px_rgba(228,111,30,0.12)]" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="font-poppins text-[4.5rem] font-bold leading-none hercules-gradient-text md:text-[5.5rem]">
+            <span className="font-inter text-[4.5rem] font-bold tracking-tight leading-none hercules-gradient-text md:text-[6.5rem]">
               A
             </span>
           </div>
@@ -57,15 +57,15 @@ export default function HeroVisual() {
 
       <motion.div {...float(0.8, 8)} className="absolute left-[2%] top-[28%] z-30">
         <div className="rounded-2xl border border-white/80 bg-white/70 px-4 py-3 shadow-[0_20px_50px_-20px_rgba(15,23,42,0.15)] backdrop-blur-xl">
-          <p className="font-montserrat text-[9px] font-semibold uppercase tracking-wider text-slate-400">Uptime</p>
-          <p className="font-poppins text-lg font-bold text-slate-900">99.99%</p>
+          <p className="font-inter text-[9px] font-semibold uppercase tracking-wider text-slate-400">Uptime</p>
+          <p className="font-inter text-lg font-bold tracking-tight text-slate-900">99.99%</p>
         </div>
       </motion.div>
 
       <motion.div {...float(1.2, 6)} className="absolute right-[0%] top-[22%] z-30">
         <div className="rounded-2xl border border-white/80 bg-white/70 px-4 py-3 shadow-[0_20px_50px_-20px_rgba(15,23,42,0.15)] backdrop-blur-xl">
-          <p className="font-montserrat text-[9px] font-semibold uppercase tracking-wider text-slate-400">Deploy</p>
-          <p className="font-poppins text-sm font-bold text-emerald-600">Success</p>
+          <p className="font-inter text-[9px] font-semibold uppercase tracking-wider text-slate-400">Deploy</p>
+          <p className="font-inter text-sm font-bold tracking-tight text-emerald-600">Success</p>
         </div>
       </motion.div>
 

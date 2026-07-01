@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { useSiteSection } from '@/lib/use-site-content';
 import { getSchedulingUrl } from '@/lib/scheduling';
 import HerculesButton from './HerculesButton';
@@ -13,43 +14,66 @@ export default function PremiumCta() {
     nav.items.find((i) => i.href === '/portfolio')?.name ?? 'View Our Work';
 
   return (
-    <section className="hercules-section pb-20 pt-8 md:pb-28" aria-label="Call to action">
+    <section className="hercules-section pb-24 pt-12 md:pb-32" aria-label="Call to action">
       <div className="container-premium">
         <Reveal>
-          <div className="relative overflow-hidden rounded-[2rem] border border-white/90 bg-gradient-to-br from-blue-50/80 via-white/90 to-orange-50/60 p-10 shadow-[0_40px_120px_-40px_rgba(43,110,242,0.2)] backdrop-blur-xl md:rounded-[2.5rem] md:p-16 lg:p-20">
-            <div className="pointer-events-none absolute -left-24 -top-24 h-80 w-80 rounded-full bg-orange-200/30 blur-[100px]" aria-hidden="true" />
-            <div className="pointer-events-none absolute -bottom-20 -right-20 h-96 w-96 rounded-full bg-blue-200/25 blur-[100px]" aria-hidden="true" />
+          <div className="relative overflow-hidden rounded-[3rem] border border-white/60 bg-slate-900 shadow-[0_40px_100px_-20px_rgba(15,23,42,0.4)]">
+            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.05] mix-blend-overlay" aria-hidden="true" />
+            <div className="pointer-events-none absolute -left-40 top-0 h-[600px] w-[600px] rounded-full bg-orange-500/20 blur-[120px]" aria-hidden="true" />
+            <div className="pointer-events-none absolute -right-40 bottom-0 h-[600px] w-[600px] rounded-full bg-blue-500/20 blur-[120px]" aria-hidden="true" />
 
-            <div className="relative grid items-center gap-12 lg:grid-cols-[1fr_0.85fr] lg:gap-16">
+            <div className="relative z-10 grid items-center gap-12 p-12 md:p-16 lg:grid-cols-[1fr_0.9fr] lg:gap-20 lg:p-24">
               <div className="text-center lg:text-left">
                 {cta.badge && (
-                  <p className="font-montserrat text-[11px] font-semibold uppercase tracking-[0.28em] text-[#e46f1e]">
-                    {cta.badge}
-                  </p>
+                  <div className="inline-flex items-center rounded-full border border-orange-500/30 bg-orange-500/10 px-4 py-1.5 backdrop-blur-md mb-8">
+                    <p className="font-inter text-[11px] font-bold uppercase tracking-[0.25em] text-orange-300">
+                      {cta.badge}
+                    </p>
+                  </div>
                 )}
-                <h2 className="mt-5 font-poppins text-3xl font-bold tracking-[-0.03em] text-slate-900 md:text-5xl lg:text-[3.25rem] lg:leading-[1.08]">
+                
+                <h2 className="font-inter text-4xl font-extrabold tracking-tight text-white md:text-5xl lg:text-6xl lg:leading-[1.1]">
                   {cta.headline}{' '}
                   {cta.headlineAccent && (
-                    <span className="hercules-gradient-text">{cta.headlineAccent}</span>
+                    <span className="block mt-2 bg-gradient-to-r from-orange-400 to-orange-200 bg-clip-text text-transparent">{cta.headlineAccent}</span>
                   )}
                 </h2>
-                <p className="mx-auto mt-6 max-w-xl font-montserrat text-base leading-[1.75] text-slate-500 md:text-lg lg:mx-0">
+                
+                <p className="mx-auto mt-8 max-w-xl font-inter text-lg leading-[1.8] text-slate-300 lg:mx-0">
                   {cta.description}
                 </p>
-                <div className="mt-10 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
-                  <HerculesButton href={cta.buttonHref || getSchedulingUrl('cta')} variant="primary" size="lg">
+                
+                <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-5 lg:justify-start">
+                  <HerculesButton 
+                    href={cta.buttonHref || getSchedulingUrl('cta')} 
+                    variant="primary" 
+                    size="lg"
+                    className="w-full sm:w-auto px-10 py-4 shadow-[0_10px_30px_-10px_rgba(228,111,30,0.5)]"
+                  >
                     {cta.buttonLabel}
                   </HerculesButton>
-                  <HerculesButton href="/portfolio" variant="secondary" size="lg">
+                  <HerculesButton 
+                    href="/portfolio" 
+                    variant="secondary" 
+                    size="lg"
+                    className="w-full sm:w-auto px-10 py-4 bg-white/10 text-white border-white/20 hover:bg-white/20 hover:border-white/30"
+                  >
                     {portfolioLabel}
                   </HerculesButton>
                 </div>
               </div>
 
-              <div className="hidden lg:block">
-                <div className="scale-[0.85] xl:scale-100">
+              <div className="hidden lg:block relative">
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent z-10" />
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1 }}
+                  className="scale-[1.1] xl:scale-125 transform-gpu"
+                >
                   <HeroVisual />
-                </div>
+                </motion.div>
               </div>
             </div>
           </div>

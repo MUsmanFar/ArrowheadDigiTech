@@ -65,40 +65,66 @@ export default function HerculesServices() {
   }, []);
 
   return (
-    <section className="hercules-section bg-white" aria-label="Services">
-      <div className="container-premium">
-        <SectionHeader
-          eyebrow="Our Services"
-          title={`${intro.headline} ${intro.headlineAccent ?? ''}`.trim()}
-          description={intro.description}
-          align="center"
-          className="mb-16 md:mb-20"
-        />
+    <section className="hercules-section relative overflow-hidden bg-[#fafafa] py-24 md:py-32" aria-label="Services">
+      <div className="pointer-events-none absolute left-0 top-1/4 h-[800px] w-[800px] -translate-x-1/2 rounded-full bg-gradient-to-r from-orange-100/30 to-blue-50/20 blur-[120px]" aria-hidden="true" />
+      
+      <div className="container-premium relative z-10">
+        <div className="flex flex-col lg:flex-row items-end justify-between gap-8 mb-16 md:mb-24">
+          <SectionHeader
+            eyebrow="Our Capabilities"
+            title={`${intro.headline} ${intro.headlineAccent ?? ''}`.trim()}
+            description={intro.description}
+            align="left"
+            className="max-w-2xl"
+          />
+          <div className="hidden lg:block pb-4">
+            <HerculesButton href={intro.viewAllHref} variant="secondary" className="bg-white hover:bg-slate-50">
+              {intro.viewAllLabel}
+            </HerculesButton>
+          </div>
+        </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:gap-8">
           {services.map((service, i) => {
             const meta = getServiceMeta(service.slug, i);
+            const isFeatured = i === 0 || i === 3;
+            
             return (
               <motion.div
                 key={service.slug}
-                initial={{ opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
-                transition={{ delay: (i % 3) * 0.07, duration: 0.6 }}
+                transition={{ delay: (i % 3) * 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                className={isFeatured ? 'md:col-span-2 lg:col-span-1' : ''}
               >
                 <Link href={`/services/${service.slug}`} className="group block h-full">
-                  <GlassCard hover padding="lg" className="flex h-full flex-col">
-                    <IconBox icon={meta.icon} variant={meta.variant} />
-                    <h3 className="mt-6 font-poppins text-xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-[#e46f1e] md:text-[1.35rem]">
+                  <GlassCard 
+                    padding="lg" 
+                    className="flex h-full flex-col relative overflow-hidden bg-white/70 hover:bg-white/90 backdrop-blur-xl border border-white transition-all duration-500 hover:shadow-[0_40px_80px_-20px_rgba(15,23,42,0.12)] hover:-translate-y-2"
+                  >
+                    <div className="absolute top-0 right-0 p-8 opacity-5 transition-opacity duration-500 group-hover:opacity-10 transform translate-x-4 -translate-y-4 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:scale-110">
+                      <meta.icon size={120} />
+                    </div>
+                    
+                    <IconBox icon={meta.icon} variant={meta.variant} size="lg" className="mb-8 shadow-sm border border-white" />
+                    
+                    <h3 className="font-inter text-2xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-[#e46f1e] md:text-[1.75rem]">
                       {service.title}
                     </h3>
-                    <p className="mt-4 flex-1 font-montserrat text-sm leading-[1.75] text-slate-500 md:text-[0.9375rem]">
+                    
+                    <p className="mt-4 flex-1 font-inter text-base leading-[1.8] text-slate-500 relative z-10">
                       {service.description}
                     </p>
-                    <span className="mt-8 inline-flex items-center gap-1.5 font-montserrat text-sm font-semibold text-[#e46f1e]">
-                      Learn more
-                      <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
-                    </span>
+                    
+                    <div className="mt-10 flex items-center justify-between pt-6 border-t border-slate-100/80">
+                      <span className="font-inter text-sm font-bold tracking-wide uppercase text-slate-400 group-hover:text-[#e46f1e] transition-colors">
+                        Explore Service
+                      </span>
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 group-hover:bg-orange-50 transition-colors">
+                        <ArrowRight size={18} className="text-slate-400 group-hover:text-[#e46f1e] transition-transform duration-300 group-hover:translate-x-1" />
+                      </div>
+                    </div>
                   </GlassCard>
                 </Link>
               </motion.div>
@@ -106,7 +132,7 @@ export default function HerculesServices() {
           })}
         </div>
 
-        <div className="mt-16 text-center">
+        <div className="mt-16 text-center lg:hidden">
           <HerculesButton href={intro.viewAllHref} variant="primary">
             {intro.viewAllLabel}
           </HerculesButton>

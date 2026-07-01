@@ -34,58 +34,79 @@ export default function HerculesAbout() {
   const principles = manifesto.items.slice(0, 4).map((item) => item.title);
 
   return (
-    <section className="hercules-section hercules-section-muted relative overflow-hidden" aria-label="About">
-      <div className="pointer-events-none absolute right-0 top-1/2 h-96 w-96 -translate-y-1/2 translate-x-1/3 rounded-full bg-blue-100/20 blur-[100px]" aria-hidden="true" />
+    <section className="hercules-section relative overflow-hidden bg-white py-24 md:py-32" aria-label="About">
+      <div className="pointer-events-none absolute right-0 top-0 h-[600px] w-[600px] translate-x-1/3 -translate-y-1/3 rounded-full bg-gradient-to-br from-orange-50 to-blue-50/40 blur-[80px]" aria-hidden="true" />
+      <div className="pointer-events-none absolute left-0 bottom-0 h-[500px] w-[500px] -translate-x-1/3 translate-y-1/3 rounded-full bg-blue-50/50 blur-[100px]" aria-hidden="true" />
 
-      <div className="container-premium relative">
-        <div className="grid items-center gap-16 lg:grid-cols-12 lg:gap-10 xl:gap-14">
-          <Reveal className="lg:col-span-4">
-            <AboutVisual />
-          </Reveal>
-
-          <div className="lg:col-span-5">
-            <SectionHeader
-              eyebrow="Who We Are"
-              title={hero.headline}
-              description={hero.subheadline}
-            />
-            {manifesto.items[0] && (
-              <p className="mt-8 font-montserrat text-base leading-[1.8] text-slate-500 md:text-lg">
-                {manifesto.items[0].content}
-              </p>
-            )}
-            <ul className="mt-8 space-y-4">
-              {principles.map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-orange-50 text-[#e46f1e]">
-                    <Check size={14} strokeWidth={2.5} aria-hidden="true" />
-                  </span>
-                  <span className="font-montserrat text-sm text-slate-600 md:text-base">{item}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-10">
-              <HerculesButton href="/about" variant="secondary">
-                Learn about our story
-              </HerculesButton>
-            </div>
+      <div className="container-premium relative z-10">
+        <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+          <div className="w-full lg:w-5/12 order-2 lg:order-1 relative">
+            <Reveal>
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/40 to-transparent rounded-[3rem] transform -rotate-3 scale-105 border border-white shadow-xl backdrop-blur-sm z-0"></div>
+                <div className="relative z-10 bg-white rounded-[3rem] shadow-[0_20px_60px_-15px_rgba(15,23,42,0.08)] p-4 border border-slate-100">
+                  <AboutVisual />
+                </div>
+                
+                {/* Floating Metrics Overlay */}
+                <div className="absolute -bottom-8 -right-8 z-20 flex flex-col gap-4">
+                  {metrics.map((m, i) => (
+                    <motion.div
+                      key={m.label}
+                      initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.3 + i * 0.15, duration: 0.6 }}
+                    >
+                      <GlassCard padding="md" className="bg-white/80 backdrop-blur-xl border border-white shadow-[0_20px_40px_-15px_rgba(15,23,42,0.1)] pr-12">
+                        <p className="font-inter text-3xl font-extrabold tracking-tight text-slate-900">{m.value}</p>
+                        <p className="font-inter text-[11px] font-bold uppercase tracking-wider text-[#e46f1e] mt-1">{m.label}</p>
+                      </GlassCard>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
           </div>
 
-          <div className="flex flex-col gap-5 lg:col-span-3">
-            {metrics.map((m, i) => (
-              <motion.div
-                key={m.label}
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.6 }}
-              >
-                <GlassCard hover padding="lg" className={i === 1 ? 'lg:translate-x-4' : ''}>
-                  <p className="font-poppins text-4xl font-bold tracking-tight text-slate-900">{m.value}</p>
-                  <p className="mt-2 font-montserrat text-sm font-medium text-slate-500">{m.label}</p>
-                </GlassCard>
-              </motion.div>
-            ))}
+          <div className="w-full lg:w-7/12 order-1 lg:order-2 lg:pl-10">
+            <Reveal delay={100}>
+              <SectionHeader
+                eyebrow="Who We Are"
+                title={hero.headline}
+                description={hero.subheadline}
+                className="mb-8"
+              />
+              {manifesto.items[0] && (
+                <p className="mt-8 font-inter text-lg leading-[1.8] text-slate-500">
+                  {manifesto.items[0].content}
+                </p>
+              )}
+              
+              <div className="mt-12 grid sm:grid-cols-2 gap-6">
+                {principles.map((item, i) => (
+                  <motion.div 
+                    key={item} 
+                    className="flex items-start gap-4 p-5 rounded-2xl bg-slate-50/50 border border-slate-100 transition-colors hover:bg-slate-50 hover:border-orange-100"
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2 + i * 0.1 }}
+                  >
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm border border-slate-100 text-[#e46f1e]">
+                      <Check size={18} strokeWidth={2.5} aria-hidden="true" />
+                    </span>
+                    <span className="font-inter font-semibold text-slate-800 leading-snug mt-2">{item}</span>
+                  </motion.div>
+                ))}
+              </div>
+              
+              <div className="mt-12 pt-8 border-t border-slate-100">
+                <HerculesButton href="/about" variant="primary" size="lg" className="px-8 shadow-[0_8px_20px_-8px_rgba(228,111,30,0.4)] hover:shadow-[0_12px_24px_-8px_rgba(228,111,30,0.5)]">
+                  Learn about our story
+                </HerculesButton>
+              </div>
+            </Reveal>
           </div>
         </div>
       </div>

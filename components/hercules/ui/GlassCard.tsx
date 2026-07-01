@@ -25,10 +25,10 @@ export default function GlassCard({
   return (
     <div
       className={cn(
-        'rounded-[1.75rem] transition-all duration-500 ease-out',
+        'rounded-[2rem] transition-all duration-500 ease-out',
         soft ? 'hercules-glass-soft' : 'hercules-glass',
         hover &&
-          'hover:-translate-y-1.5 hover:shadow-[0_32px_90px_-28px_rgba(15,23,42,0.18)] hover:border-white',
+          'hover:-translate-y-2 hover:shadow-[0_40px_100px_-30px_rgba(15,23,42,0.2)] hover:border-white/80',
         PADDING[padding],
         className,
       )}

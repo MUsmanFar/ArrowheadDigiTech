@@ -22,12 +22,12 @@ export default function HerculesButton({
   className,
 }: Props) {
   const classes = cn(
-    'group inline-flex items-center justify-center gap-2.5 rounded-full font-semibold font-montserrat transition-all duration-300 ease-out',
-    size === 'lg' ? 'px-9 py-4 text-base' : 'px-7 py-3.5 text-sm',
+    'group inline-flex items-center justify-center gap-2.5 rounded-full font-medium font-inter transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)]',
+    size === 'lg' ? 'px-9 py-4 text-[0.95rem]' : 'px-7 py-3 text-[0.875rem]',
     variant === 'primary' &&
-      'bg-[#e46f1e] text-white shadow-[0_16px_48px_-14px_rgba(228,111,30,0.55)] hover:bg-[#c45a12] hover:-translate-y-0.5 hover:shadow-[0_22px_56px_-12px_rgba(228,111,30,0.65)] active:translate-y-0',
+      'bg-[#e46f1e] text-white shadow-[0_8px_24px_-8px_rgba(228,111,30,0.5)] hover:bg-[#c45a12] hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-12px_rgba(228,111,30,0.6)] active:translate-y-0 active:shadow-[0_4px_12px_-4px_rgba(228,111,30,0.5)]',
     variant === 'secondary' &&
-      'border border-slate-200/90 bg-white/95 text-slate-900 shadow-[0_10px_36px_-18px_rgba(15,23,42,0.12)] hover:-translate-y-0.5 hover:border-slate-300 hover:bg-white hover:shadow-[0_16px_44px_-16px_rgba(15,23,42,0.14)] active:translate-y-0',
+      'border border-slate-200/60 bg-white/80 backdrop-blur-md text-slate-800 shadow-[0_4px_12px_-6px_rgba(15,23,42,0.08)] hover:-translate-y-0.5 hover:border-slate-300 hover:bg-white hover:shadow-[0_12px_24px_-10px_rgba(15,23,42,0.1)] active:translate-y-0',
     variant === 'dark' &&
       'bg-slate-900 text-white shadow-[0_12px_36px_-14px_rgba(15,23,42,0.45)] hover:bg-slate-800',
     variant === 'ghost' &&
